@@ -1,0 +1,26 @@
+Under ubuntu, make rpm package for aiqb.
+
+*****************************************************
+Prerequisite for build RPM package:
+
+Install rpmbuild under ubuntu if needed,
+sudo apt-get install rpm
+
+Install auto-make utils needed for building the rpm from source,
+sudo apt-get install autoconf libtool
+
+*****************************************************
+Build RPM for IPU4 firmware binaries:
+
+Run the shell script under this directory to build and package rpm.
+
+./build_rpm.sh
+
+*****************************************************
+Install the built RPM:
+
+sudo rpm -ivh aiqb-1.0.0-0.x86_64.rpm
+
+or install RPM locally:
+
+rpm -ivh --prefix=/YOUR/OWN/PATH aiqb-1.0.0-0.x86_64.rpm

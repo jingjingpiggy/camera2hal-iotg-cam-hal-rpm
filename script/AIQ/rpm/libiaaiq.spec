@@ -1,0 +1,18 @@
+Summary: Lib IA AIQ 
+Name: libiaaiq 
+Version: 1.0.0
+Release: 0
+License: Intel
+Group: Development/Tools
+Prefix: /usr
+%description
+IPU4 firmware binaries.
+%prep
+%build
+%install
+mkdir -p $RPM_BUILD_ROOT/usr/lib64/
+mkdir -p $RPM_BUILD_ROOT/usr/include/libiaaiq/
+cp $RPM_BUILD_DIR/lib/debug/64/* $RPM_BUILD_ROOT/usr/lib64/
+cp $RPM_BUILD_DIR/include/* $RPM_BUILD_ROOT/usr/include/libiaaiq/
+%files
+/usr/
