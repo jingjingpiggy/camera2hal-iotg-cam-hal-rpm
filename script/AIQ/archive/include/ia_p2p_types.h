@@ -24,7 +24,7 @@
 
 #include <stdint.h>
 
-#include <libiaaiq/ia_types.h>
+#include "ia_types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -71,9 +71,14 @@ typedef struct
 } ia_p2p_payload_desc;
 
 /* Currently supported program groups. TODO: Add dependency to ia_css_bxt_pss_program_groups.h. */
-#define IA_P2P_PG_ISYS 0            /* No manifest available so we define a custom PG specification id for ISYS. */
-#define IA_P2P_PG_VPREGDC 116       /* IA_CSS_BXT_PSS_PG_SPECIFICATION_VPREGDC */
-#define IA_P2P_PG_VPOSTGDC 114      /* IA_CSS_BXT_PSS_PG_SPECIFICATION_VPOSTGDC */
+#define IA_P2P_PG_ISYS      0       /* No manifest available so we define a custom PG specification id for ISYS. */
+#define IA_P2P_PG_ISL       120
+#define IA_P2P_PG_VPREGDC   116     /* IA_CSS_BXT_PSS_PG_SPECIFICATION_VPREGDC */
+#define IA_P2P_PG_SPREGDC   117
+#define IA_P2P_PG_VPOSTGDC  114     /* IA_CSS_BXT_PSS_PG_SPECIFICATION_VPOSTGDC */
+#define IA_P2P_PG_SPOSTGDC  118
+#define IA_P2P_PG_POWERON   201     /* Power-on program group. */
+#define IA_P2P_PG_TEST      1       /* For internal P2P testing. */
 
 #ifdef __cplusplus
 }

@@ -78,6 +78,14 @@ typedef struct
     ia_isp_bxt_run_kernels_t *run_kernels;        /*!< Array of kernels in the program group. */
 } ia_isp_bxt_program_group;
 
+typedef struct
+{
+    bool rgbs_grid;     /*!< If true, RGBS grid is available. */
+    bool af_grid;       /*!< If true, AF grid is available. */
+    bool histograms;    /*!< If true, histograms are available. */
+    bool dvs_stats;     /*!< If true, DVS statistics are available. */
+} ia_isp_bxt_statistics_query_results_t;
+
 #ifdef __cplusplus
 }
 #endif

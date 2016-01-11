@@ -53,7 +53,8 @@ typedef enum
     ia_isp_effect_negative =         (1 << 7),
     ia_isp_effect_vivid =            (1 << 8),
     ia_isp_effect_invert_gamma =     (1 << 9),
-    ia_isp_effect_grayscale =        (1 << 10)
+    ia_isp_effect_grayscale =        (1 << 10),
+    ia_isp_effect_aqua =             (1 << 11)
 } ia_isp_effect;
 
 /*!

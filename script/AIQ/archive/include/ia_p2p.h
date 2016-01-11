@@ -46,39 +46,49 @@
  *   - IA_P2P_PG_VPOSTGDC (same as IA_CSS_BXT_PSS_PG_SPECIFICATION_VPOSTGDC)
  *
  *  P2P implementation currently supports the following kernels from ISYS:
- *   - IA_CSS_ISYS_KERNEL_ID_INL
- *   - IA_CSS_ISYS_KERNEL_ID_BLC_GLOBAL
- *   - IA_CSS_ISYS_KERNEL_ID_BLC_SENSOR_TYPE_0
- *   - IA_CSS_ISYS_KERNEL_ID_BLC_SENSOR_TYPE_1
- *   - IA_CSS_ISYS_KERNEL_ID_BLC_SENSOR_TYPE_2
- *   - IA_CSS_ISYS_KERNEL_ID_PCLN
- *   - IA_CSS_ISYS_KERNEL_ID_LSC_SENSOR_TYPE_0
- *   - IA_CSS_ISYS_KERNEL_ID_LSC_SENSOR_TYPE_1
- *   - IA_CSS_ISYS_KERNEL_ID_LSC_SENSOR_TYPE_2
- *   - IA_CSS_ISYS_KERNEL_ID_3A_STAT_AWB
- *   - IA_CSS_ISYS_KERNEL_ID_3A_STAT_AF
- *   - IA_CSS_ISYS_KERNEL_ID_3A_STAT_AE_CCM
- *   - IA_CSS_ISYS_KERNEL_ID_3A_STAT_AE
- *   - IA_CSS_ISYS_KERNEL_ID_IDS
+ *   - INL
+ *   - BLC_GLOBAL
+ *   - BLC_SENSOR_TYPE_0
+ *   - BLC_SENSOR_TYPE_1
+ *   - BLC_SENSOR_TYPE_2
+ *   - PCLN
+ *   - LSC_SENSOR_TYPE_0
+ *   - LSC_SENSOR_TYPE_1
+ *   - LSC_SENSOR_TYPE_2
+ *   - 3A_STAT_AWB
+ *   - 3A_STAT_AF
+ *   - 3A_STAT_AE_CCM
+ *   - 3A_STAT_AE
+ *   - IDS
  *
  *  P2P implementation currently supports the following kernels from VPREGDC:
- *   - IA_CSS_PSYS_KERNEL_ID_WBA_WBA
- *   - IA_CSS_PSYS_KERNEL_ID_RYNR_VCUD (B0)
- *   - IA_CSS_PSYS_KERNEL_ID_RYNR_BNLM (B0)
- *   - IA_CSS_PSYS_KERNEL_ID_DEMOSAIC_DEMOSAIC
- *   - IA_CSS_PSYS_KERNEL_ID_CCM_CCM (A0)
- *   - IA_CSS_PSYS_KERNEL_ID_ACM_CCM (B0)
- *   - IA_CSS_PSYS_KERNEL_ID_ACM_ACM (B0)
- *   - IA_CSS_PSYS_KERNEL_ID_GTC_CSC_CDS
- *   - IA_CSS_PSYS_KERNEL_ID_GTC_GTM
- *   - IA_CSS_PSYS_KERNEL_ID_YUV1_IEFD
- *   - IA_CSS_PSYS_KERNEL_ID_YUV1_YDS (defaults)
+ *   - WBA_BC (A0)
+ *   - WBA_WBA
+ *   - RYNR_VCUD (B0)
+ *   - RYNR_BNLM (B0)
+ *   - DEMOSAIC_DEMOSAIC
+ *   - CCM_CCM (A0)
+ *   - CCM_BDC (A0)
+ *   - ACM_CCM (B0)
+ *   - ACM_ACM (B0)
+ *   - GTC_CSC_CDS
+ *   - GTC_GTM
+ *   - YUV1_IEFD
+ *   - YUV1_YDS (defaults)
+ *   - YUV1_TCC (defaults)
+ *   - DVS_YBIN
+ *   - DVS_DVS
+ *   - DVS_L0
+ *   - DVS_L1
+ *   - DVS_L2
  *
  *  P2P implementation currently supports the following kernels from VPOSTGDC:
- *   - IA_CSS_PSYS_KERNEL_ID_OFS_OF
- *   - IA_CSS_PSYS_KERNEL_ID_OFS_SC0 (without fragmentation support)
- *   - IA_CSS_PSYS_KERNEL_ID_OFS_SC1 (without fragmentation support)
- *   - IA_CSS_PSYS_KERNEL_ID_OFS_ISP
+ *   - DVS_COORDS
+ *   - DVS_CONFIG
+ *   - OFS_OF
+ *   - OFS_SC0 (without fragmentation support)
+ *   - OFS_SC1 (without fragmentation support)
+ *   - OFS_ISP
  *
  *  \section init Initialization and deinitialization
  *
@@ -86,12 +96,17 @@
  *  This function returns a handle to the created P2P instance, required by the encoding and decoding functions. When cleaning up, P2P must be
  *  deinitialized with ia_p2p_deinit().
  *
+ *  The user has to allocate a cache buffer which is used during encoding and decoding to store parameters which are cached between frames.
+ *  The cache buffer is specific to a stream, so each stream must have its own cache buffer. The user takes care of giving the correct cache
+ *  buffer to P2P. The size of the cache buffer must be queried with ia_p2p_get_cache_buffer_size().
+ *
  *  \section runtime Runtime use
  *
  *  The high-level execution flow during runtime is illustrated in Figure 1. On each frame, P2P expects to get public data from PAL. The user
  *  is responsible for calling pal_run() to produce the public data as a binary data chunk and give this as an input to ia_p2p_parse() which
- *  parses the data to a form that is more easily accessible by the encoding functions. After parsing the public data, the requirements for the
- *  terminals and the payload can be queried from P2P in order to allocate memory for the payload and to create terminals.
+ *  parses the data to a form that is more easily accessible by the encoding functions. ia_p2p_parse() also requires the pointer to the cache
+ *  buffer to use for encoding the cached data. After parsing the public data, the requirements for the terminals and the payload can be queried
+ *  from P2P in order to allocate memory for the payload and to create terminals.
  *
  *  \mscfile overview.signalling Figure 1. Using P2P at runtime.
  *
@@ -112,7 +127,7 @@
  *
  *  Parameter input terminal contains global parameters for all kernels, so only one parameter input terminal is required. The order of the sections
  *  in the parameter input terminal is such that first comes all the sections for kernel 0, then all sections for kernel 1 and so on. The order of the
- *  kernels for ISYS is currently defined by the IA_CSS_ISYS_KERNEL_ID enumeration.
+ *  kernels for ISYS is currently defined by the IA_CSS_ISA_KERNEL_ID enumeration.
  *
  *  Program terminal contains program-specific information, i.e. parameters which are not global but fragment-specific. The user can decide into how many
  *  fragments the full frame is split. Only one program terminal is needed, and it contains fragment-specific parameters for all kernels and for each and every
@@ -176,24 +191,25 @@
  *  ia_p2p_param_in_terminal_encode(). Same is true for the parameter output terminal which is prepared using ia_p2p_param_out_terminal_prepare() at any time.
  *  Preparation only fills in the payload offsets so that firmware knows where to write the statistics.
  *
- *  Program terminal encoding must be started with ia_p2p_program_terminal_init(). For a single kernel, program terminal must be always encoded with
- *  ia_p2p_program_terminal_encode() before encoding the spatial parameter input/output terminals with ia_p2p_spatial_param_in_terminal_encode() /
- *  ia_p2p_spatial_param_out_terminal_prepare(), because it also produces sequencer fragment descriptors which are required in encoding the spatial parameter
- *  input terminal. Encoding program terminals and spatial parameter input and output terminals can be done in a single loop (as shown in Figure 3) or in two
- *  separate loops. Using separate loops, however, requires the sequencer fragment descriptors to be stored somewhere for every kernel.
+ *  Program terminal encoding must be started with ia_p2p_program_terminal_init(). This is executed only once per frame. Then, ia_p2p_program_terminal_encode()
+ *  needs to be run for each kernel individually, just as was with ia_p2p_param_in_terminal_encode(). Program terminal encode needs the fragment descriptors,
+ *  which define which part of the full frame the fragment contains.
+ *
+ *  Spatial param terminals are encoded/prepared with ia_p2p_spatial_param_in_terminal_encode() / ia_p2p_spatial_param_out_terminal_prepare(). Each kernel has its
+ *  own spatial terminals, so the function is called only once per terminal for each kernel.
  *
  *  \subsection runtime_decoding_stats Decoding statistics
  *
  *  Figure 4 illustrates the decoding process for statistics. Decoding the parameter output terminal should be done with a similar loop as encoding the parameter
- *  input terminal and keeping track of the current section index. ia_p2p_param_out_terminal_decode() is used to decode the global statistics and it produces
- *  an ia_binary_data structure which contains the statistics for the specific kernel in a one binary blob. Same kind of output is retrieved also from
- *  ia_p2p_spatial_param_out_terminal_decode() with the exception that every statistics block producing spatial statistics has its own spatial param output terminal.
+ *  input terminal and keeping track of the current section index. ia_p2p_param_out_terminal_decode() is used to decode the global statistics. Spatial statistics are
+ *  decoded similarly with ia_p2p_spatial_param_out_terminal_decode() with the exception that every statistics block producing spatial statistics has its own spatial
+ *  param output terminal.
  *
  *  \mscfile decoding_stats.signalling 4. Decoding process for statistics.
  *
- *  The memory pointed by the returned ia_binary_data structures is owned by P2P. It remains valid until the same function for the same kernel is called again,
- *  in which case the old statistics would be overwritten by the new statistics. The user is responsible of copying the data from the ia_binary_data structure
- *  to another location to preserve it over several frames.
+ *  After all statistics have been decoded, the statistics buffer can be requested from P2P by ia_p2p_serialize_statistics(). The returned ia_binary_data buffer is
+ *  owned by P2P and remains valid until ia_p2p_serialize_statistics() is called the next time. The user is responsible of copying the data from the ia_binary_data
+ *  structure to another location to preserve it over several frames.
  *
  *  \subsection runtime_decoding_inputs Decoding input parameters (only for debugging purposes)
  *
@@ -236,10 +252,18 @@ ia_p2p_handle ia_p2p_init(void);
 void ia_p2p_deinit(ia_p2p_handle ia_p2p);
 
 /*!
+ *  Returns the required size for the cache buffer.
+ *
+ *  \param [in] ia_p2p IA_P2P instance handle.
+ */
+uint32_t ia_p2p_get_cache_buffer_size(ia_p2p_handle ia_p2p);
+
+/*!
  *  Parses the public data ready to be used for encoding.
  *
- *  \param [in] ia_p2p      IA_P2P instance handle.
- *  \param [in] public_data The public data to parse (from PAL output).
+ *  \param [in] ia_p2p          IA_P2P instance handle.
+ *  \param [in] public_data     The public data to parse (from PAL output).
+ *  \param [in] cache_buffer    A pointer to the cache buffer. The buffer is allocated and managed by the user (query the required size with ia_p2p_get_cache_buffer_size()).
  *
  *  \return ia_err_none, if no errors.
  *          ia_err_argument, if the arguments are invalid.
@@ -247,7 +271,23 @@ void ia_p2p_deinit(ia_p2p_handle ia_p2p);
  */
 ia_err ia_p2p_parse(
     ia_p2p_handle ia_p2p,
-    const ia_binary_data* public_data);
+    const ia_binary_data* public_data,
+    void* cache_buffer);
+
+/*!
+ *  Serializes the statistics to a single binary blob.
+ *
+ *  \param [in]  ia_p2p     IA_P2P instance handle.
+ *  \param [out] statistics The resulting statistics data.
+ *
+ *  \return ia_err_none, if no errors.
+ *          ia_err_argument, if the arguments are invalid.
+ *
+ *  \remarks The returned data buffer is owned by P2P and is valid as long as any P2P decode functions are not called.
+ */
+ia_err ia_p2p_serialize_statistics(
+    ia_p2p_handle ia_p2p,
+    ia_binary_data* statistics);
 
 /*!
  *  Generates a kernel bitmap for the requested program group.
@@ -556,7 +596,8 @@ ia_err ia_p2p_spatial_param_out_terminal_decode_grid_descriptors(
  *  \param [in]     terminal        The spatial param output terminal.
  *  \param [in]     section_index   The index of the first section where the data for this kernel is available in the terminal.
  *  \param [in]     payload_buffer  A pointer to the beginning of the payload buffer.
- *  \param [out]    result          The decoded output as a binary data blob.
+ *  \param [in,out] cache_buffer    A pointer to the cache buffer for storing the cached outputs.
+ *                                  The buffer is allocated and managed by the user (query the required size with ia_p2p_get_cache_buffer_size()).
  *
  *  \return ia_err_none, if no errors.
  *          ia_err_argument, if the arguments are invalid.
@@ -568,7 +609,7 @@ ia_err ia_p2p_spatial_param_out_terminal_decode(
     ia_css_spatial_param_terminal_t* terminal,
     unsigned int section_index,
     const unsigned char* payload_buffer,
-    ia_binary_data* result);
+    void* cache_buffer);
 
 /*!
  *  Prepares payload for a single kernel in a parameter output terminal.
@@ -606,7 +647,6 @@ ia_err ia_p2p_param_out_terminal_prepare(
  *  \param [in]     section_index       The index of the first section where the data for this kernel is written to the terminal.
  *  \param [in]     total_section_count The total number of sections for one fragment including all kernels.
  *  \param [in]     payload_buffer      A pointer to the beginning of the payload buffer.
- *  \param [out]    result              The decoded output as a binary data blob.
  *
  *  \return ia_err_none, if no errors.
  *          ia_err_argument, if the arguments are invalid.
@@ -619,8 +659,7 @@ ia_err ia_p2p_param_out_terminal_decode(
     const ia_css_param_terminal_t* terminal,
     unsigned int section_index,
     unsigned int total_section_count,
-    const unsigned char* payload_buffer,
-    ia_binary_data* result);
+    const unsigned char* payload_buffer);
 
 #ifdef __cplusplus
 }

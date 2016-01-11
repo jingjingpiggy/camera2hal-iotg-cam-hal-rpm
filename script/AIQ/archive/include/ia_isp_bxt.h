@@ -97,6 +97,7 @@ typedef struct
     char manual_hue;                                 /*!< Optional. Manual hue value range [-128,127]. */
     char manual_saturation;                          /*!< Optional. Manual saturation value range [-128,127]. */
     ia_isp_effect effects;                           /*!< Optional. Manual setting for special effects. Combination of ia_isp_effect enums.*/
+    ia_dvs_morph_table *dvs_morph_table;             /*!< Mandatory. DVS results which are passed to GDC ISP FW.*/
 } ia_isp_bxt_input_params;
 
 /*!
@@ -132,7 +133,25 @@ ia_isp_bxt_get_version(void);
  * \param[in] ia_isp_bxt        Mandatory.\n
  *                              ia_isp_bxt instance handle.
  * \param[in]  statistics_ptr   Mandatory.\n
- *                              AWB statistics in ISP specific format.
+ *                              Statistics in ISP specific format.
+ * \param[out] out_stats        Mandatory.\n
+ *                              A pointer to the query results which indicate which statistics are available.
+ * \return                      Error code.
+ */
+LIBEXPORT ia_err
+ia_isp_bxt_statistics_query(
+    ia_isp_bxt *ia_isp_bxt_ptr,
+    const ia_binary_data *statistics_ptr,
+    ia_isp_bxt_statistics_query_results_t* out_query_results);
+
+/*!
+ * \brief Converts BXT ISP specific statistics to IA_AIQ format.
+ * ISP generated statistics may not be in the format in which AIQ algorithms expect. Statistics need to be converted
+ * from various ISP formats into AIQ statistics format.
+ * \param[in] ia_isp_bxt        Mandatory.\n
+ *                              ia_isp_bxt instance handle.
+ * \param[in]  statistics_ptr   Mandatory.\n
+ *                              Statistics in ISP specific format.
  * \param[out] rgbs_grid        Mandatory.\n
  *                              Pointer's pointer where address of converted statistics are stored.
  *                              Converted RGBS grid statistics. Output can be directly used as input in function ia_aiq_statistics_set.
@@ -208,7 +227,7 @@ ia_isp_bxt_statistics_convert_awb(
  * \param[in]  ia_isp_bxt    Mandatory.\n
  *                           ia_isp_bxt instance handle.
  * \param[in]  statistics_ptr   Mandatory.\n
- *                              AF statistics in ISP specific format.
+ *                              Statistics in ISP specific format.
  *
  * \param[out] af_grid Mandatory.\n
  *                           this pointer is returned from the initialize function
@@ -256,7 +275,7 @@ ia_isp_bxt_statistics_convert_af(
  * \param[in]  ia_isp_bxt       Mandatory.\n
  *                              ia_isp_bxt instance handle.
  * \param[in]  statistics_ptr   Mandatory.\n
- *                              Ae statistics in ISP specific format.
+ *                              Statistics in ISP specific format.
  * \param[out] aiq_histogram    Mandatory.\n
  *                              Pointer's pointer where address of converted statistics are stored.
  *                              Converted aiq histogram statistics. Output can be directly used as input in function ia_aiq_statistics_set.
@@ -294,6 +313,34 @@ ia_isp_bxt_statistics_convert_ae(
     void *c3_histogram,
     unsigned int num_bins,
     ia_aiq_histogram **out_aiq_histogram);
+
+/*!
+ * \brief This function converts corner based statistics to generic DVS statistics.
+ *
+ * ISP generated statistics may not be in the format in which AIQ algorithms expect. Statistics need to be converted
+ * from various ISP formats into AIQ statistics format.
+ *
+ * \param[in]  ia_isp_bxt                  Mandatory.\n
+ *                                         ia_isp_bxt instance handle.
+ * \param[in]  statistics_ptr              Mandatory.\n
+ *                                         Statistics in ISP specific format.
+ * \param[in]  dvs_statistics_input_width  Mandatory.\n
+ *                                         DVS statistics input width. Used only in DVS statistics conversion.
+ * \param[in]  dvs_statistics_input_height Mandatory.\n
+ *                                         DVS statistics input height. Used only in DVS statistics conversion.
+ * \param[out] dvs_statistics              Mandatory.\n
+ *                                         Pointer's pointer where address of converted statistics are stored.
+ *                                         Converted DVS statistics. Output can be directly used as input in function ia_dvs_set_statistics.
+ *                                         If the external buffer is provided in dvs_statistics it will be used otherwise internal buffer is used.
+ * \return                                 Error code.
+ */
+LIBEXPORT ia_err
+ia_isp_bxt_statistics_convert_dvs_from_binary(
+    ia_isp_bxt *ia_isp_bxt,
+    const ia_binary_data *statistics_ptr,
+    unsigned int dvs_statistics_input_width,
+    unsigned int dvs_statistics_input_height,
+    ia_dvs_statistics **dvs_statistics);
 
 /*!
  * \brief This function converts corner based statistics to generic DVS statistics.
