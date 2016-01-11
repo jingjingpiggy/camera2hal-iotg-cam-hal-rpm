@@ -24,17 +24,34 @@
 
 #include <ia_cipf/ia_cipf_types.h>
 
-#define ia_cipf_external_mask            ia_fourcc(0xFF,0xFF,0xFF,0)
+#define ia_cipf_external_mask            ia_fourcc(0xFF,0,0xFF,0xFF)
+#define ia_cipf_external_mask_idx        ia_fourcc(0xFF,0,0xFF,0)
 #define ia_cipf_external_source_uid(idx) ia_fourcc('@','S','R',idx)
 #define ia_cipf_external_sink_uid(idx)   ia_fourcc('@','S','N',idx)
+#define ia_cipf_external_source_terminal_uid(idx) \
+                                         ia_cipf_external_source_uid(idx)
+#define ia_cipf_external_sink_terminal_uid(idx) \
+                                         ia_cipf_external_sink_uid(idx)
 
-#define ia_cipf_external_source_terminal_uid(idx) ia_cipf_external_source_uid(idx)
-#define ia_cipf_external_sink_terminal_uid(idx)   ia_cipf_external_sink_uid(idx)
+/* support external source and sink with parameter terminal types */
+#define ia_cipf_external_param_source_uid(idx) \
+        ia_fourcc('@','P','R',idx)
+#define ia_cipf_external_param_sink_uid(idx) \
+        ia_fourcc('@','P','N',idx)
+#define ia_cipf_external_param_source_terminal_uid(idx) \
+        ia_cipf_external_param_source_uid(idx)
+#define ia_cipf_external_param_sink_terminal_uid(idx) \
+        ia_cipf_external_param_sink_uid(idx)
 
-#define is_external_source(uid) ((ia_cipf_external_mask & uid) == \
-                                 ia_cipf_external_source_uid(0))
-#define is_external_sink(uid) ((ia_cipf_external_mask & uid) == \
-                               ia_cipf_external_sink_uid(0))
+#define is_external_source(uid) ((ia_cipf_external_mask_idx & uid) == \
+                                 (ia_cipf_external_mask \
+                                  & ia_cipf_external_source_uid(0)))
+#define is_external_sink(uid) ((ia_cipf_external_mask_idx & uid) == \
+                               (ia_cipf_external_mask \
+                                & ia_cipf_external_sink_uid(0)))
+#define is_external_param(uid) (( is_external_source(uid) \
+                                 || is_external_sink(uid)) \
+                                && (char)(uid>>16) == 'P')
 
 /* Backward compatibility for deprecated external source & sink uids */
 /** \todo Remove these uids when not used anymore */

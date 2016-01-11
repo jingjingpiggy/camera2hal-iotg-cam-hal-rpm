@@ -99,6 +99,7 @@
 #define psys_interleaved_code_out_uid psys_interleaved_code_uid + 2
 
 #define psys_command_timeout_ms_uid ia_fourcc('P','S','C','T')
+#define psys_stage_operation_mode_uid ia_fourcc('P','S','O','P')
 
 /* COMMON CSS UIDS */
 #define css_program_group_params_uid ia_fourcc('C','S','S','P')
@@ -115,12 +116,24 @@
 #define css_fragment_max_uid         ia_fourcc('C','S','F','<')
 #define css_fragment_min_uid         ia_fourcc('C','S','F','>')
 #define css_fragment_uid             ia_fourcc('C','S','F','S')
+#define css_fragment_overlap_uid     ia_fourcc('C','S','F','O')
+#define css_fragment_count_uid       ia_fourcc('C','S','F','C')
 #define css_terminal_descriptor_uid  ia_fourcc('C','S','S','T')
 #define css_kernel_bitmap_uid        ia_fourcc('C','S','S','K')
 
 /* Encode 8bit vied_nci_resource_id_t into least significat byte of UID */
 #define css_vied_nci_kernel_id_uid_mask ia_fourcc(0xFF,0xFF,0xFF,0)
 #define css_vied_nci_kernel_id_uid(x)   ia_fourcc('K','I','#', x)
+
+/** PSYS stage operation modes
+ *
+ * Controllable via psys_stage_operation_mode_uid property
+ */
+typedef enum _psys_stage_opmode {
+    _psys_stage_opmode_na_,     /**< not set, defaults to raw */
+    _psys_stage_opmode_raw_,    /**< basic operation */
+    _psys_stage_opmode_coupled_ /**< coupled with downstream */
+} psys_stage_opmode_t;
 
 /*** User control utils for PSYS stage ***/
 

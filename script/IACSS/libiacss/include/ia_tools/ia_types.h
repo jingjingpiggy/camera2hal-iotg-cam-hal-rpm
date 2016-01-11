@@ -44,7 +44,8 @@ typedef int32_t ia_err_t;
 #define ia_err_noentry  -(1 << 6)  /*!< No such entry/entity/file */
 #define ia_err_timeout  -(1 << 7)  /*!< Time out*/
 #define ia_err_end      -(1 << 8)  /*!< End of values*/
-
+#define ia_err_full     -(1 << 9)  /*!< Exchange full */
+#define ia_err_again    -(1 << 10) /*!< Operation requires additional call */
 
 #ifndef __cplusplus
 

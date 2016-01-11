@@ -29,6 +29,8 @@
  * \brief Terminal base (terminal_base) implements functionality common between all stage
  * terminals realized using CIPF. This includes handling of terminal formats
  * and propagation of operations to different realizations with common rules.
+ *
+ * \mscfile cipf_terminal.signalling Terminal connection sequences
  */
 
 typedef enum terminal_format_state {
@@ -128,6 +130,20 @@ ia_err_t
 terminal_base_set_property_operations(ia_cipf_terminal_t *terminal,
                                       terminal_set_property_op set_property_op,
                                       terminal_get_property_op get_property_op);
+
+/** Set terminal to delay mode
+ *
+ * Sets up the terminal to use ring buffer for delayed buffers exchange
+ * operation. Terminal will require delay + 1 buffers to operate at minimum.
+ * Push- and pull-operations and other stage semantics remain equivalent.
+ *
+ * \ingroup terminal_base
+ * \param[in] terminal  ia_cipf_terminal_t handle
+ * \param[in] delay number of buffers to delay
+ */
+ia_err_t
+terminal_base_set_delay_mode(ia_cipf_terminal_t *terminal,
+                             uint32_t delay);
 
 /** Set connection to terminal
  *

@@ -48,6 +48,9 @@ public:
     static const char* key2str(const ia_uid key);
     static ia_uid generateKey(const std::string&);
 
+    ItemUID(std::initializer_list<ia_uid> uids) {
+        mUids.insert(mUids.end(), uids.begin(), uids.end());
+    };
     ItemUID() {};
     void pop_back() { mUids.pop_back(); };
     void push_back( const ia_uid& iuid) { mUids.push_back(iuid); };

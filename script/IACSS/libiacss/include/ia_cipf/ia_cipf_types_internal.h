@@ -66,6 +66,14 @@ typedef ia_err_t (*container_get_property_op)(struct _cipf_container*,
                                               ia_uid uid,
                                               ia_cipf_property_t *);
 
+typedef struct _cipf_buffer_ring ia_cipf_buffer_ring_t;
+
+typedef enum _cipf_buffer_ring_mode {
+    CIPF_BUFFER_RING_SYNC,
+    CIPF_BUFFER_RING_ASYNC,         /* asynchronous consumer */
+    CIPF_BUFFER_RING_ASYNC_BLOCK    /* async, block consumer */
+} ia_cipf_buffer_ring_mode_t;
+
 /**
  * \ingroup ia_cipf_internals
  */
@@ -74,8 +82,10 @@ struct _cipf_terminal {
     ia_uid                   uid;
     uint32_t                 id;
     ia_cipf_buffer_t         *buffer;
+    ia_cipf_buffer_ring_t    *ring;
     ia_cipf_stage_t          *stage;
     ia_cipf_container_t      *property_container;
+    void                     (*destroy)(struct _cipf_terminal*);
     log_context_t            *context;
 };
 
