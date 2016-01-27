@@ -553,12 +553,12 @@ typedef struct
  */
 typedef struct
 {
-    ia_aiq_af_status status;                         /*!< Focus status */
-    unsigned short current_focus_distance;           /*!< Current focusing distance in mm. Range is between 10000mm (10 meters) and 85 mm */
-    int next_lens_position;                          /*!< Next lens position */
-    ia_aiq_lens_driver_action lens_driver_action;    /*!< Lens driver action*/
-    bool use_af_assist;                              /*!< True if the af assist light is to be used at half press, false otherwise */
-    bool final_lens_position_reached;                /*!< Lens has reached the final lens position */
+    ia_aiq_af_status status;                           /*!< Focus status */
+    unsigned short current_focus_distance;             /*!< Current focusing distance in mm */
+    int next_lens_position;                            /*!< Next lens position */
+    ia_aiq_lens_driver_action lens_driver_action;      /*!< Lens driver action*/
+    bool use_af_assist;                                /*!< True if the af assist light is to be used at half press, false otherwise */
+    bool final_lens_position_reached;                  /*!< Lens has reached the final lens position */
 } ia_aiq_af_results;
 
 /*!

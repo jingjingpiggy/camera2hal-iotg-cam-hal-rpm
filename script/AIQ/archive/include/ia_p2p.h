@@ -238,11 +238,13 @@ extern "C" {
 #endif
 
 /*!
- *  Initializes IA_P2P module.
+ *  Initializes IA_P2P module for the given platform.
+ *
+ *  \param [in] platform The platform for which to initialize P2P.
  *
  *  \return The IA_P2P instance handle, or NULL if errors.
  */
-ia_p2p_handle ia_p2p_init(void);
+ia_p2p_handle ia_p2p_init(ia_p2p_platform_t platform);
 
 /*!
  *  De-initializes IA_P2P module.
@@ -302,6 +304,36 @@ uint64_t ia_p2p_get_kernel_bitmap(
     uint32_t pg_id);
 
 /*!
+ *  Calculates proper fragments for post-GDC.
+ *
+ *  \param [in]  ia_p2p                 IA_P2P instance handle.
+ *  \param [in]   fragment_count        The number of fragments.
+ *  \param [out]  pixel_fragment_descs  The resulting array of fragment descriptors, one for each fragment.
+ */
+ia_err ia_p2p_calculate_postgdc_fragments(
+    ia_p2p_handle ia_p2p,
+    unsigned int fragment_count,
+    ia_p2p_fragment_desc* pixel_fragment_descs);
+
+/*!
+ *  Returns the required slice counts for each fragment for the given kernel.
+ *
+ *  \param [in]  ia_p2p                 IA_P2P instance handle.
+ *  \param [in]  pg_id                  The program group id.
+ *  \param [in]  kernel_id              The program group specific identifier of the kernel whose payload sizes to calculate.
+ *  \param [in]  fragment_count         The number of fragments.
+ *  \param [in]  pixel_fragment_descs   An array of fragment descriptors, one for each fragment.
+ *  \param [out] slice_counts           The resulting array of slice counts, one for each fragment.
+ */
+ia_err ia_p2p_get_slice_counts(
+    ia_p2p_handle ia_p2p,
+    uint32_t pg_id,
+    uint32_t kernel_id,
+    unsigned int fragment_count,
+    const ia_p2p_fragment_desc* pixel_fragment_descs,
+    unsigned int* slice_counts);
+
+/*!
  *  Calculates the required number of section descriptors for each terminal type for the given kernel.
  *
  *  \param [in]  ia_p2p                 IA_P2P instance handle.
@@ -325,6 +357,7 @@ ia_err ia_p2p_get_kernel_terminal_requirements(
  *  \param [in]  pg_id                  The program group id.
  *  \param [in]  kernel_id              The program group specific identifier of the kernel whose payload sizes to calculate.
  *  \param [in]  fragment_count         The number of fragments.
+ *  \param [in]  pixel_fragment_descs   An array of fragment descriptors, one for each fragment.
  *  \param [out] kernel_payload_desc    The calculated total payload size for each terminal for the given kernel.
  *
  *  \return ia_err_none, if no errors.
@@ -335,6 +368,7 @@ ia_err ia_p2p_get_kernel_payload_desc(
     uint32_t pg_id,
     uint32_t kernel_id,
     unsigned int fragment_count,
+    const ia_p2p_fragment_desc* pixel_fragment_descs,
     ia_p2p_payload_desc* kernel_payload_desc);
 
 /*!
@@ -359,31 +393,6 @@ ia_err ia_p2p_param_in_terminal_encode(
     unsigned int section_index,
     unsigned char* payload_buffer,
     unsigned int payload_base_offset);
-
-#ifdef IA_P2P_ENABLE_DEBUG_SUPPORT
-/*!
- *  Decodes data for a single kernel in a parameter terminal.
- *
- *  \param [in]     ia_p2p          IA_P2P instance handle.
- *  \param [in]     pg_id           The program group id.
- *  \param [in]     kernel_id       The program group specific identifier of the kernel to encode.
- *  \param [in,out] terminal        The parameter terminal.
- *  \param [in]     section_index   The index of the first section where the data for this kernel is available in the terminal.
- *  \param [in,out] payload_buffer  A pointer to the beginning of the payload buffer.
- *  \param [out]    public_data_out A structure for the public data output.
- *
- *  \return ia_err_none, if no errors.
- *          ia_err_argument, if the arguments are invalid.
- */
-ia_err ia_p2p_param_in_terminal_decode(
-    ia_p2p_handle ia_p2p,
-    uint32_t pg_id,
-    uint32_t kernel_id,
-    const ia_css_param_terminal_t* terminal,
-    unsigned int section_index,
-    const unsigned char* payload_buffer,
-    ia_p2p_public_data_t* public_data_out);
-#endif
 
 /*!
  *  Initializes the program terminal sequencer with fragment information.
@@ -430,38 +439,6 @@ ia_err ia_p2p_program_terminal_encode(
     unsigned char* payload_buffer,
     unsigned int payload_base_offset);
 
-#ifdef IA_P2P_ENABLE_DEBUG_SUPPORT
-/*!
- *  Encodes data for a single kernel in a program terminal.
- *
- *  \param [in]     ia_p2p                          IA_P2P instance handle.
- *  \param [in]     pg_id                           The program group id.
- *  \param [in]     kernel_id                       The program group specific identifier of the kernel to decode.
- *  \param [in]     fragment_count                  The number of fragments.
- *  \param [in]     sequencer_fragment_descs        An array of fragment grid descriptors, one for each fragment. These must be retrieved from the
- *                                                  spatial param terminal via ia_p2p_spatial_param_in_terminal_decode_grid_descriptors().
- *  \param [in,out] terminal                        The program terminal.
- *  \param [in]     section_index                   The index of the first section where the data for this kernel is available in the terminal.
- *  \param [in]     total_section_count             The total number of sections for one fragment including all kernels.
- *  \param [in]     payload_buffer                  A pointer to the beginning of the payload buffer.
- *  \param [out]    public_data_out                 A structure for the decoded output.
- *
- *  \return ia_err_none, if no errors.
- *          ia_err_argument, if the arguments are invalid.
- */
-ia_err ia_p2p_program_terminal_decode(
-    ia_p2p_handle ia_p2p,
-    uint32_t pg_id,
-    uint32_t kernel_id,
-    unsigned int fragment_count,
-    const ia_css_fragment_grid_desc_t* sequencer_fragment_descs,
-    ia_css_program_terminal_t* terminal,
-    unsigned int section_index,
-    unsigned int total_section_count,
-    const unsigned char* payload_buffer,
-    ia_p2p_public_data_t* public_data_out);
-#endif
-
 /*!
  *  Encodes data for a single kernel in a spatial param input terminal.
  *
@@ -489,54 +466,6 @@ ia_err ia_p2p_spatial_param_in_terminal_encode(
     unsigned char* payload_buffer,
     unsigned int payload_base_offset);
 
-#ifdef IA_P2P_ENABLE_DEBUG_SUPPORT
-/*!
- *  Decodes fragment grid descriptors for a single kernel from a spatial param input terminal.
- *
- *  \param [in]     ia_p2p                          IA_P2P instance handle.
- *  \param [in]     pg_id                           The program group id.
- *  \param [in]     kernel_id                       The program group specific identifier of the kernel to decode.
- *  \param [in]     fragment_count                  The number of fragments.
- *  \param [in]     terminal                        The spatial param input terminal.
- *  \param [in]     public_data_out                 A structure for the decoded output.
- *  \param [out]    sequencer_fragment_descs        The resulting array of fragment grid descriptors.
- *
- *  \return ia_err_none, if no errors.
- *          ia_err_argument, if the arguments are invalid.
- */
-ia_err ia_p2p_spatial_param_in_terminal_decode_grid_descriptors(
-    ia_p2p_handle ia_p2p,
-    uint32_t pg_id,
-    uint32_t kernel_id,
-    unsigned int fragment_count,
-    ia_css_spatial_param_terminal_t* terminal,
-    ia_p2p_public_data_t* public_data_out,
-    ia_css_fragment_grid_desc_t* sequencer_fragment_descs);
-
-/*!
- *  Decodes spatial parameter data for a single kernel from a spatial param input terminal.
- *
- *  \param [in]     ia_p2p                          IA_P2P instance handle.
- *  \param [in]     pg_id                           The program group id.
- *  \param [in]     kernel_id                       The program group specific identifier of the kernel to decode.
- *  \param [in]     terminal                        The spatial param input terminal.
- *  \param [in]     section_index                   The index of the first section where the data for this kernel is available in the terminal.
- *  \param [in]     payload_buffer                  A pointer to the beginning of the payload buffer.
- *  \param [in,out] public_data_out                 A structure for the decoded output.
- *
- *  \return ia_err_none, if no errors.
- *          ia_err_argument, if the arguments are invalid.
- */
-ia_err ia_p2p_spatial_param_in_terminal_decode(
-    ia_p2p_handle ia_p2p,
-    uint32_t pg_id,
-    uint32_t kernel_id,
-    ia_css_spatial_param_terminal_t* terminal,
-    unsigned int section_index,
-    const unsigned char* payload_buffer,
-    ia_p2p_public_data_t* public_data_out);
-#endif
-
 /*!
  *  Encodes data for a single kernel in a spatial param output terminal.
  *
@@ -561,31 +490,6 @@ ia_err ia_p2p_spatial_param_out_terminal_prepare(
     ia_css_spatial_param_terminal_t* terminal,
     unsigned int section_index,
     unsigned int payload_base_offset);
-
-#ifdef IA_P2P_ENABLE_DEBUG_SUPPORT
-/*!
- *  Decodes fragment grid descriptors for a single kernel from a spatial param output terminal.
- *
- *  \param [in]     ia_p2p                          IA_P2P instance handle.
- *  \param [in]     pg_id                           The program group id.
- *  \param [in]     kernel_id                       The program group specific identifier of the kernel to decode.
- *  \param [in]     fragment_count                  The number of fragments.
- *  \param [in]     terminal                        The spatial param output terminal.
- *  \param [in]     public_data_out                 A structure for the decoded output.
- *  \param [out]    sequencer_fragment_descs        The resulting array of fragment grid descriptors.
- *
- *  \return ia_err_none, if no errors.
- *          ia_err_argument, if the arguments are invalid.
- */
-ia_err ia_p2p_spatial_param_out_terminal_decode_grid_descriptors(
-    ia_p2p_handle ia_p2p,
-    uint32_t pg_id,
-    uint32_t kernel_id,
-    unsigned int fragment_count,
-    ia_css_spatial_param_terminal_t* terminal,
-    ia_p2p_public_data_t* public_data_out,
-    ia_css_fragment_grid_desc_t* sequencer_fragment_descs);
-#endif
 
 /*!
  *  Decodes spatial parameter data for a single kernel from a spatial param output terminal.
@@ -660,6 +564,230 @@ ia_err ia_p2p_param_out_terminal_decode(
     unsigned int section_index,
     unsigned int total_section_count,
     const unsigned char* payload_buffer);
+
+/*!
+ *  Encodes data for a single kernel in a sliced parameter terminal.
+ *
+ *  \param [in]     ia_p2p                  IA_P2P instance handle.
+ *  \param [in]     pg_id                   The program group id.
+ *  \param [in]     kernel_id               The program group specific identifier of the kernel to encode.
+ *  \param [in]     fragment_count          The number of fragments.
+ *  \param [in]     pixel_fragment_descs    An array of fragment descriptors, one for each fragment.
+ *  \param [in,out] terminal                The parameter terminal.
+ *  \param [in,out] payload_buffer          A pointer to the beginning of the payload buffer.
+ *  \param [in]     payload_base_offset     The base offset in the payload buffer for this kernel.
+ *
+ *  \return ia_err_none, if no errors.
+ *          ia_err_argument, if the arguments are invalid.
+ */
+ia_err ia_p2p_sliced_param_in_terminal_encode(
+    ia_p2p_handle ia_p2p,
+    uint32_t pg_id,
+    uint32_t kernel_id,
+    unsigned int fragment_count,
+    const ia_p2p_fragment_desc* pixel_fragment_descs,
+    ia_css_sliced_param_terminal_t* terminal,
+    unsigned char* payload_buffer,
+    unsigned int payload_base_offset);
+
+/*!
+ *  Prepares payload for a single kernel in a sliced parameter output terminal.
+ *
+ *  \param [in]     ia_p2p                  IA_P2P instance handle.
+ *  \param [in]     pg_id                   The program group id.
+ *  \param [in]     kernel_id               The program group specific identifier of the kernel whose descriptors to prepare.
+ *  \param [in]     fragment_count          The number of fragments.
+ *  \param [in]     pixel_fragment_descs    An array of fragment descriptors, one for each fragment.
+ *  \param [in,out] terminal                The param output terminal.
+ *  \param [in]     section_index           The index of the first section where the data for this kernel is written to the terminal.
+ *  \param [in]     total_section_count     The total number of sections for one fragment including all kernels.
+ *  \param [in]     payload_base_offset     The base offset in the payload buffer for this kernel.
+ *
+ *  \return ia_err_none, if no errors.
+ *          ia_err_argument, if the arguments are invalid.
+ */
+ia_err ia_p2p_sliced_param_out_terminal_prepare(
+    ia_p2p_handle ia_p2p,
+    uint32_t pg_id,
+    uint32_t kernel_id,
+    unsigned int fragment_count,
+    const ia_p2p_fragment_desc* pixel_fragment_descs,
+    ia_css_sliced_param_terminal_t* terminal,
+    unsigned int payload_base_offset);
+
+/*!
+ *  Decodes param out data for a single kernel in a sliced parameter output terminal.
+ *
+ *  \param [in]     ia_p2p              IA_P2P instance handle.
+ *  \param [in]     pg_id               The program group id.
+ *  \param [in]     kernel_id           The program group specific identifier of the kernel to decode.
+ *  \param [in]     fragment_count      The number of fragments.
+ *  \param [in]     terminal            The param output terminal.
+ *  \param [in]     section_index       The index of the first section where the data for this kernel is written to the terminal.
+ *  \param [in]     total_section_count The total number of sections for one fragment including all kernels.
+ *  \param [in]     payload_buffer      A pointer to the beginning of the payload buffer.
+ *
+ *  \return ia_err_none, if no errors.
+ *          ia_err_argument, if the arguments are invalid.
+ */
+ia_err ia_p2p_sliced_param_out_terminal_decode(
+    ia_p2p_handle ia_p2p,
+    uint32_t pg_id,
+    uint32_t kernel_id,
+    unsigned int fragment_count,
+    const ia_p2p_fragment_desc* pixel_fragment_descs,
+    const ia_css_sliced_param_terminal_t* terminal,
+    const unsigned char* payload_buffer);
+
+#ifdef IA_P2P_ENABLE_DEBUG_SUPPORT
+/*!
+ *  Decodes data for a single kernel in a parameter terminal.
+ *
+ *  \param [in]     ia_p2p          IA_P2P instance handle.
+ *  \param [in]     pg_id           The program group id.
+ *  \param [in]     kernel_id       The program group specific identifier of the kernel to encode.
+ *  \param [in,out] terminal        The parameter terminal.
+ *  \param [in]     section_index   The index of the first section where the data for this kernel is available in the terminal.
+ *  \param [in,out] payload_buffer  A pointer to the beginning of the payload buffer.
+ *  \param [out]    public_data_out A structure for the public data output.
+ *
+ *  \return ia_err_none, if no errors.
+ *          ia_err_argument, if the arguments are invalid.
+ */
+ia_err ia_p2p_param_in_terminal_decode(
+    ia_p2p_handle ia_p2p,
+    uint32_t pg_id,
+    uint32_t kernel_id,
+    const ia_css_param_terminal_t* terminal,
+    unsigned int section_index,
+    const unsigned char* payload_buffer,
+    ia_p2p_public_data_t* public_data_out);
+
+/*!
+ *  Encodes data for a single kernel in a program terminal.
+ *
+ *  \param [in]     ia_p2p                          IA_P2P instance handle.
+ *  \param [in]     pg_id                           The program group id.
+ *  \param [in]     kernel_id                       The program group specific identifier of the kernel to decode.
+ *  \param [in]     fragment_count                  The number of fragments.
+ *  \param [in]     sequencer_fragment_descs        An array of fragment grid descriptors, one for each fragment. These must be retrieved from the
+ *                                                  spatial param terminal via ia_p2p_spatial_param_in_terminal_decode_grid_descriptors().
+ *  \param [in,out] terminal                        The program terminal.
+ *  \param [in]     section_index                   The index of the first section where the data for this kernel is available in the terminal.
+ *  \param [in]     total_section_count             The total number of sections for one fragment including all kernels.
+ *  \param [in]     payload_buffer                  A pointer to the beginning of the payload buffer.
+ *  \param [out]    public_data_out                 A structure for the decoded output.
+ *
+ *  \return ia_err_none, if no errors.
+ *          ia_err_argument, if the arguments are invalid.
+ */
+ia_err ia_p2p_program_terminal_decode(
+    ia_p2p_handle ia_p2p,
+    uint32_t pg_id,
+    uint32_t kernel_id,
+    unsigned int fragment_count,
+    const ia_css_fragment_grid_desc_t* sequencer_fragment_descs,
+    ia_css_program_terminal_t* terminal,
+    unsigned int section_index,
+    unsigned int total_section_count,
+    const unsigned char* payload_buffer,
+    ia_p2p_public_data_t* public_data_out);
+
+/*!
+ *  Decodes fragment grid descriptors for a single kernel from a spatial param input terminal.
+ *
+ *  \param [in]     ia_p2p                          IA_P2P instance handle.
+ *  \param [in]     pg_id                           The program group id.
+ *  \param [in]     kernel_id                       The program group specific identifier of the kernel to decode.
+ *  \param [in]     fragment_count                  The number of fragments.
+ *  \param [in]     terminal                        The spatial param input terminal.
+ *  \param [in]     public_data_out                 A structure for the decoded output.
+ *  \param [out]    sequencer_fragment_descs        The resulting array of fragment grid descriptors.
+ *
+ *  \return ia_err_none, if no errors.
+ *          ia_err_argument, if the arguments are invalid.
+ */
+ia_err ia_p2p_spatial_param_in_terminal_decode_grid_descriptors(
+    ia_p2p_handle ia_p2p,
+    uint32_t pg_id,
+    uint32_t kernel_id,
+    unsigned int fragment_count,
+    ia_css_spatial_param_terminal_t* terminal,
+    ia_p2p_public_data_t* public_data_out,
+    ia_css_fragment_grid_desc_t* sequencer_fragment_descs);
+
+/*!
+ *  Decodes spatial parameter data for a single kernel from a spatial param input terminal.
+ *
+ *  \param [in]     ia_p2p                          IA_P2P instance handle.
+ *  \param [in]     pg_id                           The program group id.
+ *  \param [in]     kernel_id                       The program group specific identifier of the kernel to decode.
+ *  \param [in]     terminal                        The spatial param input terminal.
+ *  \param [in]     section_index                   The index of the first section where the data for this kernel is available in the terminal.
+ *  \param [in]     payload_buffer                  A pointer to the beginning of the payload buffer.
+ *  \param [in,out] public_data_out                 A structure for the decoded output.
+ *
+ *  \return ia_err_none, if no errors.
+ *          ia_err_argument, if the arguments are invalid.
+ */
+ia_err ia_p2p_spatial_param_in_terminal_decode(
+    ia_p2p_handle ia_p2p,
+    uint32_t pg_id,
+    uint32_t kernel_id,
+    ia_css_spatial_param_terminal_t* terminal,
+    unsigned int section_index,
+    const unsigned char* payload_buffer,
+    ia_p2p_public_data_t* public_data_out);
+
+/*!
+ *  Decodes fragment grid descriptors for a single kernel from a spatial param output terminal.
+ *
+ *  \param [in]     ia_p2p                          IA_P2P instance handle.
+ *  \param [in]     pg_id                           The program group id.
+ *  \param [in]     kernel_id                       The program group specific identifier of the kernel to decode.
+ *  \param [in]     fragment_count                  The number of fragments.
+ *  \param [in]     terminal                        The spatial param output terminal.
+ *  \param [in]     public_data_out                 A structure for the decoded output.
+ *  \param [out]    sequencer_fragment_descs        The resulting array of fragment grid descriptors.
+ *
+ *  \return ia_err_none, if no errors.
+ *          ia_err_argument, if the arguments are invalid.
+ */
+ia_err ia_p2p_spatial_param_out_terminal_decode_grid_descriptors(
+    ia_p2p_handle ia_p2p,
+    uint32_t pg_id,
+    uint32_t kernel_id,
+    unsigned int fragment_count,
+    ia_css_spatial_param_terminal_t* terminal,
+    ia_p2p_public_data_t* public_data_out,
+    ia_css_fragment_grid_desc_t* sequencer_fragment_descs);
+
+/*!
+ *  Decodes data for a single kernel in a sliced parameter terminal.
+ *
+ *  \param [in]     ia_p2p                  IA_P2P instance handle.
+ *  \param [in]     pg_id                   The program group id.
+ *  \param [in]     kernel_id               The program group specific identifier of the kernel to encode.
+ *  \param [in]     fragment_count          The number of fragments.
+ *  \param [in]     pixel_fragment_descs    An array of fragment descriptors, one for each fragment.
+ *  \param [in,out] terminal                The parameter terminal.
+ *  \param [in,out] payload_buffer          A pointer to the beginning of the payload buffer.
+ *  \param [out]    public_data_out         A structure for the public data output.
+ *
+ *  \return ia_err_none, if no errors.
+ *          ia_err_argument, if the arguments are invalid.
+ */
+ia_err ia_p2p_sliced_param_in_terminal_decode(
+    ia_p2p_handle ia_p2p,
+    uint32_t pg_id,
+    uint32_t kernel_id,
+    unsigned int fragment_count,
+    const ia_p2p_fragment_desc* pixel_fragment_descs,
+    const ia_css_sliced_param_terminal_t* terminal,
+    const unsigned char* payload_buffer,
+    ia_p2p_public_data_t* public_data_out);
+
+#endif
 
 #ifdef __cplusplus
 }

@@ -42,14 +42,14 @@ extern "C" {
  *
  * Example:
  * 1. Sensor outputs 6528 x 4896. Sensor crops 3264 x 2448 ROI from bottom right corner.
- * 2. ISP block downscales the image from 3264 x 2448 to 2176 x 1632 (scale 0.75) and crops to 1920 x 1080 (RCB):
+ * 2. ISP block downscales the image from 3264 x 2448 to 2176 x 1632 (scale 0.6667) and crops to 1920 x 1080 (RCB):
  *    resolution_info { 6528, 4896, { 3264, 2448, 0, 0 }, 2176, 1632, { 128, 276, 128, 276 } }
  * 3. ISP block needs to know what resolution changes were done with respect to full sensor frame:
- *    resolution_history { 6528, 4896, { 3264+(128*0.75), 2448+(276*0.75), (128*0.75), (276*0.75) }, 1920, 1080, { 0, 0, 0, 0 } }
+ *    resolution_history { 6528, 4896, { 3264+(128/0.6667), 2448+(276/0.6667), (128/0.6667), (276/0.6667) }, 1920, 1080, { 0, 0, 0, 0 } }
  * 4. ISP block forther downscales the image to 1280 x 720 (RCB):
  *    resolution_info { 1920, 1080, { 0, 0, 0, 0 }, 1280, 720, { 0, 0, 0, 0 } }
  * 5. ISP block needs to know what resolution changes were done:
- *    resolution_history { 6528, 4896, { 3264+(128*0.75), 2448+(276*0.75), (128*0.75), (276*0.75) }, 1280, 720, { 0, 0, 0, 0 } }
+ *    resolution_history { 6528, 4896, { 3264+(128/0.6667), 2448+(276/0.6667), (128/0.6667), (276/0.6667) }, 1280, 720, { 0, 0, 0, 0 } }
  */
 typedef struct
 {

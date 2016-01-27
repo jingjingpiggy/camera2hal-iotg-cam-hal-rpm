@@ -36,6 +36,16 @@ extern "C" {
 typedef struct ia_p2p_t* ia_p2p_handle;
 
 /*!
+ *  Platform identifier.
+ */
+typedef enum
+{
+    IA_P2P_PLATFORM_BXT_A0,
+    IA_P2P_PLATFORM_BXT_B0,
+    IA_P2P_PLATFORM_CNL_A0,
+} ia_p2p_platform_t;
+
+/*!
  *  Fragment descriptor.
  */
 typedef struct
@@ -51,11 +61,14 @@ typedef struct
  */
 typedef struct
 {
-    unsigned int param_in_section_count;                /*!< The number of parameter input sections required. */
-    unsigned int param_out_section_count_per_fragment;  /*!< The number of parameter output sections required per fragment. */
-    unsigned int program_section_count_per_fragment;    /*!< The number of program sections required per fragment. */
-    unsigned int spatial_param_in_section_count;        /*!< The number of spatial param input sections required. */
-    unsigned int spatial_param_out_section_count;       /*!< The number of spatial param output sections required. */
+    unsigned int param_in_section_count;                        /*!< The number of parameter input sections required. */
+    unsigned int param_out_section_count_per_fragment;          /*!< The number of parameter output sections required per fragment. */
+    unsigned int program_section_count_per_fragment;            /*!< The number of program sections required per fragment. */
+    unsigned int spatial_param_in_section_count;                /*!< The number of spatial param input sections required. */
+    unsigned int spatial_param_out_section_count;               /*!< The number of spatial param output sections required. */
+    unsigned int sliced_param_in_section_count_per_fragment;    /*!< The number of sliced param input sections required for fragment. */
+    unsigned int sliced_param_out_section_count_per_fragment;   /*!< The number of sliced param input sections required for fragment. */
+    unsigned int slice_count;                                   /*!< The number of slices needed in sliced terminals. */
 } ia_p2p_terminal_requirements_t;
 
 /*!
@@ -68,6 +81,8 @@ typedef struct
     uint32_t program_payload_size;              /*!< The total size of the program payload in bytes. */
     uint32_t spatial_param_in_payload_size;     /*!< The total size of the spatial param input payload in bytes. */
     uint32_t spatial_param_out_payload_size;    /*!< The total size of the spatial param output payoad in bytes. */
+    uint32_t sliced_param_in_payload_size;      /*!< The total size of the sliced param input payload in bytes. */
+    uint32_t sliced_param_out_payload_size;     /*!< The total size of the sliced param output payoad in bytes. */
 } ia_p2p_payload_desc;
 
 /* Currently supported program groups. TODO: Add dependency to ia_css_bxt_pss_program_groups.h. */

@@ -99,6 +99,7 @@ typedef uint32_t uq16_16_t;
 #define IA_UNUSED(x)             (void)x
 #define IA_LOG2(x)               (logf((float)(x)) / logf(2.0f))
 #define IA_ASSERT                assert
+#define IA_SIGN(a)               (((a) > 0) - ((a) < 0))
 
 #ifdef __BUILD_FOR_GSD_AOH__
 
