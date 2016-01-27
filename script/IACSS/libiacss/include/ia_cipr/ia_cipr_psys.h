@@ -103,12 +103,16 @@ typedef struct ia_cipr_psys_command_config {
     ia_cipr_buffer_t *pg;
 } ia_cipr_psys_command_config_t;
 
+#define CIPR_PSYS_CAP_DRIVER_FIELD_LENGTH        20
+#define CIPR_PSYS_CAP_DEVMODEL_FIELD_LENGTH      32
+
 /**
  * \ingroup ia_cipr_psys
  */
 typedef struct ia_cipr_psys_capability_s {
     uint32_t version;
-    uint8_t driver[20];
+    uint8_t driver[CIPR_PSYS_CAP_DRIVER_FIELD_LENGTH];
+    uint8_t dev_model[CIPR_PSYS_CAP_DEVMODEL_FIELD_LENGTH];
     uint32_t program_group_count;
 } ia_cipr_psys_capability_t;
 

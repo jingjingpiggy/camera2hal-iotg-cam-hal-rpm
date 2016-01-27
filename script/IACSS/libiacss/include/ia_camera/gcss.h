@@ -28,6 +28,7 @@ extern "C" {
 #define GCSS_KEY(key, str) GCSS_KEY_##key,
 typedef enum _GraphConfigKey {
     #include "gcss_keys.h"
+    GCSS_KEY_START_CUSTOM_KEYS = 0x8000,
 } GraphConfigKey;
 #undef GCSS_KEY
 

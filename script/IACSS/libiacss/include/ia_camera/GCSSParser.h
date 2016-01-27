@@ -34,7 +34,7 @@ namespace GCSS {
  */
 class GCSSParser {
 public:
-    GCSSParser(){};
+    GCSSParser();
     ~GCSSParser();
     void parseGCSSXmlFile(const char*, GraphConfigNode**);
 
@@ -45,13 +45,14 @@ private: /* Methods */
     static void startElement(void *userData, const char *name, const char **atts);
     static void endElement(void *userData, const char *name);
 
-    void getElementType(const ItemUID& att_uid, ia_uid& data_type);
+    void getElementType(const ia_uid& att_uid, ia_uid& data_type);
     void handleGraph(const char *name, const char **atts);
     void handleNode(const char *name, const char **atts);
     void checkField(GCSSParser *profiles, const char *name, const char **atts);
 
 private:  /* Members */
 
+    ia_uid mTopLevelNode;
     GCSS::GraphConfigNode *mCurrentNode; /* TODO: these should be of GraphConfig-iface type */
 };
 } // namespace

@@ -232,6 +232,13 @@ ia_cipf_pipe_get_num_stages(const ia_cipf_pipe_t *pipe);
 /**
  * \ingroup ia_cipf_pipe
  */
+ia_cipf_stage_t *
+ia_cipf_pipe_enumerate_stages(const ia_cipf_pipe_t *pipe,
+                              uint32_t idx);
+
+/**
+ * \ingroup ia_cipf_pipe
+ */
 ia_cipf_stage_t*
 ia_cipf_pipe_get_stage_by_uid(const ia_cipf_pipe_t *pipe, ia_uid uid);
 

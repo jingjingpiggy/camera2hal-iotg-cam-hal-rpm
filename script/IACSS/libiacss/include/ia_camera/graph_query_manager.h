@@ -35,18 +35,13 @@
 
 namespace GCSS {
 
-enum DataType {
-    TYPE_NA,
-    TYPE_STR,
-    TYPE_INT
-};
-
 class ItemUID
 {
 public:
     static ia_uid str2key(const std::string&);
     static const char* key2str(const ia_uid key);
     static ia_uid generateKey(const std::string&);
+    static void addCustomKeyMap(std::map<std::string, ia_uid> &osMap);
 
     ItemUID(std::initializer_list<ia_uid> uids) {
         mUids.insert(mUids.end(), uids.begin(), uids.end());
@@ -58,9 +53,10 @@ public:
     bool operator == (const ItemUID& v) const {
         return v.mUids == mUids;
     }
+    std::string toString();
 
     std::size_t size() const { return mUids.size(); };
-    ItemUID(ia_uid uid) { mUids.push_back(uid); };
+
     ItemUID(const ItemUID &ref) { mUids = ref.mUids; };
 
     ia_uid& operator[](std::size_t idx) { return mUids[idx]; }
@@ -84,40 +80,55 @@ inline bool operator>(const ItemUID &r, const ItemUID &l)
     return r.mUids > l.mUids;
 }
 
+/**
+ * Holds type of the item. It can be Node or Attribute (int or string)
+ */
+enum Type {
+    NA,
+    STR_ATTRIBUTE,
+    INT_ATTRIBUTE,
+    NODE
+};
+
 // CONTAINER FOR ATTRIBUTE OR LEAF
 class GraphConfigItem
 {
 public:
-    typedef std::multimap<ItemUID, GraphConfigItem*> gcss_item_map;
-    enum Type {
-        ATTRIBUTE,
-        NODE
-    };
+    typedef std::multimap<ia_uid, GraphConfigItem*> gcss_item_map;
     Type type;
-
     GraphConfigItem(Type type) : type(type){}
     virtual ~GraphConfigItem() {}
 };
 
-typedef std::pair<ItemUID, GraphConfigItem*> gcss_tree_item;
-
-// ATTRIBUTE
-class GraphConfigAttribute : public GraphConfigItem
+/**
+ * Container for integer type attributes
+ */
+class GraphConfigIntAttribute : public GraphConfigItem
 {
 public:
-    GraphConfigAttribute() : GraphConfigItem(ATTRIBUTE), dataType(TYPE_NA){}
-    GraphConfigAttribute(DataType dt) : GraphConfigItem(ATTRIBUTE), dataType(dt){}
-    GraphConfigAttribute* copy();
-    ia_err_t insertString(const std::string&);
+    GraphConfigIntAttribute() : GraphConfigItem(INT_ATTRIBUTE), mInteger(-1){}
+    GraphConfigIntAttribute* copy();
     ia_err_t insertInteger(int);
-    ia_err_t getString(std::string&);
     ia_err_t getInteger(int&);
     ia_err_t getAttrValAsString(std::string &ret);
-    ~GraphConfigAttribute() {};
+    ~GraphConfigIntAttribute() {};
 private:
-    DataType dataType;
-    std::string mString;
     int mInteger;
+};
+
+/**
+ * Container for string type attributes
+ */
+class GraphConfigStrAttribute : public GraphConfigItem
+{
+public:
+    GraphConfigStrAttribute() : GraphConfigItem(STR_ATTRIBUTE){}
+    GraphConfigStrAttribute* copy();
+    ia_err_t insertString(const std::string&);
+    ia_err_t getString(std::string&);
+    ~GraphConfigStrAttribute() {};
+private:
+    std::string mString;
 };
 
 // LEAF
@@ -130,15 +141,18 @@ public:
     GraphConfigNode() : GraphConfigItem(NODE), mAncestor(NULL){};
     GraphConfigNode* copy();
     gcss_item_map item;
+
+    void dumpNode();
     ia_err_t getAllDescendants(gcss_node_vector&);
     ia_err_t getAncestor(GraphConfigNode**);
-    ia_err_t getAttribute(const ItemUID, GraphConfigAttribute**);
-    ia_err_t getDescendant(const ItemUID, GraphConfigNode**);
-    ia_err_t insertDescendant(GraphConfigItem*, const ItemUID);
+    ia_err_t getIntAttribute(const ia_uid, GraphConfigIntAttribute&);
+    ia_err_t getStrAttribute(const ia_uid, GraphConfigStrAttribute&);
+    ia_err_t getDescendant(const ia_uid, GraphConfigNode**);
+    ia_err_t insertDescendant(GraphConfigItem*, const ia_uid);
     ia_err_t addDescendantsFromNode(GraphConfigNode*);
     ia_err_t getConnectionData(const std::string&,
                                GraphConfigNode*,
-                               ItemUID&,
+                               ia_uid&,
                                GraphConfigNode**,
                                std::vector<ia_uid>&);
     ~GraphConfigNode();
@@ -153,13 +167,18 @@ public:
     typedef std::map<ItemUID, std::string> GraphQuery;
 
     ia_err_t getGraph(GraphConfigNode*, GraphConfigNode*);
-    ia_err_t queryGraphs(const GraphQuery&, GraphQueryResult&);
+    ia_err_t queryGraphs(const GraphQuery&,
+                         GraphQueryResult&,
+                         bool strict = true);
     ia_err_t queryGraphs(const GraphQuery&,
                          const GraphQueryResult&,
-                         GraphQueryResult&);
+                         GraphQueryResult&,
+                         bool strict = true);
     void setGraphSettings(GraphConfigNode** settings) {mGraphSettings = *settings;}
     void setGraphDescriptor(GraphConfigNode** descriptor) {mGraphDescriptor = *descriptor;}
 private:
+    // true = every search item has to match, false = at least one match
+    bool strictQuery;
     // Store parsed data into these containers, instead of using a single node
     GraphConfigNode* mGraphSettings;
     GraphConfigNode* mGraphDescriptor;

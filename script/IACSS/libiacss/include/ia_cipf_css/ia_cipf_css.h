@@ -70,6 +70,12 @@
 #define psys_2600_4k60_param_uid    psys_2600_4k60_uid + 3
 #define psys_2600_4k60_secondary_output_uid psys_2600_4k60_uid + 4
 
+#define psys_2600_uvswap_pg_id        119
+#define psys_2600_uvswap_uid          ia_fourcc('P',psys_2600_uvswap_pg_id,'G','0')
+#define psys_2600_uvswap_input_uid    psys_2600_uvswap_uid + 1
+#define psys_2600_uvswap_output_uid   psys_2600_uvswap_uid + 2
+#define psys_2600_uvswap_param_uid    psys_2600_uvswap_uid + 3
+
 #define psys_2600_popg_pg_id                201
 #define psys_2600_popg_uid                  ia_fourcc('P',psys_2600_popg_pg_id,'G','0')
 #define psys_2600_popg_param_uid            psys_2600_popg_uid + 1
@@ -94,6 +100,22 @@
 #define psys_2600_video_pre_gdc_input_uid    psys_2600_video_pre_gdc_uid + 3
 #define psys_2600_video_pre_gdc_output_uid   psys_2600_video_pre_gdc_uid + 4
 
+#define psys_2600_still_pre_gdc_pg_id        117
+#define psys_2600_still_pre_gdc_uid          ia_fourcc('P',psys_2600_still_pre_gdc_pg_id,'G','0')
+#define psys_2600_still_pre_gdc_param_uid    psys_2600_still_pre_gdc_uid + 1
+#define psys_2600_still_pre_gdc_program_uid  psys_2600_still_pre_gdc_uid + 2
+#define psys_2600_still_pre_gdc_input_uid    psys_2600_still_pre_gdc_uid + 3
+#define psys_2600_still_pre_gdc_output_uid   psys_2600_still_pre_gdc_uid + 4
+
+#define psys_2600_still_post_gdc_pg_id                118
+#define psys_2600_still_post_gdc_uid                  ia_fourcc('P',psys_2600_still_post_gdc_pg_id,'G','0')
+#define psys_2600_still_post_gdc_param_uid            psys_2600_still_post_gdc_uid + 1
+#define psys_2600_still_post_gdc_program_uid          psys_2600_still_post_gdc_uid + 2
+#define psys_2600_still_post_gdc_input_uid            psys_2600_still_post_gdc_uid + 3
+#define psys_2600_still_post_gdc_spatial_param_uid    psys_2600_still_post_gdc_uid + 4
+#define psys_2600_still_post_gdc_output_uid           psys_2600_still_post_gdc_uid + 5
+#define psys_2600_still_post_gdc_secondary_output_uid psys_2600_still_post_gdc_uid + 6
+
 #define psys_interleaved_code_uid     ia_fourcc('I','L','C','S')
 #define psys_interleaved_code_in_uid  psys_interleaved_code_uid + 1
 #define psys_interleaved_code_out_uid psys_interleaved_code_uid + 2
@@ -102,26 +124,30 @@
 #define psys_stage_operation_mode_uid ia_fourcc('P','S','O','P')
 
 /* COMMON CSS UIDS */
-#define css_program_group_params_uid ia_fourcc('C','S','S','P')
-#define css_frame_descriptor_uid     ia_fourcc('C','S','S','F')
-#define css_fourcc_raw               ia_fourcc('C','S','B','A')
-#define css_fourcc_raw_interleaved   ia_fourcc('C','S','R','I')
-#define css_fourcc_internal_yuv_line ia_fourcc('C','S','Y','C')
-#define css_fourcc_yyuv420_v32       ia_fourcc('C','S','Y','U')
-#define css_sc_descriptor_uid        ia_fourcc('C','S','S','C')
-#define css_frame_max_resolution_uid ia_fourcc('C','S','M','A')
-#define css_frame_min_resolution_uid ia_fourcc('C','S','M','I')
-#define css_program_group_manifest_uid ia_fourcc('C','S','S','M')
-#define css_process_group_uid        ia_fourcc('C','S','P','G')
-#define css_fragment_max_uid         ia_fourcc('C','S','F','<')
-#define css_fragment_min_uid         ia_fourcc('C','S','F','>')
-#define css_fragment_uid             ia_fourcc('C','S','F','S')
-#define css_fragment_overlap_uid     ia_fourcc('C','S','F','O')
-#define css_fragment_count_uid       ia_fourcc('C','S','F','C')
-#define css_terminal_descriptor_uid  ia_fourcc('C','S','S','T')
-#define css_kernel_bitmap_uid        ia_fourcc('C','S','S','K')
+#define css_program_group_params_uid    ia_fourcc('C','S','S','P')
+#define css_frame_descriptor_uid        ia_fourcc('C','S','S','F')
+#define css_fourcc_raw                  ia_fourcc('C','S','B','A')
+#define css_fourcc_raw_interleaved      ia_fourcc('C','S','R','I')
+#define css_fourcc_internal_yuv_line    ia_fourcc('C','S','Y','C')
+#define css_fourcc_yyuv420_v32          ia_fourcc('C','S','Y','U')
+#define css_sc_descriptor_uid           ia_fourcc('C','S','S','C')
+#define css_frame_max_resolution_uid    ia_fourcc('C','S','M','A')
+#define css_frame_min_resolution_uid    ia_fourcc('C','S','M','I')
+#define css_program_group_manifest_uid  ia_fourcc('C','S','S','M')
+#define css_process_group_uid           ia_fourcc('C','S','P','G')
+#define css_fragment_max_uid            ia_fourcc('C','S','F','<')
+#define css_fragment_min_uid            ia_fourcc('C','S','F','>')
+#define css_fragment_uid                ia_fourcc('C','S','F','S')
+#define css_fragment_overlap_uid        ia_fourcc('C','S','F','O')
+#define css_fragment_count_uid          ia_fourcc('C','S','F','C')
+#define css_terminal_descriptor_uid     ia_fourcc('C','S','S','T')
+#define css_kernel_bitmap_uid           ia_fourcc('C','S','S','K')
+#define css_fragment_grid_desc_uid      ia_fourcc('C','S','F','G')
+#define css_frame_grid_param_desc_uid   ia_fourcc('C','S','F','P')
+#define css_param_section_desc_uid      ia_fourcc('C','S','P','D')
+#define css_frag_param_section_desc_uid ia_fourcc('C','S','F','D')
 
-/* Encode 8bit vied_nci_resource_id_t into least significat byte of UID */
+/* Encode 8bit vied_nci_resource_id_t into least significant byte of UID */
 #define css_vied_nci_kernel_id_uid_mask ia_fourcc(0xFF,0xFF,0xFF,0)
 #define css_vied_nci_kernel_id_uid(x)   ia_fourcc('K','I','#', x)
 
