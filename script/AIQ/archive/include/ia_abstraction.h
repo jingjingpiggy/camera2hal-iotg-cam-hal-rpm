@@ -29,10 +29,11 @@
 
 /*!
  * \brief extra Q number format typedefs.
-*/
+ */
 typedef int16_t sq7_8_t;
 typedef uint16_t uq8_8_t;
 typedef uint16_t uq6_10_t;
+typedef uint16_t uq4_12_t;
 typedef int32_t sq15_16_t;
 typedef uint32_t uq16_16_t;
 

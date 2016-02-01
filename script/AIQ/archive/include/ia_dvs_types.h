@@ -155,6 +155,8 @@ typedef struct
                                                      Lens distortion correction is calculated from the full sensor resolution and
                                                      DVS needs to know how distortion grids need to be cropped so that they will match with
                                                      the GDC input image.*/
+    bool validate_morph_table;                  /**< False disables morph table validation, true enables. Morph table needs to be validated to
+                                                     protect FW. Starting from IPU4 validation is performed in PAL. */
 } ia_dvs_configuration;
 
 /** Distortion grid configuration.
