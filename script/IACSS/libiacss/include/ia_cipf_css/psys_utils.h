@@ -62,8 +62,3 @@ psys_utils_read_buffer_section(ia_cipf_buffer_t *buffer,
                                ia_uid section_uid,
                                void *data,
                                uint32_t size);
-
-uint32_t
-psys_utils_interpret_terminal_sections_from_manifest(
-        ia_cipf_property_t *property);
-

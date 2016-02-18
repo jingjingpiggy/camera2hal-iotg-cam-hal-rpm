@@ -84,6 +84,13 @@
 
 /**
  * \ingroup ia_cipr_memory
+ * memcpy wrapper. Uses same size for both source and destination.
+ */
+#define IA_CIPR_MEMCPY(dest, src, n) \
+    ia_cipr_memcpy(dest, n, src, n)
+
+/**
+ * \ingroup ia_cipr_memory
  */
 size_t ia_cipr_pagesize(void);
 
@@ -130,5 +137,17 @@ void* ia_cipr_alloc_aligned(size_t size,
  * \ingroup ia_cipr_memory
  */
 void ia_cipr_free(void *ptr, const char *logmsg);
+
+/**
+ * \param dest as in memcpy
+ * \param dest_size as in memcpy_s, max number of bytes to modify in destination
+ * \param src as in memcpy
+ * \param n as in memcpy
+ * \ingroup ia_cipr_memory
+ */
+void ia_cipr_memcpy(void *dest,
+                    size_t dest_size,
+                    const void *src,
+                    size_t n);
 
 #endif /* IA_CIPR_ALLOC_H_ */

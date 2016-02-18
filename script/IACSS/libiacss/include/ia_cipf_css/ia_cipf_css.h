@@ -92,6 +92,7 @@
 #define psys_2600_post_gdc_spatial_param_uid    psys_2600_post_gdc_uid + 4
 #define psys_2600_post_gdc_output_uid           psys_2600_post_gdc_uid + 5
 #define psys_2600_post_gdc_secondary_output_uid psys_2600_post_gdc_uid + 6
+#define psys_2600_post_gdc_third_output_uid     psys_2600_post_gdc_uid + 7
 
 #define psys_2600_video_pre_gdc_pg_id        116
 #define psys_2600_video_pre_gdc_uid          ia_fourcc('P',psys_2600_video_pre_gdc_pg_id,'G','0')
@@ -115,6 +116,15 @@
 #define psys_2600_still_post_gdc_spatial_param_uid    psys_2600_still_post_gdc_uid + 4
 #define psys_2600_still_post_gdc_output_uid           psys_2600_still_post_gdc_uid + 5
 #define psys_2600_still_post_gdc_secondary_output_uid psys_2600_still_post_gdc_uid + 6
+#define psys_2600_still_post_gdc_third_output_uid     psys_2600_still_post_gdc_uid + 7
+
+#define psys_2600_video_isa_pg_id                120
+#define psys_2600_video_isa_uid                  ia_fourcc('P',psys_2600_video_isa_pg_id,'G','0')
+#define psys_2600_video_isa_param_uid            psys_2600_video_isa_uid + 1
+#define psys_2600_video_isa_program_uid          psys_2600_video_isa_uid + 2
+#define psys_2600_video_isa_input_uid            psys_2600_video_isa_uid + 3
+#define psys_2600_video_isa_output_uid           psys_2600_video_isa_uid + 4
+#define psys_2600_video_isa_secondary_output_uid psys_2600_video_isa_uid + 5
 
 #define psys_interleaved_code_uid     ia_fourcc('I','L','C','S')
 #define psys_interleaved_code_in_uid  psys_interleaved_code_uid + 1
@@ -146,6 +156,7 @@
 #define css_frame_grid_param_desc_uid   ia_fourcc('C','S','F','P')
 #define css_param_section_desc_uid      ia_fourcc('C','S','P','D')
 #define css_frag_param_section_desc_uid ia_fourcc('C','S','F','D')
+#define css_kernel_disable_uid          ia_fourcc('C','S','K','D')
 
 /* Encode 8bit vied_nci_resource_id_t into least significant byte of UID */
 #define css_vied_nci_kernel_id_uid_mask ia_fourcc(0xFF,0xFF,0xFF,0)

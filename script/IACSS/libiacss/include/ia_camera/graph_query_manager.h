@@ -95,21 +95,35 @@ class GraphConfigItem
 {
 public:
     typedef std::multimap<ia_uid, GraphConfigItem*> gcss_item_map;
+    typedef gcss_item_map::const_iterator const_iterator;
+    GraphConfigItem::const_iterator getNext(const_iterator& it){
+                                            return std::next(it, 1);}
+    virtual ia_err_t getValue(int&){return ia_err_none;}
+    virtual ia_err_t getValue(std::string&){return ia_err_none;}
     Type type;
     GraphConfigItem(Type type) : type(type){}
+
     virtual ~GraphConfigItem() {}
+};
+
+class GraphConfigAttribute : public GraphConfigItem {
+public:
+    GraphConfigAttribute() : GraphConfigItem(NA){}
+    GraphConfigAttribute(Type t) : GraphConfigItem(t){}
+    ~GraphConfigAttribute() {}
 };
 
 /**
  * Container for integer type attributes
  */
-class GraphConfigIntAttribute : public GraphConfigItem
+class GraphConfigIntAttribute : public GraphConfigAttribute
 {
 public:
-    GraphConfigIntAttribute() : GraphConfigItem(INT_ATTRIBUTE), mInteger(-1){}
+    GraphConfigIntAttribute() : GraphConfigAttribute(INT_ATTRIBUTE), mInteger(-1){}
     GraphConfigIntAttribute* copy();
     ia_err_t insertInteger(int);
     ia_err_t getInteger(int&);
+    ia_err_t getValue(int& intVal){intVal = mInteger; return ia_err_none;}
     ia_err_t getAttrValAsString(std::string &ret);
     ~GraphConfigIntAttribute() {};
 private:
@@ -119,13 +133,14 @@ private:
 /**
  * Container for string type attributes
  */
-class GraphConfigStrAttribute : public GraphConfigItem
+class GraphConfigStrAttribute : public GraphConfigAttribute
 {
 public:
-    GraphConfigStrAttribute() : GraphConfigItem(STR_ATTRIBUTE){}
+    GraphConfigStrAttribute() : GraphConfigAttribute(STR_ATTRIBUTE){}
     GraphConfigStrAttribute* copy();
     ia_err_t insertString(const std::string&);
     ia_err_t getString(std::string&);
+    ia_err_t getValue(std::string& str){str = mString; return ia_err_none;}
     ~GraphConfigStrAttribute() {};
 private:
     std::string mString;
@@ -141,22 +156,49 @@ public:
     GraphConfigNode() : GraphConfigItem(NODE), mAncestor(NULL){};
     GraphConfigNode* copy();
     gcss_item_map item;
-
     void dumpNode();
-    ia_err_t getAllDescendants(gcss_node_vector&);
+    static void dumpNodeTree(GraphConfigNode*, int depth  = 0);
+    const_iterator begin() const { return item.begin(); }
+    const_iterator end() const { return item.end(); }
+    ia_err_t getAllDescendants(gcss_node_vector&) const;
     ia_err_t getAncestor(GraphConfigNode**);
+    ia_err_t getAttribute(const ia_uid iuid, GraphConfigAttribute** ret) const;
     ia_err_t getIntAttribute(const ia_uid, GraphConfigIntAttribute&);
     ia_err_t getStrAttribute(const ia_uid, GraphConfigStrAttribute&);
-    ia_err_t getDescendant(const ia_uid, GraphConfigNode**);
+    ia_err_t getDescendant(const ia_uid, GraphConfigNode**) const;
+    ia_err_t getDescendant(const ia_uid attribute,
+                           const int searchAttributeValue,
+                           const_iterator& it,
+                           GraphConfigNode** retNode) const;
+    ia_err_t getDescendant(const ia_uid attribute,
+                           const std::string& searchAttributeValue,
+                           const_iterator& it,
+                           GraphConfigNode** retNode) const;
+    ia_err_t getNodeCountByType(const std::string &typeValue, uint32_t& count);
+    ia_err_t getDescendantByString(const std::string &str,
+                                   GraphConfigNode **retNode);
     ia_err_t insertDescendant(GraphConfigItem*, const ia_uid);
-    ia_err_t addDescendantsFromNode(GraphConfigNode*);
-    ia_err_t getConnectionData(const std::string&,
-                               GraphConfigNode*,
-                               ia_uid&,
-                               GraphConfigNode**,
-                               std::vector<ia_uid>&);
+    ia_err_t getConnectionData(const std::string& connection_string,
+                               const GraphConfigNode* settings,
+                               GraphConfigNode* ret_node,
+                               std::vector<ia_uid>& addedNodesVector);
+    template <typename T>
+    ia_err_t getValue(const ia_uid& uid, T& val) const {
+
+        GraphConfigAttribute * retAttribute;
+        ia_err_t ret = getAttribute(uid, &retAttribute);
+
+        if (ia_err_none != ret)
+            return ret;
+
+        return retAttribute->getValue(val);
+    }
     ~GraphConfigNode();
 private:
+    ia_err_t addDescendantsFromNode(GraphConfigNode*);
+    ia_err_t addResInfo(const GraphConfigNode* settings);
+    GraphConfigItem::const_iterator getNextAttribute(
+            GraphConfigItem::const_iterator& it) const;
     GraphConfigNode* mAncestor;
 };
 
@@ -174,14 +216,19 @@ public:
                          const GraphQueryResult&,
                          GraphQueryResult&,
                          bool strict = true);
+    /**
+     * \todo remove the non-const setters when HAL is no more dependent on them
+     */
     void setGraphSettings(GraphConfigNode** settings) {mGraphSettings = *settings;}
     void setGraphDescriptor(GraphConfigNode** descriptor) {mGraphDescriptor = *descriptor;}
+    void setGraphSettings(const GraphConfigNode* settings) {mGraphSettings = settings;}
+    void setGraphDescriptor(const GraphConfigNode* descriptor) {mGraphDescriptor = descriptor;}
 private:
     // true = every search item has to match, false = at least one match
     bool strictQuery;
     // Store parsed data into these containers, instead of using a single node
-    GraphConfigNode* mGraphSettings;
-    GraphConfigNode* mGraphDescriptor;
+    const GraphConfigNode* mGraphSettings;
+    const GraphConfigNode* mGraphDescriptor;
     ItemUID iuidVector; // Contains sequence of keys to find a certain item
 
     ia_err_t goThroughSettings(const GraphQuery&,

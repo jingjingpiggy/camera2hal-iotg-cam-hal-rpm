@@ -103,11 +103,15 @@ typedef struct log_context log_context_t;
 #define ia_cipf_frame_fourcc_iyuv ia_fourcc('I','Y','U','V')
 #define ia_cipf_frame_fourcc_nv12 ia_fourcc('N','V','1','2')
 #define ia_cipf_frame_fourcc_nv21 ia_fourcc('N','V','2','1')
+#define ia_cipf_frame_fourcc_yuy2 ia_fourcc('Y','U','Y','2')
 #define ia_cipf_frame_fourcc_ba10 ia_fourcc('B','A','1','0')
+#define ia_cipf_frame_fourcc_gr08 ia_fourcc('G','R','0','8')
+#define ia_cipf_frame_fourcc_gr10 ia_fourcc('G','R','1','0')
 #define ia_cipf_frame_fourcc_grbg ia_fourcc('G','R','B','G')
 #define ia_cipf_frame_fourcc_rggb ia_fourcc('R','G','G','B')
 #define ia_cipf_frame_fourcc_bggr ia_fourcc('B','G','G','R')
 #define ia_cipf_frame_fourcc_gbrg ia_fourcc('G','B','R','G')
+#define ia_cipf_frame_fourcc_tile ia_fourcc('T','I','L','E')
 
 /* Native object type reference UIDs */
 #define ia_cipf_pipeline_location_ref_uid   ia_fourcc('P','O','L','R')

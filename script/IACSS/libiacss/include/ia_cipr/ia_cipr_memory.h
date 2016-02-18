@@ -85,13 +85,15 @@ typedef uint32_t ia_cipr_memory_flags_t;
 #define IA_CIPR_MEMORY_READ_ONLY        (uint32_t)(1 << 5)
 #define IA_CIPR_MEMORY_WRITE_ONLY       (uint32_t)(1 << 6)
 #define IA_CIPR_MEMORY_UNCACHED         (uint32_t)(1 << 7)
+#define IA_CIPR_MEMORY_MAP_TO_USER      (uint32_t)(1 << 8)
+#define IA_CIPR_MEMORY_NO_CLEAR         (uint32_t)(1 << 9)
 
 /**
  * Memory bitfield definitions for memory state
  */
-#define IA_CIPR_MEMORY_ALLOCATED        (uint32_t)(1 << 8)
-#define IA_CIPR_MEMORY_FROM_USER        (uint32_t)(1 << 9)
-#define IA_CIPR_MEMORY_MIGRATED         (uint32_t)(1 << 10)
+#define IA_CIPR_MEMORY_ALLOCATED        (uint32_t)(1 << 10)
+#define IA_CIPR_MEMORY_FROM_USER        (uint32_t)(1 << 11)
+#define IA_CIPR_MEMORY_MIGRATED         (uint32_t)(1 << 12)
 
 /**
  * Device specific implementations in CIPR are allowed to extend memory
