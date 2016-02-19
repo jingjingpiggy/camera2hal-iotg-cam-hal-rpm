@@ -40,10 +40,18 @@
  *
  *  \section supported_kernels Supported Program Groups & Kernels
  *
+ *  Supported platforms:
+ *   - BXT B0
+ *   - CNL A0
+ *   - CNL B0
+ *
  *  P2P implementation currently supports the following program groups:
  *   - IA_P2P_PG_ISYS
- *   - IA_P2P_PG_VPREGDC (same as IA_CSS_BXT_PSS_PG_SPECIFICATION_VPREGDC)
- *   - IA_P2P_PG_VPOSTGDC (same as IA_CSS_BXT_PSS_PG_SPECIFICATION_VPOSTGDC)
+ *   - IA_P2P_PG_ISL
+ *   - IA_P2P_PG_VPREGDC
+ *   - IA_P2P_PG_VPOSTGDC
+ *   - IA_P2P_PG_SPREGDC
+ *   - IA_P2P_PG_SPOSTGDC
  *
  *  P2P implementation currently supports the following kernels from ISYS:
  *   - INL
@@ -62,7 +70,6 @@
  *   - IDS
  *
  *  P2P implementation currently supports the following kernels from VPREGDC:
- *   - WBA_BC (A0)
  *   - WBA_WBA
  *   - RYNR_VCUD (B0)
  *   - RYNR_BNLM (B0)
@@ -599,8 +606,6 @@ ia_err ia_p2p_sliced_param_in_terminal_encode(
  *  \param [in]     fragment_count          The number of fragments.
  *  \param [in]     pixel_fragment_descs    An array of fragment descriptors, one for each fragment.
  *  \param [in,out] terminal                The param output terminal.
- *  \param [in]     section_index           The index of the first section where the data for this kernel is written to the terminal.
- *  \param [in]     total_section_count     The total number of sections for one fragment including all kernels.
  *  \param [in]     payload_base_offset     The base offset in the payload buffer for this kernel.
  *
  *  \return ia_err_none, if no errors.
@@ -618,14 +623,13 @@ ia_err ia_p2p_sliced_param_out_terminal_prepare(
 /*!
  *  Decodes param out data for a single kernel in a sliced parameter output terminal.
  *
- *  \param [in]     ia_p2p              IA_P2P instance handle.
- *  \param [in]     pg_id               The program group id.
- *  \param [in]     kernel_id           The program group specific identifier of the kernel to decode.
- *  \param [in]     fragment_count      The number of fragments.
- *  \param [in]     terminal            The param output terminal.
- *  \param [in]     section_index       The index of the first section where the data for this kernel is written to the terminal.
- *  \param [in]     total_section_count The total number of sections for one fragment including all kernels.
- *  \param [in]     payload_buffer      A pointer to the beginning of the payload buffer.
+ *  \param [in]     ia_p2p                  IA_P2P instance handle.
+ *  \param [in]     pg_id                   The program group id.
+ *  \param [in]     kernel_id               The program group specific identifier of the kernel to decode.
+ *  \param [in]     fragment_count          The number of fragments.
+ *  \param [in]     pixel_fragment_descs    An array of fragment descriptors, one for each fragment.
+ *  \param [in]     terminal                The param output terminal.
+ *  \param [in]     payload_buffer          A pointer to the beginning of the payload buffer.
  *
  *  \return ia_err_none, if no errors.
  *          ia_err_argument, if the arguments are invalid.

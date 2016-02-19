@@ -28,28 +28,36 @@
 extern "C" {
 #endif
 
-/* \brief Input structure for resolution changing ISP block.
+/*!
+ * \brief Input structure for resolution changing ISP block.
+ *
  * If ISP block changes resolution as part of its processing, this structure defines
  * resolutions and cropping parameters for one input and output pins. If ISP block has
  * multiple outputs, structure needs to be passed for each output pin. Order of operations:
- * 1. Input image is cropped according to input_crop structure parameters. New cropped input resolution is calculated.
- * 2. Cropped input image is scaled from cropped input resolution to output resolution (output_width & output_height).
- * 3. Output image is cropped according to output_crop structure parameters.
+ *
+ * -# Input image is cropped according to input_crop structure parameters. New cropped input resolution is calculated.
+ * -# Cropped input image is scaled from cropped input resolution to output resolution (output_width & output_height).
+ * -# Output image is cropped according to output_crop structure parameters.
  *
  * If ISP block doesn't change resolution of the image as part of its processing, this structure defines
  * resolution changes done to the image from the beginning of the pipe until now. For example if some scaling or
  * cropping was done before, they are combined.
  *
  * Example:
- * 1. Sensor outputs 6528 x 4896. Sensor crops 3264 x 2448 ROI from bottom right corner.
- * 2. ISP block downscales the image from 3264 x 2448 to 2176 x 1632 (scale 0.6667) and crops to 1920 x 1080 (RCB):
- *    resolution_info { 6528, 4896, { 3264, 2448, 0, 0 }, 2176, 1632, { 128, 276, 128, 276 } }
- * 3. ISP block needs to know what resolution changes were done with respect to full sensor frame:
- *    resolution_history { 6528, 4896, { 3264+(128/0.6667), 2448+(276/0.6667), (128/0.6667), (276/0.6667) }, 1920, 1080, { 0, 0, 0, 0 } }
- * 4. ISP block forther downscales the image to 1280 x 720 (RCB):
- *    resolution_info { 1920, 1080, { 0, 0, 0, 0 }, 1280, 720, { 0, 0, 0, 0 } }
- * 5. ISP block needs to know what resolution changes were done:
- *    resolution_history { 6528, 4896, { 3264+(128/0.6667), 2448+(276/0.6667), (128/0.6667), (276/0.6667) }, 1280, 720, { 0, 0, 0, 0 } }
+ *
+ * -# Sensor outputs 6528 x 4896. Sensor crops 3264 x 2448 ROI from bottom right corner.
+ * -# ISP block downscales the image from 3264 x 2448 to 2176 x 1632 (scale 0.6667) and crops to 1920 x 1080 (RCB):
+ *    - resolution_info { 6528, 4896, { 3264, 2448, 0, 0 }, 2176, 1632, { 128, 276, 128, 276 } }
+ *
+ * -# ISP block needs to know what resolution changes were done with respect to full sensor frame:
+ *    - resolution_history { 6528, 4896, { 3264+(128/0.6667), 2448+(276/0.6667), (128/0.6667), (276/0.6667) }, 1920, 1080, { 0, 0, 0, 0 } }
+ *
+ * -# ISP block forther downscales the image to 1280 x 720 (RCB):
+ *    - resolution_info { 1920, 1080, { 0, 0, 0, 0 }, 1280, 720, { 0, 0, 0, 0 } }
+ *
+ * -# ISP block needs to know what resolution changes were done:
+ *    - resolution_history { 6528, 4896, { 3264+(128/0.6667), 2448+(276/0.6667), (128/0.6667), (276/0.6667) }, 1280, 720, { 0, 0, 0, 0 } }
+ *
  */
 typedef struct
 {

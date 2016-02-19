@@ -28,6 +28,30 @@
 /*!
  * \file ia_isp_bxt.h
  * \brief ia_isp_bxt specific implementation.
+ *
+ * \mainpage
+ * \section main Automatic ISP (AIC) Configuration component for IPU4 (and onwards)
+ *
+ * AIC is stateless component, which purpose is to
+ * - Convert generic results into ISP specific format.
+ * - Adapt ISP tunings based on run-time changing parameters.
+ * - Convert ISP specific statistics into format that is used by 3A and control other algorithms.
+ *
+ * AIC consists of following components:
+ * - \ref gaic
+ * - \ref pal
+ *
+ * AIC API is defined in ia_isp_bxt.h file.
+ *
+ * \subsection gaic Generic AIC (GAIC)
+ *
+ * GAIC implements generic adaptation of tunings (generated with IQ tools) as factor of run-time changing parameters. GAIC uses various interpolation
+ * schemes to calculate ISP parameters between distinct tunings.
+ *
+ * \subsection pal Parameter Abstraction Layer (PAL)
+ *
+ * PAL generates ISP parameters to each ISP block based on distinct tuning given to it. Refer to PAL documentation for detailed description for
+ * configuration and dependencies of each ISP block.
 */
 
 #ifndef IA_ISP_BXT_H_
@@ -53,10 +77,9 @@ typedef struct ia_isp_bxt_t ia_isp_bxt;
  *
  * \param[in]     aiqb_data          Mandatory although function will not return error, if it not given.\n
  *                                   Reads generic AIC records Block from CPFF.
- * \param[in]     ia_cmc             Mandatory.\n
- *                                   Parsed camera module characterization structure. Essential parts of the structure will be copied
+ * \param[in]     ia_cmc             Mandatory. Parsed camera module characterization structure. Essential parts of the structure will be copied
  *                                   into internal structure.
- * \param[in]     max_stats_width    Mandatory.\n Maximum width of RGBS and AF statistics grids from ISP. Used to calculate size of
+ * \param[in]     max_stats_width    Mandatory. Maximum width of RGBS and AF statistics grids from ISP. Used to calculate size of
  *                                   memory buffers for the IA_AIQ algorithms. The same maximum width will be used for all RGBS
  *                                   and AF statistics grid allocations.
  * \param[in]     max_stats_height   Mandatory. Maximum height of RGBS and AF statistics grids from ISP. Used to calculate size of
@@ -66,14 +89,14 @@ typedef struct ia_isp_bxt_t ia_isp_bxt;
  */
 
 LIBEXPORT ia_isp_bxt*
-ia_isp_bxt_init(const ia_binary_data *aiqb_data,
-        ia_cmc_t *ia_cmc,
-        unsigned int max_stats_width,
-        unsigned int max_stats_height);
+ia_isp_bxt_init(
+    const ia_binary_data *aiqb_data,
+    ia_cmc_t *ia_cmc,
+    unsigned int max_stats_width,
+    unsigned int max_stats_height);
 
 LIBEXPORT void
-ia_isp_bxt_deinit(
-        ia_isp_bxt *ia_isp_bxt);
+ia_isp_bxt_deinit(ia_isp_bxt *ia_isp_bxt);
 
 /*!
  *  \brief IA_ISP_BXT parameter input structure.
@@ -104,18 +127,17 @@ typedef struct
  * \brief ISP configuration for the next frame
  * Computes ISP parameters from input parameters and CPF values for the next image.
  *
- * \param[in] ia_isp_bxt                    Mandatory.\n
- *                                          ISP instance handle.
- * \param[in] ia_isp_bxt_input_params       Mandatory.\n
- *                                          Input parameters for ISP calculations.
- * \return                                  Binary data structure with pointer to the ISP configuration structure.
+ * \param[in] ia_isp_bxt                    Mandatory. ISP instance handle.
+ * \param[in] input_params                  Mandatory. Input parameters for ISP calculations.
+ * \param[out] output_data                  Mandatory. Binary data structure with pointer to the ISP configuration structure.
+ * \return                                  Error code.
  *
  */
 LIBEXPORT ia_err
 ia_isp_bxt_run(
-        ia_isp_bxt *ia_isp_bxt,
-        const ia_isp_bxt_input_params *input_params,
-        ia_binary_data *output_data);
+    ia_isp_bxt *ia_isp_bxt,
+    const ia_isp_bxt_input_params *input_params,
+    ia_binary_data *output_data);
 
 /*!
  * \brief Get version.
@@ -130,46 +152,38 @@ ia_isp_bxt_get_version(void);
  * \brief Converts BXT ISP specific statistics to IA_AIQ format.
  * ISP generated statistics may not be in the format in which AIQ algorithms expect. Statistics need to be converted
  * from various ISP formats into AIQ statistics format.
- * \param[in] ia_isp_bxt        Mandatory.\n
- *                              ia_isp_bxt instance handle.
- * \param[in]  statistics_ptr   Mandatory.\n
- *                              Statistics in ISP specific format.
- * \param[out] out_stats        Mandatory.\n
- *                              A pointer to the query results which indicate which statistics are available.
- * \return                      Error code.
+ * \param[in] ia_isp_bxt         Mandatory. ia_isp_bxt instance handle.
+ * \param[in]  statistics        Mandatory. Statistics in ISP specific format.
+ * \param[out] out_query_results Mandatory. A pointer to the query results which indicate which statistics are available.
+ * \return                       Error code.
  */
 LIBEXPORT ia_err
 ia_isp_bxt_statistics_query(
-    ia_isp_bxt *ia_isp_bxt_ptr,
-    const ia_binary_data *statistics_ptr,
+    ia_isp_bxt *ia_isp_bxt,
+    const ia_binary_data *statistics,
     ia_isp_bxt_statistics_query_results_t* out_query_results);
 
 /*!
  * \brief Converts BXT ISP specific statistics to IA_AIQ format.
  * ISP generated statistics may not be in the format in which AIQ algorithms expect. Statistics need to be converted
  * from various ISP formats into AIQ statistics format.
- * \param[in] ia_isp_bxt        Mandatory.\n
- *                              ia_isp_bxt instance handle.
- * \param[in]  statistics_ptr   Mandatory.\n
- *                              Statistics in ISP specific format.
- * \param[out] rgbs_grid        Mandatory.\n
- *                              Pointer's pointer where address of converted statistics are stored.
+ * \param[in] ia_isp_bxt        Mandatory. ia_isp_bxt instance handle.
+ * \param[in]  statistics       Mandatory. Statistics in ISP specific format.
+ * \param[out] out_rgbs_grid    Mandatory. Pointer's pointer where address of converted statistics are stored.
  *                              Converted RGBS grid statistics. Output can be directly used as input in function ia_aiq_statistics_set.
  *                              if the external buffer is provided in out_rgbs_grid it will be used otherwise internal buffer is used.
  * \return                      Error code.
  */
 LIBEXPORT ia_err
 ia_isp_bxt_statistics_convert_awb_from_binary(
-    ia_isp_bxt *ia_isp_bxt_ptr,
-    const ia_binary_data *statistics_ptr,
+    ia_isp_bxt *ia_isp_bxt,
+    const ia_binary_data *statistics,
     ia_aiq_rgbs_grid **out_rgbs_grid);
 
 /*!
  * \brief Converts BXT ISP specific statistics to IA_AIQ format.
  * ISP generated statistics may not be in the format in which AIQ algorithms expect. Statistics need to be converted
  * from various ISP formats into AIQ statistics format.
- * \param[in]  statistics    Mandatory.\n
- *                           Statistics in ISP specific format.
  * \param[in] ia_isp_bxt     Mandatory.\n
  *                           ia_isp_bxt instance handle.
  * \param[in]  stats_width   Mandatory actual width of the statistics grid.
@@ -195,15 +209,14 @@ ia_isp_bxt_statistics_convert_awb_from_binary(
  *                                     0: 0% above saturation
  *                                     255: 100% above saturation
  *
- * \param[out] rgbs_grid Mandatory.\n
- *                           Pointer's pointer where address of converted statistics are stored.
+ * \param[out] out_rgbs_grid Mandatory. Pointer's pointer where address of converted statistics are stored.
  *                           Converted RGBS grid statistics. Output can be directly used as input in function ia_aiq_statistics_set.
  *                           if the external buffer is provided in out_rgbs_grid it will be used otherwise internal buffer is used.
  * \return                   Error code.
  */
 LIBEXPORT ia_err
 ia_isp_bxt_statistics_convert_awb(
-                    ia_isp_bxt *ia_isp_bxt_ptr,
+                    ia_isp_bxt *ia_isp_bxt,
                     unsigned int stats_width,
                     unsigned int stats_height,
                     void *c0_avg,
@@ -224,36 +237,32 @@ ia_isp_bxt_statistics_convert_awb(
  * \brief Converts BXT ISP specific statistics to IA_AIQ format.
  * ISP generated statistics may not be in the format in which AIQ algorithms expect. Statistics need to be converted
  * from various ISP formats into AIQ statistics format.
- * \param[in]  ia_isp_bxt    Mandatory.\n
- *                           ia_isp_bxt instance handle.
- * \param[in]  statistics_ptr   Mandatory.\n
- *                              Statistics in ISP specific format.
+ * \param[in]  ia_isp_bxt     Mandatory ia_isp_bxt instance handle.
+ * \param[in]  statistics     Mandatory. Statistics in ISP specific format.
  *
- * \param[out] af_grid Mandatory.\n
- *                           this pointer is returned from the initialize function
- *                           Pointer's pointer where address of converted statistics are stored.
- *                           Converted af grid statistics. Output can be directly used as input in function ia_aiq_statistics_set.
- *                           if the external buffer is provided in out_af_grid it will be used otherwise internal buffer is used.
- * \return                   Error code.
+ * \param[out] out_af_grid    Mandatory. This pointer is returned from the initialize function
+ *                            Pointer's pointer where address of converted statistics are stored.
+ *                            Converted af grid statistics. Output can be directly used as input in function ia_aiq_statistics_set.
+ *                            if the external buffer is provided in out_af_grid it will be used otherwise internal buffer is used.
+ * \return                    Error code.
  */
 LIBEXPORT ia_err
 ia_isp_bxt_statistics_convert_af_from_binary(
     ia_isp_bxt *ia_isp_bxt,
-    const ia_binary_data *statistics_ptr,
+    const ia_binary_data *statistics,
     ia_aiq_af_grid **out_af_grid);
 
 /*!
  * \brief Converts BXT ISP specific statistics to IA_AIQ format.
  * ISP generated statistics may not be in the format in which AIQ algorithms expect. Statistics need to be converted
  * from various ISP formats into AIQ statistics format.
- * \param[in]  ia_isp_bxt    Mandatory.\n
- *                           ia_isp_bxt instance handle.
- * \param[in]  stats_width   Mandatory actual width of the statistics grid.
- * \param[in]  stats_height  Mandatory actual height of the statistics grid.
- * \param[in]  y00_avg       Mandatory Block value of Y00 filter response
- * \param[in]  y01_avg       Mandatory Block value of Y01 filter response
+ * \param[in]  ia_isp_bxt    Mandatory. ia_isp_bxt instance handle.
+ * \param[in]  stats_width   Mandatory. Actual width of the statistics grid.
+ * \param[in]  stats_height  Mandatory. Actual height of the statistics grid.
+ * \param[in]  y00_avg       Mandatory. Block value of Y00 filter response
+ * \param[in]  y01_avg       Mandatory. Block value of Y01 filter response
  *
- * \param[out] af_grid       Mandatory.\n
+ * \param[out] out_af_grid   Mandatory.\n
  *                           Pointer's pointer where address of converted statistics are stored.
  *                           Converted af grid statistics. Output can be directly used as input in function ia_aiq_statistics_set.
  *                           if the external buffer is provided in out_af_grid it will be used otherwise internal buffer is used.
@@ -272,37 +281,33 @@ ia_isp_bxt_statistics_convert_af(
  * \brief Converts BXT ISP specific statistics to IA_AIQ format.
  * ISP generated statistics may not be in the format in which AIQ algorithms expect. Statistics need to be converted
  * from various ISP formats into AIQ statistics format.
- * \param[in]  ia_isp_bxt       Mandatory.\n
- *                              ia_isp_bxt instance handle.
- * \param[in]  statistics_ptr   Mandatory.\n
- *                              Statistics in ISP specific format.
- * \param[out] aiq_histogram    Mandatory.\n
- *                              Pointer's pointer where address of converted statistics are stored.
- *                              Converted aiq histogram statistics. Output can be directly used as input in function ia_aiq_statistics_set.
- *                              if the external buffer is provided in out_aiq_histogram it will be used otherwise internal buffer is used.
- * \return                      Error code.
+ * \param[in]  ia_isp_bxt        Mandatory. ia_isp_bxt instance handle.
+ * \param[in]  statistics        Mandatory. Statistics in ISP specific format.
+ * \param[out] out_aiq_histogram Mandatory. Pointer's pointer where address of converted statistics are stored.
+ *                               Converted aiq histogram statistics. Output can be directly used as input in function ia_aiq_statistics_set.
+ *                               if the external buffer is provided in out_aiq_histogram it will be used otherwise internal buffer is used.
+ * \return                       Error code.
  */
 LIBEXPORT ia_err
 ia_isp_bxt_statistics_convert_ae_from_binary(
     ia_isp_bxt *ia_isp_bxt,
-    const ia_binary_data *statistics_ptr,
+    const ia_binary_data *statistics,
     ia_aiq_histogram **out_aiq_histogram);
 
 /*!
  * \brief Converts BXT ISP specific statistics to IA_AIQ format.
  * ISP generated statistics may not be in the format in which AIQ algorithms expect. Statistics need to be converted
  * from various ISP formats into AIQ statistics format.
- * \param[in]  ia_isp_bxt    Mandatory.\n
- *                           ia_isp_bxt instance handle.
- * \param[in]  c0_histogram  Mandatory Block value of c0_histogram
- * \param[in]  c1_histogram  Mandatory Block value of c1_histogram
- * \param[in]  c2_histogram  Mandatory Block value of c2_histogram
- * \param[in]  c3_histogram  Mandatory Block value of c3_histogram
- * \param[out] aiq_histogram Mandatory.\n
- *                           Pointer's pointer where address of converted statistics are stored.
- *                           Converted aiq histogram statistics. Output can be directly used as input in function ia_aiq_statistics_set.
- *                           if the external buffer is provided in out_aiq_histogram it will be used otherwise internal buffer is used.
- * \return                   Error code.
+ * \param[in]  ia_isp_bxt        Mandatory. ia_isp_bxt instance handle.
+ * \param[in]  c0_histogram      Mandatory. Block value of c0_histogram
+ * \param[in]  c1_histogram      Mandatory. Block value of c1_histogram
+ * \param[in]  c2_histogram      Mandatory. Block value of c2_histogram
+ * \param[in]  c3_histogram      Mandatory. Block value of c3_histogram
+ * \param[in]  num_bins          Mandatory. Number of histogram bins in ISP generated histograms.
+ * \param[out] out_aiq_histogram Mandatory. Pointer's pointer where address of converted statistics are stored.
+ *                               Converted aiq histogram statistics. Output can be directly used as input in function ia_aiq_statistics_set.
+ *                               if the external buffer is provided in out_aiq_histogram it will be used otherwise internal buffer is used.
+ * \return                       Error code.
  */
 LIBEXPORT ia_err
 ia_isp_bxt_statistics_convert_ae(
@@ -320,16 +325,11 @@ ia_isp_bxt_statistics_convert_ae(
  * ISP generated statistics may not be in the format in which AIQ algorithms expect. Statistics need to be converted
  * from various ISP formats into AIQ statistics format.
  *
- * \param[in]  ia_isp_bxt                  Mandatory.\n
- *                                         ia_isp_bxt instance handle.
- * \param[in]  statistics_ptr              Mandatory.\n
- *                                         Statistics in ISP specific format.
- * \param[in]  dvs_statistics_input_width  Mandatory.\n
- *                                         DVS statistics input width. Used only in DVS statistics conversion.
- * \param[in]  dvs_statistics_input_height Mandatory.\n
- *                                         DVS statistics input height. Used only in DVS statistics conversion.
- * \param[out] dvs_statistics              Mandatory.\n
- *                                         Pointer's pointer where address of converted statistics are stored.
+ * \param[in]  ia_isp_bxt                  Mandatory. ia_isp_bxt instance handle.
+ * \param[in]  statistics                  Mandatory. Statistics in ISP specific format.
+ * \param[in]  dvs_statistics_input_width  Mandatory. DVS statistics input width. Used only in DVS statistics conversion.
+ * \param[in]  dvs_statistics_input_height Mandatory. DVS statistics input height. Used only in DVS statistics conversion.
+ * \param[out] dvs_statistics              Mandatory. Pointer's pointer where address of converted statistics are stored.
  *                                         Converted DVS statistics. Output can be directly used as input in function ia_dvs_set_statistics.
  *                                         If the external buffer is provided in dvs_statistics it will be used otherwise internal buffer is used.
  * \return                                 Error code.
@@ -337,7 +337,7 @@ ia_isp_bxt_statistics_convert_ae(
 LIBEXPORT ia_err
 ia_isp_bxt_statistics_convert_dvs_from_binary(
     ia_isp_bxt *ia_isp_bxt,
-    const ia_binary_data *statistics_ptr,
+    const ia_binary_data *statistics,
     unsigned int dvs_statistics_input_width,
     unsigned int dvs_statistics_input_height,
     ia_dvs_statistics **dvs_statistics);
@@ -348,26 +348,21 @@ ia_isp_bxt_statistics_convert_dvs_from_binary(
  * ISP generated statistics may not be in the format in which DVS algorithms expect. Statistics need to be converted
  * from various ISP formats into DVS statistics format.
  *
- * \param[in]  ia_isp_bxt                  Mandatory.\n
- *                                         ia_isp_bxt instance handle.
- * \param[in]  bxt_dvs_statistics          Mandatory.\n
- *                                         Binary data which contains pointer to BXT specific DVS statistics structure.
- * \param[in]  dvs_statistics_input_width  Mandatory.\n
- *                                         DVS statistics input width. Used only in DVS statistics conversion.
- * \param[in]  dvs_statistics_input_height Mandatory.\n
- *                                         DVS statistics input height. Used only in DVS statistics conversion.
- * \param[out] dvs_statistics              Mandatory.\n
- *                                         Converted DVS statistics. Output can be directly used as input in function ia_dvs_set_statistics.
+ * \param[in]  ia_isp_bxt                  Mandatory. ia_isp_bxt instance handle.
+ * \param[in]  bxt_dvs_statistics          Mandatory. Binary data which contains pointer to BXT specific DVS statistics structure.
+ * \param[in]  dvs_statistics_input_width  Mandatory. DVS statistics input width. Used only in DVS statistics conversion.
+ * \param[in]  dvs_statistics_input_height Mandatory. DVS statistics input height. Used only in DVS statistics conversion.
+ * \param[out] dvs_statistics              Mandatory. Converted DVS statistics. Output can be directly used as input in function ia_dvs_set_statistics.
  *                                         If the external buffer is provided in dvs_statistics it will be used otherwise internal buffer is used.
  * \return                                 Error code.
  */
 LIBEXPORT ia_err
 ia_isp_bxt_statistics_convert_dvs(
-        ia_isp_bxt *ia_isp_bxt,
-        const ia_binary_data *bxt_dvs_statistics,
-        unsigned int dvs_statistics_input_width,
-        unsigned int dvs_statistics_input_height,
-        ia_dvs_statistics **dvs_statistics);
+    ia_isp_bxt *ia_isp_bxt,
+    const ia_binary_data *bxt_dvs_statistics,
+    unsigned int dvs_statistics_input_width,
+    unsigned int dvs_statistics_input_height,
+    ia_dvs_statistics **dvs_statistics);
 
 
 #ifdef __cplusplus

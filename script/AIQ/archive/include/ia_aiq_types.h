@@ -56,6 +56,8 @@ typedef enum
     ia_aiq_bayer_order_gbrg = 3,  /*!< First row contains pixels Gb, B. Second row contains pixels R, Gr. */
 } ia_aiq_bayer_order;
 
+
+
 /*!
  * \brief Raw image essential information.
  * If raw image data doesn't contain any extra bytes/lines/columns, the image can be decoded with this info.
@@ -159,7 +161,7 @@ typedef enum {
     ia_aiq_ae_priority_mode_normal,    /*!< All areas are equally important. */
     ia_aiq_ae_priority_mode_highlight, /*!< Highlights must be preserved even if it means that dark parts become very dark. */
     ia_aiq_ae_priority_mode_shadow,    /*!< Shadow areas are more important. */
-} ia_aiq_ae_priority_mode;
+} ia_aiq_ae_priority_mode;             /*!< Originally it was renamed from original ia_aiq_ae_priority_mode,then ia_aiq_ae_target_priority.Finally back to original name ia_aiq_ae_priority_mode for backward compatibility.*/
 
 /*!
  * \brief AEC feature setting.
@@ -534,18 +536,91 @@ typedef struct
 } ia_aiq_ae_exposure_result;
 
 /*!
+ *  \brief Pipe mode
+ */
+typedef enum
+{
+    hdr,           /*!< Optional. HDR mode.*/
+    ull,           /*!< Optional. ULL mode.*/
+    ir,            /*!< Optional. IR(night mode).*/
+}ae_aiq_interface_to_pipe_mode;
+/*!
+ *  \brief indicates dc iris nees to contioniously open,close or no change
+ */
+typedef enum
+{
+    ae_iris_retain,           /*!< Optional. Keep the current iris status and make no change.*/
+    ae_iris_open,             /*!< Optional. Iris is in the opening status.*/
+    ae_iris_close,            /*!< Optional. Iris in in the closing status.*/
+}ae_iris_status;              /*!< original name is ae_aperture_dc_iris.*/
+/*!
+ *  \brief indicates the status and results after setting the iris correction command
+ */
+typedef enum
+{
+    ae_iris_set_init,         /*!< Optional. No furthur action was performed after ISP initialization.*/
+    ae_iris_set_success,      /*!< Optional. The iris set action is successful.*/
+    ae_iris_set_timeout,      /*!< Optional. The iris set action is time out.*/
+}ae_iris_set_status;
+
+/*!
+ *  \brief aperture position for AE iris passed by statistics_set().
+ */
+typedef struct
+{
+    float  focal_length;                        /*!< Optional. Manual focal length for P-iris.*/
+    float  aperture_diameter;                   /*!< Optional. Manual lens aperture for P-iris.*/
+                                                /*!< Mandatory.aperture_fnf number of the camera for P-iris. Please find it in the structure ia_aiq_exposure_parameters.*/
+    bool   iris_stable;                         /*!< Mandatory.f number is stable for not.*/
+    ae_iris_status  iris_status;                /*!< Mandatory.Indicate the iris status.*/
+    ae_iris_set_status iris_set_status;         /*!< Mandatory. Indicate the resutls and status of iris after setting action.*/
+}ae_iris_attribute;                             /*!< original name is ae_aperture_position.*/
+/*!
+ *  \brief ae_iris mode flag for 0: IRIS off; 1: DC-IRIS on ;2: P-IRIS on
+ */
+typedef enum
+{
+    ae_iris_off,                             /*!< Optional.Iris on/off.  */
+    ae_dc_iris_on,                           /*!< Optional.DC IRIS only has setting to camera without feedback from camera */
+    ae_p_iris_on,                            /*!< Optional.P IRIS dual direction communication with camera */
+    reserved,                                /*!< Optional.Reserved.*/
+}ae_iris_mode;
+/*!
+ *  \brief iris related structure
+ */
+typedef struct
+{
+    ae_iris_attribute*  ae_iris_attribute_ptr;  /*!< Optional. Manual iris attribute.*/
+    ae_iris_mode  iris_mode;                    /*!< Optional. Manual iris mode.*/
+}ae_aiq_iris_params;
+
+/*!
+ *  \brief HDR performance estimation indicator related structure
+ */
+typedef struct
+{
+    float  scene_CR;               /*!< Optional. Scene contrast ratio(also called dynamic range) of captured scene. This value correlates to histogram width.*/
+    float  under_exposure_amount;  /*!< Optional. The amount of under exposure from AEC.*/
+}ae_aiq_ae_out_for_tonemapping;
+
+/*!
  * \brief AEC results.
  */
 typedef struct
 {
-    ia_aiq_ae_exposure_result* exposures;               /*!< Results for each exposure to be used in the next frame. */
-    unsigned int num_exposures;                         /*!< The number of calculated exposures. */
-    ia_aiq_hist_weight_grid* weight_grid;               /*!< Weight map to be used in the next frame histogram calculation. */
-    ia_aiq_flash_parameters* flashes;                   /*!< Array of flash parameters for each flashes to be used in the next frame. */
-    unsigned int num_flashes;                           /*!< Number of independent flashes. */
-    unsigned int lux_level_estimate;                    /*!< Lux level estimate. */
-    ia_aiq_bracket_mode multiframe;                     /*!< AEC may propose to use multiframe for optimal results. */
-    ia_aiq_ae_flicker_reduction flicker_reduction_mode; /*!< Flicker reduction mode proposed by the AEC algorithm */
+    ia_aiq_ae_exposure_result* exposures;                                  /*!< Results for each exposure to be used in the next frame. */
+    unsigned int num_exposures;                                            /*!< The number of calculated exposures. */
+    ia_aiq_hist_weight_grid* weight_grid;                                  /*!< Weight map to be used in the next frame histogram calculation. */
+    ia_aiq_flash_parameters* flashes;                                      /*!< Array of flash parameters for each flashes to be used in the next frame. */
+    unsigned int num_flashes;                                              /*!< Number of independent flashes. */
+    unsigned int lux_level_estimate;                                       /*!< Lux level estimate. */
+    ia_aiq_bracket_mode multiframe;                                        /*!< AEC may propose to use multiframe for optimal results. */
+    ia_aiq_ae_flicker_reduction flicker_reduction_mode;                    /*!< Flicker reduction mode proposed by the AEC algorithm */
+    ae_aiq_interface_to_pipe_mode interface_to_pipe_mode;                  /*!< Optional. Interface pipe mode.*/
+    ae_aiq_iris_params*  ae_aiq_iris_params_ptr;                           /*!< Optional. Iris position and status stability.*/
+    float hdr_ratio_l_s;                                                   /*!< Optional.HDR ratio of L/S.*/
+    float hdr_ratio_s_vs;                                                  /*!< Optional.HDR ratio of S/VS.*/
+    ae_aiq_ae_out_for_tonemapping* ae_aiq_ae_out_for_tonemapping_ptr;      /*!< Mandatory.Estimate the scene contrast ratio(also called dynamic range) of captured scene and the amount of under exposure from AEC.*/
 } ia_aiq_ae_results;
 
 /*!
@@ -584,18 +659,55 @@ typedef enum
     ia_aiq_gbce_level_bypass = 0,                         /*!< No gamma adaptation (use the default gamma table). This level should be used when manual AE parameters are set. */
     ia_aiq_gbce_level_gamma_stretch,                      /*!< Only gamma stretching adaptation. */
     ia_aiq_gbce_level_gamma_stretch_and_power_adaptation, /*!< Gamma stretching & gamma power adaptation. */
+    ia_aiq_gbce_level_gamma_power_adaptation,             /*!< Only gamma power adaption. Able to disable gamma stretch.*/
 } ia_aiq_gbce_level;
+/*!
+ * \brief new definition for GBCE.
+ */
+typedef enum
+{
+    ia_aiq_gbce_tm_lut_level_use_tuning = -1,             /*!< Use GTM(TM_LUT) level defined in the tuning. */
+    ia_aiq_gbce_tm_lut_level_bypass = 0,                  /*!< Bypass GTM (TM_LUT) */
+} ia_aiq_gbce_tm_lut_level;
 
 /*!
  * \brief Results from GBCE.
  */
-typedef struct {
-    float* r_gamma_lut;          /*!< Gamma LUT for R channel. Range [0.0, 1.0]. */
-    float* b_gamma_lut;          /*!< Gamma LUT for B channel. Range [0.0, 1.0]. */
-    float* g_gamma_lut;          /*!< Gamma LUT for G channel. Range [0.0, 1.0]. */
-    unsigned int gamma_lut_size; /*!< Number of elements in each gamma LUT. */
+typedef struct
+{
+    float* r_gamma_lut;                            /*!< Gamma LUT for R channel. Range [0.0, 1.0]. */
+    float* b_gamma_lut;                            /*!< Gamma LUT for B channel. Range [0.0, 1.0]. */
+    float* g_gamma_lut;                            /*!< Gamma LUT for G channel. Range [0.0, 1.0]. */
+    unsigned int gamma_lut_size;                   /*!< Number of elements in each gamma LUT. */
+    /*!< New data structure to store GTM results for TM_LUT HW block */
+    float* tm_lut;                                 /*!< TM LUT. Range [0.0, 1.0]. */
+    unsigned int tm_lut_size;                      /*!< Number of elements in TM LUT in HW. */
+    unsigned int tm_lut_width;                     /*!< Width of the TM_LUT.*/
+    unsigned int tm_lut_height;                    /*!< Height of theTM_LUT.*/
+    ia_aiq_gbce_tm_lut_level tm_lut_level_status;  /*!< tm_lut_level_status will be used to indicate if TM LUT is in bypass mode or not */
+    /*!< TO DO: find out where is the place showing GammaLUT status for current frame (fixed gamma, adaptive gamma etc) */
 } ia_aiq_gbce_results;
-
+/*!
+ *brief new struct for LTM/DRC (local tone mapping/dynamic range compression),
+ *LTM is a new algorithm in AIQ for local tone mapping when sensor is in HDR mode
+ *LTM/DRC analysis algorithm is in CPU, applying LTM is a new FW block called gamma.
+ */
+typedef enum
+{
+    ia_aiq_ltm_level_use_tuning = -1,                    /*!< Use LTM level defined in the tuning. */
+    ia_aiq_ltm_level_bypass = 0,                         /*!< Bypass LTM (DRC) */
+} ia_aiq_ltm_level;
+/*!
+ *brief new struct definition for LTM/DRC
+ */
+typedef struct
+{
+    float* ltm_lut;                    /*!< LTM LUT. Range [0.0, 1.0]. */
+    unsigned int ltm_lut_size;         /*!< Number of elements in LTM LUT. */
+    unsigned int ltm_lut_width;        /*!< Width of the LTM_LUT.*/
+    unsigned int ltm_lut_height;       /*!< Height of the LTM_LUT.*/
+    ia_aiq_ltm_level ltm_level_status; /*!< ltm_lut_level_status will be used to check if LTM/DRC is in bypass mode or not */
+} ia_aiq_ltm_results;
 /*!
  * \brief Values used in various operations for each color channels.
  * Value range depends on algorithm output.
@@ -707,6 +819,27 @@ typedef struct
     unsigned long long fs;  /*!< Frame stamp in usec (microseconds) */
 } ia_aiq_ambient_light_events;
 
+/*!
+ * \brief DRCStat Y Grid block
+ * As defined in the double precision DRC-Stat statistics specification.
+ * Ranges of all parameters are [0, 2^15].
+ */
+typedef struct
+{
+    unsigned short drcstat_y;       /*!< DRCStat Y output from vliw. */
+} drcstat_y_grid_dp;
+/*!
+ * \brief drcstat Y grid block.
+ * As defined in the AIQ statistics specification.
+ * Y grid covers the full Field Of View (FOV) of the sensor.
+ */
+typedef struct
+{
+    drcstat_y_grid_dp *blocks_ptr;   /*!< DRCstat Y blocks.*/
+    unsigned short grid_width;       /*!< Grid width. */
+    unsigned short grid_height;      /*!< Grid height. */
+    unsigned char  bitdepth;         /*!< U15 for DRCStat.*/
+} ia_aiq_drcstat_y_grid_dp;
 
 #ifdef __cplusplus
 }

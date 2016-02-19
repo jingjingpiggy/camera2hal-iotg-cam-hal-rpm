@@ -1,8 +1,10 @@
 ia release tags
-ia_aiq=v2.0_009.002
-ia_isp=v2.0_009.002
-ia_cmc_parser=v2.0_009.002
-ia_log=v1.1.3
-ia_mkn=v4.4.12
-ia_nvm=v4.0.19
-ia_tools=v4.3.9
+ia_aiq=v2.0_010.000
+ia_isp=v2.0_010.000
+ia_cmc_parser=v2.0_010.000
+ia_log=v1.1.5
+ia_mkn=v4.4.14
+ia_nvm=v4.0.22
+ia_tools=v4.3.12
+ia_pal=v2.0_010.000
+ia_p2p=v2.0_010.000
