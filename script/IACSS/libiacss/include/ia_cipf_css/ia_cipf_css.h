@@ -130,8 +130,9 @@
 #define psys_interleaved_code_in_uid  psys_interleaved_code_uid + 1
 #define psys_interleaved_code_out_uid psys_interleaved_code_uid + 2
 
-#define psys_command_timeout_ms_uid ia_fourcc('P','S','C','T')
-#define psys_stage_operation_mode_uid ia_fourcc('P','S','O','P')
+#define psys_command_timeout_ms_uid     ia_fourcc('P','S','C','T')
+#define psys_command_priority_uid       ia_fourcc('P','S','C','P')
+#define psys_stage_operation_mode_uid   ia_fourcc('P','S','O','P')
 
 /* COMMON CSS UIDS */
 #define css_program_group_params_uid    ia_fourcc('C','S','S','P')
