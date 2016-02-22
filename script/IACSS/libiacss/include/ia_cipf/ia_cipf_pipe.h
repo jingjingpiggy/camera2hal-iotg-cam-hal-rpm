@@ -50,14 +50,30 @@ ia_cipf_pipe_destroy(ia_cipf_pipe_t *pipe);
 ia_err_t
 ia_cipf_pipe_load(ia_cipf_pipe_t *pipe);
 
-/**
+/** Enumerate input terminals in the pipe
+ *
+ * Note: Indexes do not necessary follow topological/natural order. Instead the
+ * order in current implementation bases on the order of connections.
+ * Enumeration function is provided for runtime searching the terminals with
+ * some specific information associated to them. If client is after a static
+ * accessor to certain terminal, _get_terminal_by_uid() should be used
+ * instead.
+ *
  * \ingroup ia_cipf_pipe
  */
 ia_cipf_terminal_t*
 ia_cipf_pipe_get_input_terminal(ia_cipf_pipe_t *pipe,
                                 uint32_t index);
 
-/**
+/** Enumerate output terminals in the pipe
+ *
+ * Note: Indexes do not necessary follow topological/natural order. Instead the
+ * order in current implementation bases on the order of connections.
+ * Enumeration function is provided for runtime searching the terminals with
+ * some specific information associated to them. If client is after a static
+ * accessor to certain terminal, _get_terminal_by_uid() should be used
+ * instead.
+ *
  * \ingroup ia_cipf_pipe
  */
 ia_cipf_terminal_t*
