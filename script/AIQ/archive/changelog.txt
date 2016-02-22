@@ -2,57 +2,28 @@ CCA changelog
 .
 ia_imaging-ia_aiq
 8029d63f3810d627bd34c70fd20d5f361fbe825e
- (HEAD, tag: v2.0_010.000, origin/master, origin/IoTA)8029d63	Markku Mettala	Tue Feb 2 13:33:39 2016 +0200	[INT] version number updated
+ (HEAD, tag: v2.0_010.000)8029d63	Markku Mettala	Tue Feb 2 13:33:39 2016 +0200	[INT] version number updated
 2aeb447	Markku Mettala	Mon Feb 1 12:10:12 2016 +0200	Merge branch 'IoTA'
 71ceda3	Mingtao Zhao	Thu Jan 28 12:43:14 2016 +0000	[API] API changes for IoTA for AIQ add: ia_aiq_ae_manual_setting *ia_aiq_ae_manual_setting_ptr to ia_aiq_ae_input_params;move ia_aiq_gbce_tm_lut_level gbce_tm_lvel to be the last entry of ia_aiq_gbce_input_params modification of iris related data structure
-e29da5a	Dmitriy Paliy	Wed Jan 27 11:38:47 2016 +0200	SA: fix <1.0f values problem in case of compiler optimizations
- (tag: v2.0_009.006)0798d4c	Markku Mettala	Mon Jan 18 15:54:39 2016 +0200	[INT] version number updated
-46c487d	Markku Mettala	Mon Jan 18 09:15:04 2016 +0000	[INT] v120
-f1abdd9	Sampo Utriainen	Fri Jan 15 14:06:27 2016 +0200	[INT] GDC referencepipe updated
- (tag: v2.0_009.005)d5a73c1	Markku Mettala	Thu Jan 14 12:36:08 2016 +0200	[INT] version number updated
-6f0ddcc	Markus Vartiainen	Thu Jan 14 07:33:17 2016 +0000	[Filedebug] Fixed frame count sync issue in histogram BMPs
-e6ab903	Evgeny Krestyannikov	Tue Jan 12 19:18:24 2016 +0000	[AIQD] Reset AIQD data if camera module is changed
-dd207cf	Miikka Tuppurainen	Mon Jan 11 12:44:52 2016 +0200	Fix Klocwork error
-f0d058e	Dmitriy Paliy	Fri Jan 8 16:47:24 2016 +0200	SA: fix Klocwork warning
-e5f8e54	Murat Birinci	Fri Jan 8 12:07:48 2016 +0000	[INT] Fix for rounding error in manual ISO
-03acff8	Kranthi Kuntala	Fri Jan 8 13:10:59 2016 +0200	[INT] Update license headersia_imaging-ia_aiq
+e29da5a	Dmitriy Paliy	Wed Jan 27 11:38:47 2016 +0200	SA: fix <1.0f values problem in case of compiler optimizationsia_imaging-ia_aiq
 v2.0_010.000
 .
 .
 ia_imaging-ia_isp
 04603d4c1ed266b57a1b90eafb9d38a029efb32d
- (HEAD, tag: v2.0_010.000, origin/IoTA)04603d4	Markku Mettala	Tue Feb 2 13:33:32 2016 +0200	[INT] version number updated
+ (HEAD, tag: v2.0_010.000)04603d4	Markku Mettala	Tue Feb 2 13:33:32 2016 +0200	[INT] version number updated
 90b8f67	Xie,Hongbiao	Tue Feb 2 08:59:00 2016 +0000	[CIF30_LP]: revise naming for GSD LPISP
 db139a2	Xie,Hongbiao	Tue Feb 2 08:27:55 2016 +0000	[CIF30_LP]:delete unused makefiles.
 02913ee	Markku Mettala	Mon Feb 1 16:55:09 2016 +0200	[INT] no MultiThreaded*DLL
 d352b04	Vitali Samurov	Fri Jan 29 13:45:36 2016 +0000	PAF 3A statistics structure added in to the BXT structure.
-31ab954	Harish EssakySankaran	Fri Jan 29 09:45:00 2016 +0200	Fix the CIF ISP header names in define section
-bdf2521	Markku Mettala	Thu Jan 21 15:40:08 2016 +0000	[INT] get_version
-19dc406	Miikka Tuppurainen	Thu Jan 21 15:38:19 2016 +0200	[DOC] Update IA ISP documentation
-a682e88	Miikka Tuppurainen	Wed Jan 20 13:56:26 2016 +0200	[INT] Fix BLC debug prints
- (tag: v2.0_009.006)07b4ca3	Xie,Hongbiao	Tue Jan 19 11:22:00 2016 +0800	[CIF30_LP]: Compiling with smallest code option
-f5bfb3c	Xie,Hongbiao	Tue Jan 19 11:18:30 2016 +0800	[CIF30_LP]: align the histogram data format to maiq
-e6fce8a	Xie,Hongbiao	Tue Jan 19 11:14:14 2016 +0800	[CIF30_LP]: Some changs for LSC and AWB
-df4ef72	Markku Mettala	Mon Jan 18 15:57:47 2016 +0200	[INT] version number updated
-c4cc785	Markku Mettala	Mon Jan 18 09:14:51 2016 +0000	[INT] v120
-fad5a37	Miikka Tuppurainen	Fri Jan 15 13:20:13 2016 +0200	Additions to file debug functionality
- (tag: v2.0_009.005)54ab09b	Markku Mettala	Thu Jan 14 12:32:22 2016 +0200	[INT] version number updated
-aa24d75	uygar tuna	Thu Jan 14 08:30:42 2016 +0000	Fix for Hue
-9fd7a39	Uygar Tuna	Wed Jan 13 12:45:08 2016 +0200	[INT] Synchronize Mono and Saturation Contol
-e04ff52	Sampo Utriainen	Tue Jan 12 14:17:05 2016 +0200	Fix for hue and saturation controls
-54fcd9e	Uygar Tuna	Tue Jan 12 10:31:29 2016 +0000	Support for Saturation Factor
-62aca50	Markku Mettala	Tue Jan 12 12:05:46 2016 +0200	[INT] Fix LOCAL_PROPRIETARY_MODULE
-368e924	Uygar Tuna	Tue Jan 12 09:15:04 2016 +0200	Fix For Mono Issue
-d02b7ab	Miikka Tuppurainen	Fri Jan 8 16:23:02 2016 +0200	Fix Klocwork errorsia_imaging-ia_isp
+31ab954	Harish EssakySankaran	Fri Jan 29 09:45:00 2016 +0200	Fix the CIF ISP header names in define sectionia_imaging-ia_isp
 v2.0_010.000
 .
 .
 ia_imaging-ia_cmc_parser
 c35df4e5a5b2cfbe767bac60355bf5bb6d36c2a8
- (HEAD, tag: v2.0_010.000, tag: v2.0_009.006, origin/master)c35df4e	Markku Mettala	Mon Jan 18 09:14:46 2016 +0000	[INT] v120
- (tag: v2.0_009.005)9adc933	uygar tuna	Mon Jan 11 17:39:28 2016 +0200	Klockwork Fix
-53cc54a	Kranthi Kuntala	Fri Jan 8 14:33:36 2016 +0200	[INT] update license headersia_imaging-ia_cmc_parser
-v2.0_010.000
+ia_imaging-ia_cmc_parser
+v2.0_010.001
 .
 .
 ia_imaging-ia_dvs
@@ -60,59 +31,43 @@ be978f2c93b513fd1422af6b45ff1df3a4ea9e36
  (HEAD, tag: v2.0_010.000)be978f2	Markku Mettala	Tue Feb 2 13:33:53 2016 +0200	[INT] version number updated
 e6033b8	Markku Mettala	Mon Feb 1 16:21:32 2016 +0200	[INT] ProgramDataBaseFileName
 215a6f9	Markku Mettala	Mon Feb 1 12:27:46 2016 +0200	[INT] INPUTS_IN_FILE
-2f195c3	Sampo Utriainen	Mon Feb 1 09:55:11 2016 +0200	Upscaling/downscaling support from dvs_config
- (tag: v2.0_009.006)eb2e2d3	Markku Mettala	Tue Jan 19 05:45:07 2016 +0000	[INT] Fix RuntimeLibrary static->dynamic
-e9a9591	Markku Mettala	Mon Jan 18 15:54:51 2016 +0200	[INT] version number updated
-432f2d4	Markku Mettala	Mon Jan 18 09:15:07 2016 +0000	[INT] v120
- (tag: v2.0_009.005)3c81138	Markku Mettala	Thu Jan 14 12:36:19 2016 +0200	[INT] version number updated
-a8b17e9	Sampo Utriainen	Mon Jan 11 14:13:11 2016 +0200	Fix for klocwork warnings
-b08edd8	Peeta Kiikka	Fri Jan 8 13:13:18 2016 +0000	[INT] Add raw support to generate_shaky_video - Matlab function.
-045b918	Kranthi Kuntala	Fri Jan 8 13:13:36 2016 +0200	[INT] update license headersia_imaging-ia_dvs
+2f195c3	Sampo Utriainen	Mon Feb 1 09:55:11 2016 +0200	Upscaling/downscaling support from dvs_configia_imaging-ia_dvs
 v2.0_010.000
 .
 .
 ia_imaging-ia_log
 dee746f0549814d28661f1c2b72f2a3429e4fb8d
- (HEAD, tag: v1.1.5, origin/master)dee746f	Markku Mettala	Mon Jan 18 09:14:20 2016 +0000	[INT] v120
- (tag: v1.1.4)7000275	Kranthi Kuntala	Fri Jan 8 13:14:56 2016 +0200	[INT] update license headersia_imaging-ia_log
+ia_imaging-ia_log
 v1.1.5
 .
 .
 ia_imaging-ia_mkn
 75e57001e8094368b687097489e8046e1a019d05
- (HEAD, tag: v4.4.14, origin/master)75e5700	Markku Mettala	Mon Jan 18 09:14:54 2016 +0000	[INT] v120
- (tag: v4.4.13)ff1f1ad	Kranthi Kuntala	Fri Jan 8 13:17:46 2016 +0200	[INT] update license headersia_imaging-ia_mkn
+ia_imaging-ia_mkn
 v4.4.14
 .
 .
 ia_imaging-ia_nvm
 de8ab61720d3bbad6219f0af511831e9d2837d1a
- (HEAD, tag: v4.0.22, origin/master)de8ab61	Markku Mettala	Mon Jan 18 10:32:05 2016 +0000	[INT] v120
-8754318	Markku Mettala	Mon Jan 18 09:25:24 2016 +0000	[INT] Android vendor setup.
- (tag: v4.0.21)3aec72a	Kranthi Kuntala	Fri Jan 8 13:18:39 2016 +0200	[INT] update license headersia_imaging-ia_nvm
+ia_imaging-ia_nvm
 v4.0.22
 .
 .
 ia_imaging-ia_tools
 0a8adff512e27fda6176eefcf5c82b0e6833699f
- (HEAD, tag: v4.3.12, origin/master)0a8adff	Markku Mettala	Mon Jan 18 16:18:14 2016 +0200	[INT] Fix RuntimeLibrary static->dynamic
-09a902b	Markku Mettala	Mon Jan 18 09:15:00 2016 +0000	[INT] v120
- (tag: v4.3.11)fbc5a05	Kranthi Kuntala	Fri Jan 8 13:25:13 2016 +0200	[INT] update license headersia_imaging-ia_tools
+ia_imaging-ia_tools
 v4.3.12
 .
 .
 ia_imaging-ia_maiq
 811a77b56589c0c8972b1718b92abff5c22fecf3
- (HEAD, origin/master)811a77b	Xie,Hongbiao	Fri Jan 29 14:38:30 2016 +0000	Compiling with smallest code option
-23e8a71	Dmitriy Paliy	Thu Jan 21 09:14:13 2016 +0200	[INT] SA: fix to compare all LSC weights
-6d46478	Dmitriy Paliy	Tue Jan 19 10:38:10 2016 +0200	SA: add functionality in SA to change "update" flag
-a459443	Miikka Tuppurainen	Mon Jan 11 12:09:42 2016 +0000	Clear CC histogram analysis bits when RGBS grid is givenia_imaging-ia_maiq
+ (HEAD, origin/master)811a77b	Xie,Hongbiao	Fri Jan 29 14:38:30 2016 +0000	Compiling with smallest code optionia_imaging-ia_maiq
 v.000-58-g811a77b
 .
 .
 ia_imaging-ia_pal
 86e94649a3ffe5e356f277721c9befc4329e3114
- (HEAD, tag: v2.0_010.000, origin/IoTA)86e9464	Markku Mettala	Tue Feb 2 13:33:59 2016 +0200	[INT] version number updated
+ (HEAD, tag: v2.0_010.000)86e9464	Markku Mettala	Tue Feb 2 13:33:59 2016 +0200	[INT] version number updated
 e8e09d4	Joni-Matti Maatta	Fri Jan 29 13:41:33 2016 +0200	[INT] Add preprocessor flags in broxton_ia_pal.vcxproj
 832562a	liron	Fri Jan 29 08:31:14 2016 +0200	[API] InputScalerV2: changed parameters to match HW. PAL functionality enabled same as InputScaler.
 e882931	Amir Goren	Thu Jan 28 15:36:02 2016 +0200	[API] Added "run_kernel" data structure support for XNR4-M, XNR4-MH & VCUD
@@ -125,36 +80,13 @@ b342a72	Amir Goren	Wed Jan 27 15:30:39 2016 +0200	[INT] vcud code cleanup + smal
 e9af29f	Omri Cohen	Tue Jan 26 13:22:51 2016 +0000	TNR5v1 change frame_number min and default
 b497e12	Vitali Samurov	Mon Jan 25 14:53:43 2016 +0000	AWB: (i) increased grid sizes; (ii) increased saturation treshold.
 77159d7	Amir Goren	Mon Jan 25 13:58:51 2016 +0200	[INT] VCUD static upscale_only bugfix
-6288cdd	Markku Mettala	Mon Jan 25 13:24:37 2016 +0200	[INT] Fix runtime
-f7112d6	Omri Cohen	Thu Jan 21 10:53:44 2016 +0000	Tnr5v1 change clip function and fix value limit
-d69c9aa	Amir Goren	Wed Jan 20 14:38:18 2016 +0200	[INT] HSD #1804217911 bugfix (v2)
-743c56d	Amir Goren	Wed Jan 20 10:39:58 2016 +0200	[INT] vcud bypass static bugfix + XNR4 (excel) lpf max range bugfix
-37f6b31	Petteri Kyrönlahti	Tue Jan 19 16:32:07 2016 +0200	[INT] BNLM bypass fix
- (tag: v2.0_009.006)ae591dd	sshwart1	Tue Jan 19 12:02:20 2016 +0000	revert outOfImage coordinates fix
-eb4f32a	Amir Goren	Mon Jan 18 17:56:41 2016 +0200	[INT] HSD#1804217911 temp bugfix changed default linear_rgb2luma->mode=2
-c16b37d	Markku Mettala	Mon Jan 18 15:54:56 2016 +0200	[INT] version number updated
-073a733	Markku Mettala	Mon Jan 18 09:14:27 2016 +0000	[INT] v120
-a2d0025	Petteri Kyrönlahti	Fri Jan 15 14:20:04 2016 +0000	BNLM fix sig_n_detail_lut calculation
-ff07e6c	Vitali Samurov	Fri Jan 15 07:25:51 2016 +0000	AF statistics filter coefficients have been tuned.
-fe9bfa7	Omri Cohen	Thu Jan 14 13:39:41 2016 +0000	Clip nm_radial_lut (to maximum 32767) according to the algorithm.
-b13914c	sshwart1	Thu Jan 14 14:10:59 2016 +0200	GDC3 clockWork fixes
- (tag: v2.0_009.005)b91b6cf	Markku Mettala	Thu Jan 14 12:36:25 2016 +0200	[INT] version number updated
-cffd5fb	Amir Goren	Wed Jan 13 13:01:11 2016 +0200	[INT] BNLM Klockworks bugfix HSD#1304288849
-8568b6c	Shaul Tsur	Tue Jan 12 15:32:34 2016 +0000	Updating Excel Columns , changing ACM default
-5a8b810	Anna Kaplun	Tue Jan 12 12:56:56 2016 +0000	fix xnr4_m power parameters upper limit
-7baf47c	sshwart1	Tue Jan 12 12:53:00 2016 +0000	fix in GDC PAL calculations
-08b5e77	Miikka Tuppurainen	Tue Jan 12 09:06:31 2016 +0000	Define common chroma sampling enum throughout PALs
-14c37dc	Aki Launiainen	Fri Jan 8 14:35:35 2016 +0000	[OPT] ia_pal_compute_bxt_tnr5v1.cpp moved multiplication out of loop
-4be9d33	Kranthi Kuntala	Fri Jan 8 12:34:43 2016 +0000	[INT] update license headers
-2ef2151	Claudio Brunelli	Fri Jan 8 12:01:28 2016 +0000	[OPT] optimize function CreateGDCDefaultMorph
-068c1c9	Miikka Tuppurainen	Fri Jan 8 11:38:44 2016 +0000	[DOC] Fix errors in documentation
-0f63fb4	Vitali Samurov	Fri Jan 8 11:11:34 2016 +0000	AWB: saturation tresholds corrected.ia_imaging-ia_pal
+6288cdd	Markku Mettala	Mon Jan 25 13:24:37 2016 +0200	[INT] Fix runtimeia_imaging-ia_pal
 v2.0_010.000
 .
 .
 ia_imaging-ia_p2p
 11ab440c0f80bf95bb12477659bf4e26c4dd0e3f
- (HEAD, tag: v2.0_010.000, origin/IoTA)11ab440	Kranthi Kuntala	Mon Feb 1 15:34:52 2016 +0000	[INT] update license headers
+ (HEAD, tag: v2.0_010.000)11ab440	Kranthi Kuntala	Mon Feb 1 15:34:52 2016 +0000	[INT] update license headers
 064a0c6	Joni-Matti Maatta	Mon Feb 1 16:01:42 2016 +0200	Update PG dump generator to include XNR4 video kernel
 48eba90	Joni-Matti Maatta	Fri Jan 29 12:55:11 2016 +0200	[INT] Fix doxygen documentation
 c9dcf3d	Joni-Matti Maatta	Fri Jan 29 11:57:15 2016 +0200	IDS converter for IPU4p
@@ -166,26 +98,18 @@ cb5e996	Joni-Matti Maatta	Thu Jan 28 14:12:42 2016 +0200	Remove vmem.h and updat
 b3929bd	Joni-Matti Maatta	Mon Jan 25 17:37:11 2016 +0200	Fix AWB validation range for shftr_val_cx
 4128566	Joni-Matti Maatta	Mon Jan 25 11:21:11 2016 +0200	Fix fragment_grid_dimension setting in GDC
 b7d381c	Joni-Matti Maatta	Fri Jan 22 15:21:44 2016 +0200	Move ISL crop parameters to correct terminal
-946845a	Joni-Matti Maatta	Fri Jan 22 15:12:33 2016 +0200	Update TNR5 encoding after FW interface change
-7abafa5	Joni-Matti Maatta	Thu Jan 21 13:17:56 2016 +0200	Add handling of interpolation type for GDC
-18a8b78	Joni-Matti Maatta	Wed Jan 20 12:59:35 2016 +0200	Add possibility to ignore validation errors in the PG dump generator
-369ddb8	Joni-Matti Maatta	Wed Jan 20 10:58:01 2016 +0200	Enable XNR4 video in BXT B0 vpregdc
- (tag: v.019)c941375	Joni-Matti Maatta	Tue Jan 19 14:53:17 2016 +0200	Move XNR4 radial parameters to program terminal
-78b21b2	Markku Mettala	Mon Jan 18 09:14:24 2016 +0000	[INT] v120
- (tag: v.018)784860b	Miikka Tuppurainen	Wed Jan 13 17:04:59 2016 +0200	Klocwork fix for P2Pia_imaging-ia_p2p
+946845a	Joni-Matti Maatta	Fri Jan 22 15:12:33 2016 +0200	Update TNR5 encoding after FW interface changeia_imaging-ia_p2p
 v2.0_010.000
 .
 .
 ia_imaging-include
 d204b427c1f37caa29743290e1d230c70c315ac4
- (HEAD, tag: v2.0_010.000, tag: v2.0_009.006)d204b42	Markus Vartiainen	Tue Jan 19 10:49:39 2016 +0200	Added uq4_12_t typedefia_imaging-include
+ia_imaging-include
 v2.0_010.000
 .
 .
 ia_imaging-testframework
 1d881a22a7a73a98d3a465600871810db485818b
- (HEAD, tag: v2.0_010.000)1d881a2	Dmitriy Paliy	Fri Jan 22 17:49:25 2016 +0200	Add strcat
- (tag: v2.0_009.006)987f9c0	Markku Mettala	Mon Jan 18 09:15:01 2016 +0000	[INT] v120
- (tag: v2.0_009.005)51ed931	Kranthi Kuntala	Fri Jan 8 13:27:28 2016 +0200	[INT] update license headersia_imaging-testframework
+ (HEAD, tag: v2.0_010.000)1d881a2	Dmitriy Paliy	Fri Jan 22 17:49:25 2016 +0200	Add strcatia_imaging-testframework
 v2.0_010.000
 .

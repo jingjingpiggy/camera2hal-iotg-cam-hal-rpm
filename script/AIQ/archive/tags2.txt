@@ -1,7 +1,7 @@
 CCA tags
 ia_imaging-ia_aiq=v2.0_010.000
 ia_imaging-ia_isp=v2.0_010.000
-ia_imaging-ia_cmc_parser=v2.0_010.000
+ia_imaging-ia_cmc_parser=v2.0_010.001
 ia_imaging-ia_dvs=v2.0_010.000
 ia_imaging-ia_log=v1.1.5
 ia_imaging-ia_mkn=v4.4.14
