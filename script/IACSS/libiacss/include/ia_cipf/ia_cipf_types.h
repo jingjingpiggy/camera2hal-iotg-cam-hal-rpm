@@ -99,7 +99,7 @@ typedef uint32_t ia_uid;
 typedef struct log_context log_context_t;
 
 /* Native UID definitions for fourcc pixel formats */
-#define ia_cipf_frame_fourcc_i420 ia_fourcc('I','4','2','0')
+#define ia_cipf_frame_fourcc_i420 ia_fourcc('V','4','2','0')
 #define ia_cipf_frame_fourcc_iyuv ia_fourcc('I','Y','U','V')
 #define ia_cipf_frame_fourcc_nv12 ia_fourcc('N','V','1','2')
 #define ia_cipf_frame_fourcc_nv21 ia_fourcc('N','V','2','1')

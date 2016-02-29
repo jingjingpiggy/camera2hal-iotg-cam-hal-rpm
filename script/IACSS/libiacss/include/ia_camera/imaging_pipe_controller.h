@@ -150,5 +150,24 @@ imaging_pipe_ctrl_configure_stages(imaging_pipe_ctrl_t *ctrl,
                                    ia_cipf_iterator_t *iterator,
                                    const ia_binary_data *ipu_parameters);
 
+/** Decode statistics from stage in iteration
+ *
+ * Decodes statistics from all stages in iteration.
+ *
+ * \ingroup imaging_pipe_ctrl
+ *
+ * \param[in] ctrl controller handle
+ * \param[in] iterator iterator handle
+ * \param[in] ipu_parameters IPU parameters to configure the stages with
+ */
+ia_err_t
+imaging_pipe_ctrl_decode_statistics(imaging_pipe_ctrl_t *ctrl,
+                                    ia_cipf_iterator_t *iterator,
+                                    ia_uid stage_uid,
+                                    ia_binary_data *statistics);
+
+
+
+
 
 #endif

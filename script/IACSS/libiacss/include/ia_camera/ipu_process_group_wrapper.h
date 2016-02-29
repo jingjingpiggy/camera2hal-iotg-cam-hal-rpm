@@ -244,6 +244,43 @@ ipu_pg_die_decode_terminal_payload(ipu_pg_die_t pg_die,
                                    ia_binary_data *payload,
                                    ia_binary_data *result);
 
+/** Decode a terminal payload into internal cache
+ *
+ * Decodes a process group terminal payload into internal cache. After
+ * decoding ipu_pg_die_serialize_decode_cache() can be used to read the data
+ * into binary results compatible with ia_imaging component. Decode to cache +
+ * serialize functions are intended for serializing data from multiple
+ * terminals into single result binary.
+ *
+ * \ingroup ipu_process_group_wrapper
+ *
+ * \param pg_die wrapper handle
+ * \param[in,out] process_group process group context data
+ * \param[in] terminal_index index of the terminal
+ * \param[in] payload memory for the payload to decode from
+ */
+ia_err_t
+ipu_pg_die_decode_terminal_payload_cached(ipu_pg_die_t pg_die,
+                                          ia_binary_data *process_group,
+                                          uint32_t terminal_index,
+                                          ia_binary_data *payload);
+
+/** Serialize the decode cache into binary
+ *
+ * Writes internal cache into result binary.
+ * See ipu_pg_die_decode_terminal_payload_cached().
+ *
+ * \ingroup ipu_process_group_wrapper
+ *
+ * \param pg_die wrapper handle
+ * \param[out] result binary data struct for the results.
+ *                    Caller provides the ia_binary_data struct, which
+ *                    is returned filled with address to memory owned by
+ *                    the wrapper (P2P).
+*/
+ia_err_t
+ipu_pg_die_serialize_decode_cache(ipu_pg_die_t pg_die, ia_binary_data *result);
+
 /** Dump to traces the information about process group
  *
  * Used only for debugging purposes.

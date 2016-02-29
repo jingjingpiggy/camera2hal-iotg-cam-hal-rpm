@@ -53,7 +53,7 @@ public:
     bool operator == (const ItemUID& v) const {
         return v.mUids == mUids;
     }
-    std::string toString();
+    std::string toString() const;
 
     std::size_t size() const { return mUids.size(); };
 
@@ -154,6 +154,8 @@ public:
 
     GraphConfigNode(const GraphConfigNode&);
     GraphConfigNode() : GraphConfigItem(NODE), mAncestor(NULL){};
+    ~GraphConfigNode();
+
     GraphConfigNode* copy();
     gcss_item_map item;
     void dumpNode();
@@ -193,8 +195,40 @@ public:
 
         return retAttribute->getValue(val);
     }
-    ~GraphConfigNode();
 private:
+    /**
+     * Helper function which iterates through given node and search for
+     * matching attribute. Return error if not found.
+     * \param attribute the ItemUID of attribute to search
+     * \param searchAttributeValue the value to search
+     * \param it iterator for the node to search
+     * \return ia_err_t
+     */
+    template <typename T>
+    ia_err_t iterateAttributes(ia_uid attribute,
+                               const T& searchAttributeValue,
+                               const const_iterator& it) const
+    {
+        GraphConfigNode * node = static_cast<GraphConfigNode*>(it->second);
+        const_iterator attrIterator = node->begin();
+
+        while (attrIterator != node->end()) {
+            if (attrIterator->first == attribute) {
+                GraphConfigAttribute * retAttr =
+                    static_cast<GraphConfigAttribute*>(attrIterator->second);
+                T foundAttrValue;
+                ia_err_t ret = retAttr->getValue(foundAttrValue);
+
+                if (ret != ia_err_none)
+                    return ret;
+                if (foundAttrValue == searchAttributeValue)
+                    return ia_err_none;
+            }
+            attrIterator = node->getNext(attrIterator); // Get a next attribute
+        }
+        return ia_err_end;
+    }
+
     ia_err_t addDescendantsFromNode(GraphConfigNode*);
     ia_err_t addResInfo(const GraphConfigNode* settings);
     GraphConfigItem::const_iterator getNextAttribute(

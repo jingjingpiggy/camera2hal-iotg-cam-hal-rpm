@@ -63,21 +63,23 @@
 #define psys_2600_small_param_uid   psys_2600_small_uid + 3
 #define psys_2600_small_secondary_output_uid psys_2600_small_uid + 4
 
+#define psys_2600_pg_uid(id) ia_fourcc('P',id,'G','0')
+
 #define psys_2600_4k60_pg_id        107
-#define psys_2600_4k60_uid          ia_fourcc('P',psys_2600_4k60_pg_id,'G','0')
+#define psys_2600_4k60_uid          psys_2600_pg_uid(psys_2600_4k60_pg_id)
 #define psys_2600_4k60_input_uid    psys_2600_4k60_uid + 1
 #define psys_2600_4k60_output_uid   psys_2600_4k60_uid + 2
 #define psys_2600_4k60_param_uid    psys_2600_4k60_uid + 3
 #define psys_2600_4k60_secondary_output_uid psys_2600_4k60_uid + 4
 
 #define psys_2600_uvswap_pg_id        119
-#define psys_2600_uvswap_uid          ia_fourcc('P',psys_2600_uvswap_pg_id,'G','0')
+#define psys_2600_uvswap_uid          psys_2600_pg_uid(psys_2600_uvswap_pg_id)
 #define psys_2600_uvswap_input_uid    psys_2600_uvswap_uid + 1
 #define psys_2600_uvswap_output_uid   psys_2600_uvswap_uid + 2
 #define psys_2600_uvswap_param_uid    psys_2600_uvswap_uid + 3
 
 #define psys_2600_popg_pg_id                201
-#define psys_2600_popg_uid                  ia_fourcc('P',psys_2600_popg_pg_id,'G','0')
+#define psys_2600_popg_uid                  psys_2600_pg_uid(psys_2600_popg_pg_id)
 #define psys_2600_popg_param_uid            psys_2600_popg_uid + 1
 #define psys_2600_popg_program_uid          psys_2600_popg_uid + 2
 #define psys_2600_popg_input_uid            psys_2600_popg_uid + 3
@@ -85,7 +87,7 @@
 #define psys_2600_popg_secondary_output_uid psys_2600_popg_uid + 5
 
 #define psys_2600_post_gdc_pg_id                114
-#define psys_2600_post_gdc_uid                  ia_fourcc('P',psys_2600_post_gdc_pg_id,'G','0')
+#define psys_2600_post_gdc_uid                  psys_2600_pg_uid(psys_2600_post_gdc_pg_id)
 #define psys_2600_post_gdc_param_uid            psys_2600_post_gdc_uid + 1
 #define psys_2600_post_gdc_program_uid          psys_2600_post_gdc_uid + 2
 #define psys_2600_post_gdc_input_uid            psys_2600_post_gdc_uid + 3
@@ -95,21 +97,21 @@
 #define psys_2600_post_gdc_third_output_uid     psys_2600_post_gdc_uid + 7
 
 #define psys_2600_video_pre_gdc_pg_id        116
-#define psys_2600_video_pre_gdc_uid          ia_fourcc('P',psys_2600_video_pre_gdc_pg_id,'G','0')
+#define psys_2600_video_pre_gdc_uid          psys_2600_pg_uid(psys_2600_video_pre_gdc_pg_id)
 #define psys_2600_video_pre_gdc_param_uid    psys_2600_video_pre_gdc_uid + 1
 #define psys_2600_video_pre_gdc_program_uid  psys_2600_video_pre_gdc_uid + 2
 #define psys_2600_video_pre_gdc_input_uid    psys_2600_video_pre_gdc_uid + 3
 #define psys_2600_video_pre_gdc_output_uid   psys_2600_video_pre_gdc_uid + 4
 
 #define psys_2600_still_pre_gdc_pg_id        117
-#define psys_2600_still_pre_gdc_uid          ia_fourcc('P',psys_2600_still_pre_gdc_pg_id,'G','0')
+#define psys_2600_still_pre_gdc_uid          psys_2600_pg_uid(psys_2600_still_pre_gdc_pg_id)
 #define psys_2600_still_pre_gdc_param_uid    psys_2600_still_pre_gdc_uid + 1
 #define psys_2600_still_pre_gdc_program_uid  psys_2600_still_pre_gdc_uid + 2
 #define psys_2600_still_pre_gdc_input_uid    psys_2600_still_pre_gdc_uid + 3
 #define psys_2600_still_pre_gdc_output_uid   psys_2600_still_pre_gdc_uid + 4
 
 #define psys_2600_still_post_gdc_pg_id                118
-#define psys_2600_still_post_gdc_uid                  ia_fourcc('P',psys_2600_still_post_gdc_pg_id,'G','0')
+#define psys_2600_still_post_gdc_uid                  psys_2600_pg_uid(psys_2600_still_post_gdc_pg_id)
 #define psys_2600_still_post_gdc_param_uid            psys_2600_still_post_gdc_uid + 1
 #define psys_2600_still_post_gdc_program_uid          psys_2600_still_post_gdc_uid + 2
 #define psys_2600_still_post_gdc_input_uid            psys_2600_still_post_gdc_uid + 3
@@ -119,12 +121,21 @@
 #define psys_2600_still_post_gdc_third_output_uid     psys_2600_still_post_gdc_uid + 7
 
 #define psys_2600_video_isa_pg_id                120
-#define psys_2600_video_isa_uid                  ia_fourcc('P',psys_2600_video_isa_pg_id,'G','0')
+#define psys_2600_video_isa_uid                  psys_2600_pg_uid(psys_2600_video_isa_pg_id)
 #define psys_2600_video_isa_param_uid            psys_2600_video_isa_uid + 1
 #define psys_2600_video_isa_program_uid          psys_2600_video_isa_uid + 2
 #define psys_2600_video_isa_input_uid            psys_2600_video_isa_uid + 3
 #define psys_2600_video_isa_output_uid           psys_2600_video_isa_uid + 4
 #define psys_2600_video_isa_secondary_output_uid psys_2600_video_isa_uid + 5
+#define psys_2600_video_isa_ae_output_uid        psys_2600_video_isa_uid + 6
+#define psys_2600_video_isa_blc_type0_input_uid  psys_2600_video_isa_uid + 7
+#define psys_2600_video_isa_blc_type1_input_uid  psys_2600_video_isa_uid + 8
+#define psys_2600_video_isa_blc_type2_input_uid  psys_2600_video_isa_uid + 9
+#define psys_2600_video_isa_lsc_type0_input_uid  psys_2600_video_isa_uid + 10
+#define psys_2600_video_isa_lsc_type1_input_uid  psys_2600_video_isa_uid + 11
+#define psys_2600_video_isa_lsc_type2_input_uid  psys_2600_video_isa_uid + 12
+#define psys_2600_video_isa_awb_output_uid       psys_2600_video_isa_uid + 13
+#define psys_2600_video_isa_af_output_uid        psys_2600_video_isa_uid + 14
 
 #define psys_interleaved_code_uid     ia_fourcc('I','L','C','S')
 #define psys_interleaved_code_in_uid  psys_interleaved_code_uid + 1
