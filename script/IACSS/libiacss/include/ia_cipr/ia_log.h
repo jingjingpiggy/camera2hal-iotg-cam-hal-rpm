@@ -39,7 +39,11 @@ typedef enum ia_log_level {
     IA_CSS_LOG_LEVEL_V    = 2,
     IA_CSS_LOG_LEVEL_M    = 4,
     IA_CSS_LOG_LEVEL_ERR  = 8,
-    IA_CSS_LOG_LEVEL_WARN = 16
+    IA_CSS_LOG_LEVEL_WARN = 16,
+
+    /* Make logs persistent, retrying if logcat is busy. Can be combined with
+     * other log levels. Aligning with HAL. */
+    IA_CSS_LOG_PERSIST    = 4096
 } ia_log_level_t;
 
 /* Logging context */
