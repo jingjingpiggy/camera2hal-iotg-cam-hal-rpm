@@ -179,9 +179,10 @@
  * Controllable via psys_stage_operation_mode_uid property
  */
 typedef enum _psys_stage_opmode {
-    _psys_stage_opmode_na_,     /**< not set, defaults to raw */
-    _psys_stage_opmode_raw_,    /**< basic operation */
-    _psys_stage_opmode_coupled_ /**< coupled with downstream */
+    _psys_stage_opmode_na_,         /**< not set, defaults to raw */
+    _psys_stage_opmode_raw_,        /**< basic operation */
+    _psys_stage_opmode_coupled_,    /**< coupled with downstream */
+    _psys_stage_opmode_incomplete_  /**< no fragmenting and PG creation */
 } psys_stage_opmode_t;
 
 /*** User control utils for PSYS stage ***/
