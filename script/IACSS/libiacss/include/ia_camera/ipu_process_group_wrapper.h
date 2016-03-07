@@ -88,6 +88,16 @@ ipu_pg_die_init(const ia_binary_data *ipu_parameters,
 void
 ipu_pg_die_destroy(ipu_pg_die_t pg_die);
 
+/** Set process group kernel bitmap
+ *
+ * \ingroup ipu_process_group_wrapper
+ * \param pg_die wrapper handle
+ * \param kbitmap kernel bitmap
+ */
+ia_err_t
+ipu_pg_die_set_kernel_bitmap(ipu_pg_die_t pg_die,
+                             uint64_t kbitmap);
+
 /** Query memory requirement for process group object
  *
  * \ingroup ipu_process_group_wrapper
