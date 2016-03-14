@@ -1,0 +1,55 @@
+#!/bin/bash
+
+################ Dir define #####################
+export ROOT_DIR=$PWD
+export ICAMERASRC_DIR=$ROOT_DIR/icamerasrc
+export LIBCAMHAL_DIR=$ROOT_DIR/libcamhal
+export KERNEL_HEADER_DIR=$ROOT_DIR/kernel
+export LIBIACSS_DIR=$ROOT_DIR/libiacss
+export RPM_DIR=$ROOT_DIR/rpm
+export AIQ_DIR=$RPM_DIR/script/AIQ
+export OUTPUT_DIR=$ROOT_DIR/out
+
+export AIQ_INSTALL_DIR=$ROOT_DIR/out/libiaaiq
+export IACSS_INSTALL_DIR=$ROOT_DIR/out/libiacss
+export LIBCAMHAL_INSTALL_DIR=$ROOT_DIR/out/libcamhal
+export ICAMERASRC_INSTALL_DIR=$ROOT_DIR/out/icamerasrc
+export RPMS_INSTALL_DIR=$ROOT_DIR/out/rpms
+
+export BUILD_LOG=$OUTPUT_DIR/build.log
+
+ALL_DIRS=($ROOT_DIR $ICAMERASRC_DIR $LIBCAMHAL_DIR $KERNEL_HEADER_DIR $LIBIACSS_DIR $RPM_DIR $AIQ_DIR $OUTPUT_DIR)
+
+source $RPM_DIR/build/command.sh
+source $RPM_DIR/build/make.sh
+
+
+function check_dir() {
+    if [ ! -d "$1" ] ; then
+        mkdir -p $1 2>/dev/null
+    fi
+}
+
+
+function check_output_dir() {
+    check_dir $OUTPUT_DIR
+    check_dir $AIQ_INSTALL_DIR
+    check_dir $IACSS_INSTALL_DIR
+    check_dir $LIBCAMHAL_INSTALL_DIR
+    check_dir $RPMS_INSTALL_DIR
+}
+
+function check_cross_compile() {
+    if [ -z "$CXX" ] ; then
+        export IS_CROSS_COMPILE=0
+        export PRE_BUILD_DIR=$RPM_DIR/pre-build/host
+    else
+        export IS_CROSS_COMPILE=1
+        export PRE_BUILD_DIR=$RPM_DIR/pre-build/cross
+    fi
+}
+
+check_output_dir
+check_cross_compile
+
+list

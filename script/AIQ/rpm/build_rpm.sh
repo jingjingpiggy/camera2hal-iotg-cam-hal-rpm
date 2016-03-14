@@ -4,9 +4,9 @@
 ###########################################################
 rm -rf ~/rpmbuild
 mkdir -p ~/rpmbuild/BUILD/
-rsync -av --exclude=".*" $(pwd)/../archive/* ~/rpmbuild/BUILD/
+/usr/bin/rsync -av --exclude=".*" $(pwd)/../archive/* ~/rpmbuild/BUILD/
 ###########################################################
 # Generate RPM package
 ###########################################################
-rpmbuild -ba --nodeps ./libiaaiq.spec
+/usr/bin/rpmbuild -ba --nodeps ./libiaaiq.spec
 cp ~/rpmbuild/RPMS/x86_64/libiaaiq*.rpm ./
