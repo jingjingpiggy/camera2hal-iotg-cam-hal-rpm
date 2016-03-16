@@ -35,8 +35,6 @@
  * - \ref pa (Parameter Adaptor)
  * - \ref dsd (Discrete Scene Detection)
  * - \ref gbce (Global Brightness and Contrast Enhancement)
- * - \ref ltm (local tone mapping), new function added in AIQ for local tone mapping analysis algo
- *                                  applying ltm results happens on FW block gamma*
  *
  * AIQ also supports calculation of parameters for multiframe bracketing cases:
  * - \ref afbracket (Automatic Focus Bracket)
@@ -149,12 +147,11 @@
  *
  * After this call AIQ library instance is destroyed and can't be used.
  */
+
 /*!
  * \file ia_aiq.h
  * \brief Definitions and declarations of Intel 3A library.
  */
-
-
 
 #ifndef _IA_AIQ_H_
 #define _IA_AIQ_H_
@@ -225,7 +222,7 @@ LIBEXPORT void
 ia_aiq_deinit(ia_aiq *ia_aiq);
 
 /*!
- * \brief Manual AEC limit parameters and they should be obtained from CPF
+ * \brief Manual AEC limit parameters.
  */
 typedef struct
 {
@@ -235,42 +232,7 @@ typedef struct
     int manual_frame_time_us_max;             /*!< Optional. Manual maximum frame length in microseconds. Defines minimum frame rate. -1 if NA. */
     short manual_iso_min;                     /*!< Optional. Manual minimum ISO. -1 if NA. */
     short manual_iso_max;                     /*!< Optional. Manual maximum ISO. -1 if NA. */
-    short manual_hdr_ratio_l_s_min;           /*!< Optional. Manual minium hdr ratio L/S.*/
-    short manual_hdr_ratio_l_s_max;           /*!< Optional. Manual maximum hdr ration L/S.*/
-    short manual_hdr_ratio_s_vs_min;          /*!< Optional. Manual minium hdr ratio S/VS.*/
-    short manual_hdr_ratio_s_vs_max;          /*!< Optional. Manual maximum hdr ratio S/VS.*/
 } ia_aiq_ae_manual_limits;
-/*!
- * \brief manual AEC setting structure  for hdr dynamic manual setting.It should be obtained from UI control via camera HAL.
- */
-typedef struct
-{
-    float   ev_shift;                                 /*!< Optional. Exposure Value shift [-4,4] array.N/A value:FLOAT_TO_Q16_16(0.0f).*/
-    int     manual_exposure_time_us;                  /*!< Optional. Manual exposure time.N/A value:15000.*/
-    float   manual_analog_gain;                       /*!< Optional. Manual analog gain.N/A value: FLOAT_TO_Q16_16(1.0f).*/
-    short   manual_iso;                               /*!< Optional. Manual ISO array.N/A value:DEFAULT_MODULE_ISO.*/
-    unsigned int exposure_index;                      /*!< Optional. index for the manual setting for different exposure frame.*/
-} ia_aiq_ae_manual_setting;
-/*!
- *  \brief aperture position limits for AE iris setting.They should be obtained from CPFF. It will be moved to ia_cmc_t in ia_cmc_types.h
- */
-typedef struct
-{
-    float  aperture_fn_min_limit;                   /*!< Minimum of f number of the camera*/
-    float  aperture_fn_max_limit;                   /*!< Maximum of f number of the camera*/
-    float  aperture_diameter_iris_min_limit;        /*!< Minmum of  DC/P-IRIS of the camera*/
-    float  apterture_diameter_iris_max_limit;       /*!< Maximum of DC/P-IRIS of the camera*/
-}ae_aperture_position_limits;
-/*!
- *  \brief ae aperture priority mode. Should be set by Camera HAL.And it is inclusive to ia_aiq_ae_priority_mode.
- */
-typedef enum
-{
-    ia_aiq_ae_priority_mode_automode,                /*!<Optional. Automode.*/
-    ia_aiq_ae_priority_mode_shutter,                 /*!<Optional. Shutter first.*/
-    ia_aiq_ae_priority_mode_aperture,                /*!<Optional. Apterture first.*/
-    ia_aiq_ae_priority_mode_gain,                    /*!<Optional. Gain first.*/
-}ia_aiq_ae_aperture_priority_mode;                   /*!<Originally it was ae_aperture_priority_mode.Rename to ia_aiq_ae_priority_mode,then rename to ia_aiq_ae_aperture_priority_mode.*/
 
 /*!
  *  \brief Input parameter structure for AE algorithm.
@@ -282,7 +244,7 @@ typedef struct
     ia_aiq_flash_mode flash_mode;                               /*!< Mandatory. Manual flash mode. If AEC should make flash decision, set mode to ia_aiq_flash_mode_auto. */
     ia_aiq_ae_operation_mode operation_mode;                    /*!< Mandatory. AEC operation mode. */
     ia_aiq_ae_metering_mode metering_mode;                      /*!< Mandatory. AEC metering mode. */
-    ia_aiq_ae_priority_mode  priority_mode;                     /*!< Mandatory. AEC priority mode. */
+    ia_aiq_ae_priority_mode priority_mode;                      /*!< Mandatory. AEC priority mode. */
     ia_aiq_ae_flicker_reduction flicker_reduction_mode;         /*!< Mandatory. AEC flicker reduction mode. */
     ia_aiq_exposure_sensor_descriptor *sensor_descriptor;       /*!< Mandatory although function will not return error, if not given.
                                                                      Sensor specific descriptor and limits of the used sensor mode for target frame use.
@@ -294,10 +256,8 @@ typedef struct
     int manual_exposure_time_us;                                /*!< Optional. Manual exposure time in microseconds. -1 if NA. */
     float manual_analog_gain;                                   /*!< Optional. Manual analog gain. -1 if NA. */
     short manual_iso;                                           /*!< Optional. Manual ISO. -1 if NA. Overrides manual_analog_gain. */
-    ia_aiq_ae_features *aec_features;                           /*!< Mandatory. AEC features in use when calculating new exposure parameters*/
-    ia_aiq_ae_manual_limits *manual_limits;                     /*!< Optional. Manual limits which override limits defined in AEC tunings.*/
-    ia_aiq_ae_manual_setting *ia_aiq_ae_manual_setting_ptr;     /*!< Optional. Manual dynamic setting for AEC.HDR uses more than one set of parameters. So exposure_index is added for index.*/
-    ia_aiq_ae_aperture_priority_mode ae_aperture_priority_mode; /*!< Mandatory. AEC aperture priority mode and it is inclusive to ia_aiq_ae_priority_mode.*/
+    ia_aiq_ae_features *aec_features;                           /*!< Optional. AEC features in use when calculating new exposure parameters. */
+    ia_aiq_ae_manual_limits *manual_limits;                     /*!< Optional. Manual limits which override limits defined in AEC tunings. */
 } ia_aiq_ae_input_params;
 
 /*!
@@ -354,18 +314,16 @@ LIBEXPORT ia_err
 ia_aiq_af_run(ia_aiq *ia_aiq,
               const ia_aiq_af_input_params *af_input_params,
               ia_aiq_af_results **af_results);
+
 /*!
  *  \brief Input parameter structure for AWB algorithm.
  */
 typedef struct
 {
-    ia_aiq_frame_use frame_use;                         /*!< Mandatory. Target frame type of the AWB calculations (Preview, Still, video etc.). */
-    ia_aiq_awb_operation_mode scene_mode;               /*!< Mandatory. AWB scene mode. */
-    ia_aiq_awb_manual_cct_range *manual_cct_range;      /*!< Optional. Manual CCT range. Used only if AWB scene mode 'ia_aiq_awb_operation_manual_cct_range' is used. */
-    ia_coordinate *manual_white_coordinate;             /*!< Optional. Manual white point coordinate relative to the full FOV of the scene. Used only if AWB scene mode 'ia_aiq_awb_operation_manual_white' is used. */
-    //TO DO: implement manual WB gain and locked WB gain by Camera HAL outside AIQ libraries.
-    //a_aiq_awb_manual_gains *a_aiq_awb_manual_gains_ptr; /*!< Optional. AWB manual gains. */
-    //bool  awb_gain_locked;                              /*!< Optional. AWB locked or free.*/
+    ia_aiq_frame_use frame_use;                       /*!< Mandatory. Target frame type of the AWB calculations (Preview, Still, video etc.). */
+    ia_aiq_awb_operation_mode scene_mode;             /*!< Mandatory. AWB scene mode. */
+    ia_aiq_awb_manual_cct_range *manual_cct_range;    /*!< Optional. Manual CCT range. Used only if AWB scene mode 'ia_aiq_awb_operation_manual_cct_range' is used. */
+    ia_coordinate *manual_white_coordinate;           /*!< Optional. Manual white point coordinate relative to the full FOV of the scene. Used only if AWB scene mode 'ia_aiq_awb_operation_manual_white' is used. */
 } ia_aiq_awb_input_params;
 
 /*!
@@ -391,11 +349,9 @@ ia_aiq_awb_run(ia_aiq *ia_aiq,
  */
 typedef struct
 {
-    ia_aiq_gbce_level gbce_level;           /*!< Mandatory. GBCE level. -1 to use tuning defaults.*/
-    ia_aiq_frame_use frame_use;             /*!< Mandatory. Target frame type of the GBCE calculations (Preview, Still, video etc.). */
-    float ev_shift;                         /*!< Optional. Exposure Value shift [-4,4]. */
-    ia_aiq_gbce_tm_lut_level gbce_tm_level; /*!< Mandatory. GBCE level for TM LUT. -1 to use tuning defaults.*/
-    ia_aiq_ae_results   *ae_results;        /*!< Optional. AEC output will be used by GBCE.*/
+    ia_aiq_gbce_level gbce_level;   /*!< Mandatory. GBCE level. -1 to use tuning defaults.*/
+    ia_aiq_frame_use frame_use;     /*!< Mandatory. Target frame type of the GBCE calculations (Preview, Still, video etc.). */
+    float ev_shift;                 /*!< Optional. Exposure Value shift [-4,4]. */
 } ia_aiq_gbce_input_params;
 
 /*!
@@ -409,50 +365,20 @@ typedef struct
  * \param[out] gbce_results                 Mandatory.\n
  *                                          Pointer's pointer where address of GBCE results are stored.
  *                                          Results contain GBCE Gamma table. Results can be used directly as input for AIC.
- *                                          Extended GBCE results to include TM LUT as well.
  * \return                                  Error code.
  */
 LIBEXPORT ia_err
 ia_aiq_gbce_run(ia_aiq *ia_aiq,
                 const ia_aiq_gbce_input_params *gbce_input_params,
                 ia_aiq_gbce_results **gbce_results);
- /*!
- *  \brief Input parameter structure for LTM/DRC algorithm.
- */
-typedef struct
-{
-    ia_aiq_ltm_level ltm_level;                 /*!< Mandatory. LTM level. -1 to use tuning defaults.*/
-    ia_aiq_frame_use frame_use;                 /*!< Mandatory. Target frame type of the LTM calculations (Preview, Still, video etc.). */
-    float ev_shift;                             /*!< Optional.  Exposure Value shift [-4,4]. */
-    char ltm_strength_manual;                   /*!< Optional.  user defined manual control for ltm strength*/
-    ia_aiq_ae_results   *ae_results;            /*!< Optional.  AEC output will be used by LTM.*/
-} ia_aiq_ltm_input_params;
 
-/*!
- * \brief LTM calculation based on input parameters and frame statistics.
- * Computes gamma
- *
- * \param[in] ia_aiq                        Mandatory.\n
- *                                          AIQ instance handle.
- * \param[in] ltm_input_params              Mandatory.\n
- *                                          Input parameters for LTM/DRC calculations.
- * \param[out] ltm_results                  Mandatory.\n
- *                                          Pointer's pointer where address of GBCE results are stored.
- *                                          Results contain GBCE Gamma table. Results can be used directly as input for AIC.
- *                                          Extended GBCE results to include TM LUT as well, BZ
- * \return                                  Error code.
- */
-LIBEXPORT ia_err
-ia_aiq_ltm_run(ia_aiq *ia_aiq,
-                const ia_aiq_ltm_input_params *ltm_input_params,
-                ia_aiq_ltm_results **ltm_results);
 /*!
  *  \brief Input parameter structure for DSD algorithm.
  */
 typedef struct
 {
-    ia_aiq_af_results *af_results;            /*!< Mandatory although function will not return error, if not given.
-                                              DSD will not return all scene modes, if not given. */
+    ia_aiq_af_results *af_results;     /*!< Mandatory although function will not return error, if not given.
+                                            DSD will not return all scene modes, if not given. */
     ia_aiq_scene_mode scene_modes_selection;  /*!<configure which scene modes should be detected by DSD*/
 } ia_aiq_dsd_input_params;
 
@@ -570,8 +496,6 @@ typedef struct
 
     const ia_aiq_awb_results *awb_results;                      /*!< Optional. Estimated AWB results from the previous run of AWB */
     const ia_aiq_sa_results *frame_sa_parameters;               /*!< Optional. LSC results used in the frame for statistics collected. */
-    ae_aiq_interface_to_pipe_mode  interface_to_pipe_mode;      /*!< Optional. Pipe mode - ULL vs HDR.*/
-    ae_aiq_iris_params        *ae_aiq_iris_params_current_ptr;  /*!< Optional. Current iris position and status (if stable or not) for the captured frame, for AEC(). Might have latency issue,*/
 } ia_aiq_statistics_input_params;
 
 /*!
@@ -634,7 +558,7 @@ ia_aiq_get_aiqd_data(ia_aiq *ia_aiq,
 /*!
 * \brief Data from external sensors
 */
-typedef struct
+typedef struct  
 {
     ia_aiq_sensor_data *accelerometer_events;                       /*!< The data holds information on the acceleration of the device in mg/sec (miligravity per second).
                                                                          Acceleration = Gravity + Linear Acceleration*/

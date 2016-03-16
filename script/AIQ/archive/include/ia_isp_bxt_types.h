@@ -75,8 +75,8 @@ typedef struct
     uint32_t stream_id;                                     /*!< Used to identify, in which branch of the pipe the kernel is located. */
     uint32_t kernel_uuid;                                   /*!< ia_pal_uuid. ISP API (output) UUID. */
     uint32_t enable;                                        /*!< Run-time control to bypass kernel. */
-    const ia_isp_bxt_resolution_info_t *resolution_info;    /*!< Resolution change to be done in this kernel. NULL, if kernel doesn't change resolution. */
-    const ia_isp_bxt_resolution_info_t *resolution_history; /*!< Resolution changes done before current kernel with respect to sensor output. NULL, if not available*/
+    ia_isp_bxt_resolution_info_t *resolution_info;    /*!< Resolution change to be done in this kernel. NULL, if kernel doesn't change resolution. */
+    ia_isp_bxt_resolution_info_t *resolution_history; /*!< Resolution changes done before current kernel with respect to sensor output. NULL, if not available*/
     uint32_t metadata[4];                                   /*!< Kernel specific metadata. For example image data format etc. */
 } ia_isp_bxt_run_kernels_t;
 
@@ -84,6 +84,7 @@ typedef struct
 {
     unsigned int kernel_count;                    /*!< Number of kernels in the program group .*/
     ia_isp_bxt_run_kernels_t *run_kernels;        /*!< Array of kernels in the program group. */
+    unsigned int operation_mode;                  /*!< Operation mode for selecting proper tunings. Is usually associated to different resolutions. */
 } ia_isp_bxt_program_group;
 
 typedef struct
@@ -92,6 +93,7 @@ typedef struct
     bool af_grid;       /*!< If true, AF grid is available. */
     bool histograms;    /*!< If true, histograms are available. */
     bool dvs_stats;     /*!< If true, DVS statistics are available. */
+    bool rgbs_grids_hdr;  /*!< If true, RGBS HDR grids are available. */	
 } ia_isp_bxt_statistics_query_results_t;
 
 #ifdef __cplusplus
