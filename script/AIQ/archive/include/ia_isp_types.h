@@ -38,20 +38,6 @@ typedef enum
 } ia_isp_feature_level;
 
 /*!
- * \brief Custom control parameters for tuning interpolation in GAIC
- *
- * GAIC implements generic interpolations of tuning parameters as factor of certain run-time changing parameter.
- * This structure defines custom run-time changeable control parameters, which can be used in tuning interpolations.
- */
-typedef struct
-{
-    int count;                        /*!< Length of parameters array. */
-    float *parameters;                /*!< Parameters used in calculation (interpolation) of tuning values.
-                                           The first element of the array corresponds custom tuning 0,
-                                           second corresponds with custom tuning 1 etc.*/
-} ia_isp_custom_controls;
-
-/*!
  *  \brief Definitions for the color effects.
  */
 typedef enum

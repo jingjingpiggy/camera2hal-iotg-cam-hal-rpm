@@ -68,7 +68,6 @@
  *   - 3A_STAT_AE_CCM
  *   - 3A_STAT_AE
  *   - IDS
- *   - 3A_STAT_PAF
  *
  *  P2P implementation currently supports the following kernels from VPREGDC:
  *   - WBA_WBA

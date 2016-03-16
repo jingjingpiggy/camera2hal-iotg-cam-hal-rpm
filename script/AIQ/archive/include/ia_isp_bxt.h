@@ -86,8 +86,6 @@ typedef struct ia_isp_bxt_t ia_isp_bxt;
  *                                   memory buffers for the IA_AIQ algorithms. The same maximum height will be used for all RGBS
  *                                   and AF statistics grid allocations.l
  *                                   Initialization parameters for statistics conversion.
- * \param[in]     max_num_stats_in   Mandatory. The maximum number of input statistics for one frame. Each statistics is related to different exposure.
- *                                   Used especially for sensors that support two or more simultaneous exposures (HDR).
  */
 
 LIBEXPORT ia_isp_bxt*
@@ -95,8 +93,7 @@ ia_isp_bxt_init(
     const ia_binary_data *aiqb_data,
     ia_cmc_t *ia_cmc,
     unsigned int max_stats_width,
-    unsigned int max_stats_height,
-    unsigned int max_num_stats_in);
+    unsigned int max_stats_height);
 
 LIBEXPORT void
 ia_isp_bxt_deinit(ia_isp_bxt *ia_isp_bxt);
@@ -124,7 +121,6 @@ typedef struct
     char manual_saturation;                          /*!< Optional. Manual saturation value range [-128,127]. */
     ia_isp_effect effects;                           /*!< Optional. Manual setting for special effects. Combination of ia_isp_effect enums.*/
     ia_dvs_morph_table *dvs_morph_table;             /*!< Mandatory. DVS results which are passed to GDC ISP FW.*/
-    ia_isp_custom_controls* custom_controls;         /*!< Optional. Custom control parameter for interpolating between different tunings. */
 } ia_isp_bxt_input_params;
 
 /*!
@@ -236,68 +232,6 @@ ia_isp_bxt_statistics_convert_awb(
                     void *sat_ratio_2,
                     void *sat_ratio_3,
                     ia_aiq_rgbs_grid **out_rgbs_grid);
-
-/*!
-* \brief Converts BXT ISP specific statistics to IA_AIQ format.
-* ISP generated statistics may not be in the format in which AIQ algorithms expect. Statistics need to be converted
-* from various ISP formats into AIQ statistics format.
-* \param[in] ia_isp_bxt        Mandatory. ia_isp_bxt instance handle.
-* \param[in]  statistics       Mandatory. Statistics in ISP specific format.
-* \param[in]  threshold        Mandatory. !!!TODO needs proper documentation why this is needed
-* \param[in]  r                Mandatory. !!!TODO needs proper documentation why this is needed
-* \param[in]  g                Mandatory. !!!TODO needs proper documentation why this is needed
-* \param[in]  b                Mandatory. !!!TODO needs proper documentation why this is needed
-* \param[out] out_rgbs_grid    Mandatory. Pointer's pointer where address of converted statistics are stored.
-*                              Converted RGBS grid statistics. Output can be directly used as input in function ia_aiq_statistics_set.
-*                              if the external buffer is provided in out_rgbs_grid it will be used otherwise internal buffer is used.
-* \return                      Error code.
-*/
-LIBEXPORT ia_err
-ia_isp_bxt_statistics_convert_awb_hdr_from_binary(
-    ia_isp_bxt *ia_isp_bxt,
-    const ia_binary_data *statistics,
-    int threshold,
-    float r,
-    float g,
-    float b,
-    ia_aiq_rgbs_grid **out_rgbs_grid);
-
-/*!
-* \brief Converts HDR DP RGBS statistics to AIQ format.
-* ISP/VLIW generated statistics may not be in the format in which AIQ algorithms expect. Statistics need to be converted  into AIQ statistics format.
-* \param[in] ia_isp_bxt        Mandatory.
-*                              ia_isp_bxt instance handle.
-* \param[in]  stats_width      Mandatory actual width of the statistics grid.
-* \param[in]  stats_height     Mandatory actual height of the statistics grid.
-* \param[in]  stats_r          Mandatory.
-* \param[in]  stats_b          Mandatory.
-* \param[in]  stats_g          Mandatory.
-* \param[in]  stats_s          Mandatory.
-* \param[in]  threshold        Mandatory. !!!TODO needs proper documentation why this is needed
-* \param[in]  r                Mandatory. !!!TODO needs proper documentation why this is needed
-* \param[in]  g                Mandatory. !!!TODO needs proper documentation why this is needed
-* \param[in]  b                Mandatory. !!!TODO needs proper documentation why this is needed
-* \param[out] rgbs_grid        Mandatory.
-*                              Pointer's pointer where address of converted statistics are stored.
-*                              Converted RGBS grid statistics. Output can be directly used as input in function ia_aiq_statistics_set.
-*if the external buffer is provided in out_rgbs_grid it will be used otherwise internal buffer is used.
-* \return                      Error code.
-*/
-LIBEXPORT ia_err
-ia_isp_bxt_statistics_convert_awb_hdr(
-    ia_isp_bxt *ia_isp_bxt_ptr,
-    unsigned int stats_width,
-    unsigned int stats_height,
-    void *stats_r,
-    void *stats_gr,
-    void *stats_gb,
-    void *stats_b,
-    void *stats_s,
-    int threshold,
-    float  r,
-    float  g,
-    float  b,
-    ia_aiq_rgbs_grid **out_rgbs_grid);
 
 /*!
  * \brief Converts BXT ISP specific statistics to IA_AIQ format.

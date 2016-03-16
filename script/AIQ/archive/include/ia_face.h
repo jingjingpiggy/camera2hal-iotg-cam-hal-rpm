@@ -27,6 +27,7 @@ extern "C" {
 
 /* ia_types.h contains generic data types such as coordinate, rectangle etc */
 #include "ia_types.h"
+#include <stdint.h>
 
 /** @brief Representing eyes.
  * This structure represents the eye position and the blink state.
@@ -133,7 +134,6 @@ typedef struct {
  *
  *  This function will instantiate and initialize all face engines.
  */
-LIBEXPORT
 ia_face_state *
 ia_face_init(const ia_env *env);
 
@@ -143,7 +143,6 @@ ia_face_init(const ia_env *env);
  *
  *  This funciton destroys face engines and deallocate all internal memory including ia_face_state struct itself.
  */
-LIBEXPORT
 void
 ia_face_uninit(ia_face_state *fs);
 
@@ -153,7 +152,6 @@ ia_face_uninit(ia_face_state *fs);
  *
  *  This function initializes all face engines. After this call, all internal state will be initialized to the same state as ia_face_init() is called.
  */
-LIBEXPORT
 void
 ia_face_reinit(ia_face_state *fs);
 
@@ -164,7 +162,6 @@ ia_face_reinit(ia_face_state *fs);
  *
  *  This function reset all the detected/recognized contexts. Note that the FR database will not be initialized.
  */
-LIBEXPORT
 void
 ia_face_clear_result(ia_face_state *fs);
 
@@ -173,7 +170,6 @@ ia_face_clear_result(ia_face_state *fs);
  *
  *  @return a struct that contains version information of each face engine.
  */
-LIBEXPORT
 ia_face_version
 ia_face_get_versions(void);
 
@@ -184,7 +180,6 @@ ia_face_get_versions(void);
  *
  *  This function is used to configure face engines. Please see the description of ia_face_parameters structure for the detail.
  */
-LIBEXPORT
 ia_err
 ia_face_set_parameters(ia_face_state *fs, const ia_face_parameters *params);
 
@@ -194,13 +189,11 @@ ia_face_set_parameters(ia_face_state *fs, const ia_face_parameters *params);
  *  @param params [OUT] a buffer that will hold face parameters.
  *
  */
-LIBEXPORT
 ia_err
 ia_face_get_parameters(ia_face_state *fs, ia_face_parameters *params);
 
 /** @brief Set the debug message level.
  */
-LIBEXPORT
 void
 ia_face_set_debug_level(ia_face_state *fs, int32_t level);
 
@@ -211,7 +204,6 @@ ia_face_set_debug_level(ia_face_state *fs, int32_t level);
  *
  * Enable or disable acceleration on the ISP. If this function is not called, face engine will work without acceleration.
  */
-LIBEXPORT
 void
 ia_face_set_acceleration(ia_face_state *fs, const ia_acceleration *acc_api);
 
@@ -223,7 +215,6 @@ ia_face_set_acceleration(ia_face_state *fs, const ia_acceleration *acc_api);
  *  This function tries to find faces from the input image. This function also uses information from the previous frames, so
  *  it is common practice to use this function to detect faces from the camera viewfinder.
  */
-LIBEXPORT
 void
 ia_face_detect(ia_face_state *fs, const ia_frame *frame); /* uses face tracking and results of previous frame */
 
@@ -234,7 +225,6 @@ ia_face_detect(ia_face_state *fs, const ia_frame *frame); /* uses face tracking 
  *
  *  This function tries to find faces from the input image, typically a captured still image.
  */
-LIBEXPORT
 void
 ia_face_detect_in_image(ia_face_state *fs, const ia_frame *frame);
 
@@ -247,7 +237,6 @@ ia_face_detect_in_image(ia_face_state *fs, const ia_frame *frame);
  *  Using face_area information in faces array in fs structure, this function will fill eye positions to left_eye and right_eye variable of corresponding structure.
  *  Therefore this function should be called only after face detection is performed.
  */
-LIBEXPORT
 void
 ia_face_eye_detect(ia_face_state *fs, const ia_frame *frame);
 
@@ -260,7 +249,6 @@ ia_face_eye_detect(ia_face_state *fs, const ia_frame *frame);
  *  Using face_area information in faces array in fs structure, this function will fill the mouth field of corresponding structure.
  *  As in case of eye detection, this function also should be called after face detection.
  */
-LIBEXPORT
 void
 ia_face_mouth_detect(ia_face_state *fs, const ia_frame *frame);
 
@@ -272,7 +260,6 @@ ia_face_mouth_detect(ia_face_state *fs, const ia_frame *frame);
  *  This function tries to find whether each face in the frame is smiling, and if yes, also tries to find how much.
  *  Face area and eye positions should be valid for calling this function to be meaningful.
  */
-LIBEXPORT
 void
 ia_face_smile_detect(ia_face_state *fs, const ia_frame *frame);
 
@@ -284,7 +271,6 @@ ia_face_smile_detect(ia_face_state *fs, const ia_frame *frame);
  *  This function tries to find whether each eye is closed or open as in the range of 0 to 100.
  *  Face area and eye positions should be valid for calling this function to be meaningful.
  */
-LIBEXPORT
 void
 ia_face_blink_detect(ia_face_state *fs, const ia_frame *frame);
 
@@ -301,7 +287,6 @@ ia_face_blink_detect(ia_face_state *fs, const ia_frame *frame);
  *  This function is intended to be used on the camera preview frames, which means this function also uses temporal information
  *  to get better recognition result. For recognizing faces in still images, use ia_face_recognize_in_image().
  */
-LIBEXPORT
 void
 ia_face_recognize(ia_face_state *fs, const ia_frame *frame);
 
@@ -312,7 +297,6 @@ ia_face_recognize(ia_face_state *fs, const ia_frame *frame);
  *
  *  Works the same way as ia_face_recognize() except that this function should be used for still images.
  */
-LIBEXPORT
 void
 ia_face_recognize_in_image(ia_face_state *fs, const ia_frame *frame);
 
@@ -329,7 +313,6 @@ ia_face_recognize_in_image(ia_face_state *fs, const ia_frame *frame);
  *  As this function takes the face index to recognize, face detection must be done first. Calling eye detection is optional since it will be called internally
  *  if the result is not present in the fs structure.
  */
-LIBEXPORT
 int32_t
 ia_face_recognize_single_in_image(ia_face_state *fs, const ia_frame *frame, int32_t index_to_recognize, ia_face_feature *extracted_feature);
 
@@ -340,7 +323,6 @@ ia_face_recognize_single_in_image(ia_face_state *fs, const ia_frame *frame, int3
  *
  *  Delete the face from the face recognition database. Unregistered faces will not be used for recognizing other faces any more.
  */
-LIBEXPORT
 ia_err
 ia_face_feature_unregister(ia_face_state *fs, int32_t feature_id);
 
@@ -352,7 +334,6 @@ ia_face_feature_unregister(ia_face_state *fs, int32_t feature_id);
  *
  *  This function modifies the person id of existing (already registered) face.
  */
-LIBEXPORT
 ia_err
 ia_face_feature_set_person_id(ia_face_state *fs, int32_t feature_id, int32_t person_id);
 
@@ -363,7 +344,6 @@ ia_face_feature_set_person_id(ia_face_state *fs, int32_t feature_id, int32_t per
  *
  *  This function thoroughly deletes a person and all faces registered with the person id from the face recognition database.
  */
-LIBEXPORT
 ia_err
 ia_face_unregister_person(ia_face_state *fs, int32_t person_id);
 
@@ -375,7 +355,6 @@ ia_face_unregister_person(ia_face_state *fs, int32_t person_id);
  *
  *  This function is typically used to store the face recognition database in the memory to the file system.
  */
-LIBEXPORT
 ia_err
 ia_face_get_feature_db(ia_face_state *fs, int32_t *db_size, const uint8_t **db_data);
 
@@ -388,7 +367,6 @@ ia_face_get_feature_db(ia_face_state *fs, int32_t *db_size, const uint8_t **db_d
  *  This function copies a bytestream to engine internal memory as the face recognition database.
  *  ia_face_register_feature() also can be used to copy one database entry into the memory.
  */
-LIBEXPORT
 ia_err
 ia_face_set_feature_db(ia_face_state *fs, int32_t db_size, const uint8_t *db_data);
 
@@ -412,7 +390,6 @@ ia_face_set_feature_db(ia_face_state *fs, int32_t db_size, const uint8_t *db_dat
  *
  *  This function is deprecated. Please use ia_face_register_face_feature() instead.
  */
-LIBEXPORT
 int32_t
 ia_face_register_feature(ia_face_state* fs, const uint8_t *new_feature, int32_t new_person_id,
                          int32_t new_feature_id, int32_t time_stamp, int32_t condition, int32_t checksum, int32_t version);
@@ -427,7 +404,6 @@ ia_face_register_feature(ia_face_state* fs, const uint8_t *new_feature, int32_t 
  *   - At the engine initialization stage, use this function to copy face feature data from external database to internal database.
  *   - When a new photo is imported, use this function to register a newly detected/recognized face into database.
  */
-LIBEXPORT
 int32_t
 ia_face_register_face_feature(ia_face_state *fs, const ia_face_feature *feature_to_register);
 
@@ -445,7 +421,6 @@ ia_face_register_face_feature(ia_face_state *fs, const ia_face_feature *feature_
  *  users don't need to call another ia_face_detect() for headpose tracking.
  *  If returned headpose->processing_state is zero, it means headpose tracking has failed and user needs to start over by calling face detection first.
  */
-LIBEXPORT
 ia_err
 ia_face_track_headpose(ia_face_state *fs, ia_face_headpose *headpose, const ia_frame *frame, int32_t tracking_id);
 
@@ -460,7 +435,6 @@ ia_face_track_headpose(ia_face_state *fs, ia_face_headpose *headpose, const ia_f
  *  in the fs structure, in which case face detection may be called internally if it hasn't been called.
  *  Output frame must be allocated and freed by the caller.
  */
-LIBEXPORT
 ia_err
 ia_face_beautify(ia_face_state *fs, ia_frame *output, const ia_frame *input, int32_t strength);
 
@@ -472,7 +446,6 @@ ia_face_beautify(ia_face_state *fs, ia_frame *output, const ia_frame *input, int
  *  This function attempts to detect the skin type of the faces which are already found and stored in the handle,
  *  results the dark-skin likelihood back to the member 'skin_type_dark_likelihood' and 'skin_type_validity' in each ia_faces.
  */
-LIBEXPORT
 void
 ia_face_detect_skin(ia_face_state *fs, const ia_frame *frame);
 
