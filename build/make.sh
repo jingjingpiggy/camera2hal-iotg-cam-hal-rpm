@@ -40,7 +40,7 @@ function aiq_rpm_install() {
     check_dir  $AIQ_INSTALL_DIR/lib64
 
     cp -frv include $AIQ_INSTALL_DIR/
-    cp -frv lib $AIQ_INSTALL_DIR/lib64/
+    cp -frv lib/release/64/* $AIQ_INSTALL_DIR/lib64/
 
     check_result $? $FUNCNAME
 }
