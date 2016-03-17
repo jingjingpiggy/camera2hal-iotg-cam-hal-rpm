@@ -67,5 +67,8 @@
 /* Align a to the upper multiple of b */
 #define CEIL_MUL(a, b)  CEIL_DIV(a, b) * (b)
 
+/* Number of elements in an array */
+#define NOF_ARRAY_ELEMENTS(array) (sizeof(array) / sizeof(array[0]))
+
 #endif
 
