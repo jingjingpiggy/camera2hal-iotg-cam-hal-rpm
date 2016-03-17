@@ -44,6 +44,7 @@ typedef enum
     IA_P2P_PLATFORM_BXT_B0,
     IA_P2P_PLATFORM_CNL_A0,
     IA_P2P_PLATFORM_CNL_B0,
+    IA_P2P_PLATFORM_IPU4i,
 } ia_p2p_platform_t;
 
 /*!

@@ -131,11 +131,18 @@ typedef char rwlock_t;
 #else/*__BUILD_FOR_GSD_AOH__*/
 
 #ifdef _WIN32
+
+// P2P_WINDOWS_KERNELSPACE
+// To be fixed properly.
+#ifndef P2P_WINDOWS_KERNELSPACE
 #include <windows.h>
+#endif
 
 #if defined(_MSC_VER)
+#ifndef P2P_WINDOWS_KERNELSPACE
 #define snprintf _snprintf
-#if !defined(__BOOL_DEFINED)
+#endif
+#if !defined(__BOOL_DEFINED) && !defined(__bool_true_false_are_defined)
 typedef unsigned char bool;
 #define true 1
 #define false 0
@@ -144,8 +151,13 @@ typedef unsigned char bool;
 #include <stdbool.h> /* defines bool */
 #endif
 
+// P2P_WINDOWS_KERNELSPACE
+// To be fixed properly.
+#ifndef P2P_WINDOWS_KERNELSPACE
 typedef HANDLE mutex_t;
 typedef PSRWLOCK rwlock_t;
+#endif
+
 #define IA_MUTEX_CREATE(m)       (m) = CreateMutex(NULL, false, NULL)
 #define IA_MUTEX_DELETE(m)       CloseHandle(m)
 #define IA_MUTEX_LOCK(m)         WaitForSingleObject(m, INFINITE)

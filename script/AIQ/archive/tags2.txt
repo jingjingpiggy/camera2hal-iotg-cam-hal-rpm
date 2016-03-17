@@ -1,14 +1,14 @@
 CCA tags
-ia_imaging-ia_aiq=v2.0_010.000
-ia_imaging-ia_isp=v2.0_010.000
-ia_imaging-ia_cmc_parser=v2.0_010.001
-ia_imaging-ia_dvs=v2.0_010.000
-ia_imaging-ia_log=v1.1.5
+ia_imaging-ia_aiq=v2.0_012.000
+ia_imaging-ia_isp=v2.0_012.000_002
+ia_imaging-ia_cmc_parser=v2.0_012.000
+ia_imaging-ia_dvs=v2.0_012.000
+ia_imaging-ia_log=v1.1.6
 ia_imaging-ia_mkn=v4.4.14
 ia_imaging-ia_nvm=v4.0.22
-ia_imaging-ia_tools=v4.3.12
+ia_imaging-ia_tools=v4.3.13
 ia_imaging-ia_maiq=v.000-58-g811a77b
-ia_imaging-ia_pal=v2.0_010.000
-ia_imaging-ia_p2p=v2.0_010.000
-ia_imaging-include=v2.0_010.000
-ia_imaging-testframework=v2.0_010.000
+ia_imaging-ia_pal=v2.0_012.000
+ia_imaging-ia_p2p=v2.0_012.000
+ia_imaging-include=v2.0_012.000
+ia_imaging-testframework=v2.0_012.000

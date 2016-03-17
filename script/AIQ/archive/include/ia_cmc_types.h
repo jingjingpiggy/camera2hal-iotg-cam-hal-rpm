@@ -100,7 +100,8 @@ typedef enum
     CMC_GeometricDistortionCorrection2,  /*!< 22 */
     CMC_ExposureRange,                   /*!< 23 */
     CMC_MultiLEDFlashChromaticity,       /*!< 24 */
-    CMC_AdvancedColorMatrices            /*!< 25 */
+    CMC_AdvancedColorMatrices,           /*!< 25 */
+    CMC_HDR                              /*!< 26 */
 } CMC_NameID;
 
 /*!
@@ -125,7 +126,7 @@ typedef enum {
 typedef enum {
     CMC_Camera_Orientation_Down = 0,            /*!< Camera module is pointing down*/
     CMC_Camera_Orientation_Horizontally,        /*!< Camera module is pointing horizontally*/
-    CMC_Camera_Orientation_Up                   /*!< Camera module is pointing up*/    
+    CMC_Camera_Orientation_Up                   /*!< Camera module is pointing up*/
 } CMC_Camera_Orientation;
 
 /*!
@@ -833,6 +834,18 @@ typedef struct
 } cmc_parsed_advanced_color_matrix_t;
 
 /*!
+* \brief CMC HDR Parameters
+*/
+typedef struct
+{
+    ia_mkn_record_header header;    /*!< Record header with Format ID: Uint16 (See AIQB_DataID) Name ID: CMC_HDR. */
+    float hdr_exposure_ratio_min;   /*!< Minimum HDR exposure ratio between different exposures. */
+    float hdr_exposure_ratio_max;   /*!< Maximum HDR exposure ratio between different exposures. */
+}
+cmc_parsed_hdr_parameters_t;
+#define SIZEOF_CMC_HDR_T 16
+
+/*!
  * \brief Parsed CMC structure.
  * Parser will fill the pointers in this structure so that data can be accessed more easily.
  */
@@ -862,6 +875,7 @@ typedef struct
     cmc_multi_led_flash_t *cmc_multi_led_flashes;
     cmc_emd_decoder_config_t *cmc_emd_decoder_config;
     cmc_parsed_advanced_color_matrix_t cmc_parsed_advanced_color_matrix;
+    cmc_parsed_hdr_parameters_t *cmc_parsed_hdr_parameters;
 } ia_cmc_t;
 
 #ifdef __cplusplus

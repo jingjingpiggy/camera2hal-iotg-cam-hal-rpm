@@ -84,6 +84,7 @@ typedef struct
 {
     unsigned int kernel_count;                    /*!< Number of kernels in the program group .*/
     ia_isp_bxt_run_kernels_t *run_kernels;        /*!< Array of kernels in the program group. */
+    unsigned int operation_mode;                  /*!< Operation mode for selecting proper tunings. Is usually associated to different resolutions. */
 } ia_isp_bxt_program_group;
 
 typedef struct
@@ -92,6 +93,7 @@ typedef struct
     bool af_grid;       /*!< If true, AF grid is available. */
     bool histograms;    /*!< If true, histograms are available. */
     bool dvs_stats;     /*!< If true, DVS statistics are available. */
+    bool rgbs_grids_hdr;  /*!< If true, RGBS HDR grids are available. */	
 } ia_isp_bxt_statistics_query_results_t;
 
 #ifdef __cplusplus
