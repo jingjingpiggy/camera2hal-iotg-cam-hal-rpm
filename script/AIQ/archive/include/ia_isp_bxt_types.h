@@ -75,8 +75,8 @@ typedef struct
     uint32_t stream_id;                                     /*!< Used to identify, in which branch of the pipe the kernel is located. */
     uint32_t kernel_uuid;                                   /*!< ia_pal_uuid. ISP API (output) UUID. */
     uint32_t enable;                                        /*!< Run-time control to bypass kernel. */
-    const ia_isp_bxt_resolution_info_t *resolution_info;    /*!< Resolution change to be done in this kernel. NULL, if kernel doesn't change resolution. */
-    const ia_isp_bxt_resolution_info_t *resolution_history; /*!< Resolution changes done before current kernel with respect to sensor output. NULL, if not available*/
+    ia_isp_bxt_resolution_info_t *resolution_info;    /*!< Resolution change to be done in this kernel. NULL, if kernel doesn't change resolution. */
+    ia_isp_bxt_resolution_info_t *resolution_history; /*!< Resolution changes done before current kernel with respect to sensor output. NULL, if not available*/
     uint32_t metadata[4];                                   /*!< Kernel specific metadata. For example image data format etc. */
 } ia_isp_bxt_run_kernels_t;
 

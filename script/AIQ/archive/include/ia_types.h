@@ -21,7 +21,7 @@
 #include <stdarg.h>
 
 #if defined(_MSC_VER)
-    #if !defined(__BOOL_DEFINED) && !defined(__bool_true_false_are_defined)
+    #if !defined(__BOOL_DEFINED)
         typedef unsigned char bool;
         #define true 1
         #define false 0
@@ -111,8 +111,6 @@ typedef struct {
  * Needs to be agreed with ia_imaging error codes.
  * \brief Error codes.
 */
-#ifndef __IA_TYPES_H__
-#define __IA_TYPES_H__
 typedef enum {
     ia_err_none     =  0,       /*!< No errors*/
     ia_err_general  = (1 << 1), /*!< General error*/
@@ -121,7 +119,6 @@ typedef enum {
     ia_err_internal = (1 << 4), /*!< Error in code*/
     ia_err_argument = (1 << 5)  /*!< Invalid argument for a function*/
 } ia_err;
-#endif
 
 typedef struct {
     int left;
