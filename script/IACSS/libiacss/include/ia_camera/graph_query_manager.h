@@ -98,10 +98,12 @@ public:
     typedef gcss_item_map::const_iterator const_iterator;
     GraphConfigItem::const_iterator getNext(const_iterator& it){
                                             return std::next(it, 1);}
-    virtual ia_err_t getValue(int&){return ia_err_none;}
-    virtual ia_err_t getValue(std::string&){return ia_err_none;}
+    /* Return error if getValue is being used directly or if child class
+     * doesn't implement getValue */
+    virtual ia_err_t getValue(int&) {return ia_err_noentry;}
+    virtual ia_err_t getValue(std::string&) {return ia_err_noentry;}
     Type type;
-    GraphConfigItem(Type type) : type(type){}
+    GraphConfigItem(Type type) : type(type) {}
 
     virtual ~GraphConfigItem() {}
 };
@@ -250,11 +252,6 @@ public:
                          const GraphQueryResult&,
                          GraphQueryResult&,
                          bool strict = true);
-    /**
-     * \todo remove the non-const setters when HAL is no more dependent on them
-     */
-    void setGraphSettings(GraphConfigNode** settings) {mGraphSettings = *settings;}
-    void setGraphDescriptor(GraphConfigNode** descriptor) {mGraphDescriptor = *descriptor;}
     void setGraphSettings(const GraphConfigNode* settings) {mGraphSettings = settings;}
     void setGraphDescriptor(const GraphConfigNode* descriptor) {mGraphDescriptor = descriptor;}
 private:
