@@ -258,6 +258,9 @@ typedef struct
     short manual_iso;                                           /*!< Optional. Manual ISO. -1 if NA. Overrides manual_analog_gain. */
     ia_aiq_ae_features *aec_features;                           /*!< Optional. AEC features in use when calculating new exposure parameters. */
     ia_aiq_ae_manual_limits *manual_limits;                     /*!< Optional. Manual limits which override limits defined in AEC tunings. */
+    float manual_aperture_fn;                                   /*!< Optional. Manual f-number of aperture (e.g. 2.8), -1.0 for N/A. Used only with P iris. */
+    ia_aiq_aperture_control_dc_iris_command manual_dc_iris_command; /*!< Optional. Used only with DC iris. 0 (hold) for N/A. */
+    ia_aiq_ae_exposure_distribution_priority exposure_distribution_priority; /*!< Mandatory. AEC exposure distribution priority mode. */
 } ia_aiq_ae_input_params;
 
 /*!
@@ -349,9 +352,10 @@ ia_aiq_awb_run(ia_aiq *ia_aiq,
  */
 typedef struct
 {
-    ia_aiq_gbce_level gbce_level;   /*!< Mandatory. GBCE level. -1 to use tuning defaults.*/
-    ia_aiq_frame_use frame_use;     /*!< Mandatory. Target frame type of the GBCE calculations (Preview, Still, video etc.). */
-    float ev_shift;                 /*!< Optional. Exposure Value shift [-4,4]. */
+    ia_aiq_gbce_level gbce_level;           /*!< Mandatory. GBCE level. -1 to use tuning defaults.*/
+    ia_aiq_tone_map_level tone_map_level;   /*!< Mandatory. Tone Map level. -1 to use tuning defaults.*/
+    ia_aiq_frame_use frame_use;             /*!< Mandatory. Target frame type of the GBCE calculations (Preview, Still, video etc.). */
+    float ev_shift;                         /*!< Optional. Exposure Value shift [-4,4]. */
 } ia_aiq_gbce_input_params;
 
 /*!

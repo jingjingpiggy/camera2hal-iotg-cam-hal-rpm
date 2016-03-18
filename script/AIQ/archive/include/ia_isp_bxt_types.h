@@ -75,8 +75,8 @@ typedef struct
     uint32_t stream_id;                                     /*!< Used to identify, in which branch of the pipe the kernel is located. */
     uint32_t kernel_uuid;                                   /*!< ia_pal_uuid. ISP API (output) UUID. */
     uint32_t enable;                                        /*!< Run-time control to bypass kernel. */
-    ia_isp_bxt_resolution_info_t *resolution_info;    /*!< Resolution change to be done in this kernel. NULL, if kernel doesn't change resolution. */
-    ia_isp_bxt_resolution_info_t *resolution_history; /*!< Resolution changes done before current kernel with respect to sensor output. NULL, if not available*/
+    ia_isp_bxt_resolution_info_t *resolution_info;          /*!< Resolution change to be done in this kernel. NULL, if kernel doesn't change resolution. */
+    ia_isp_bxt_resolution_info_t *resolution_history;       /*!< Resolution changes done before current kernel with respect to sensor output. NULL, if not available*/
     uint32_t metadata[4];                                   /*!< Kernel specific metadata. For example image data format etc. */
 } ia_isp_bxt_run_kernels_t;
 
@@ -89,12 +89,46 @@ typedef struct
 
 typedef struct
 {
-    bool rgbs_grid;     /*!< If true, RGBS grid is available. */
-    bool af_grid;       /*!< If true, AF grid is available. */
-    bool histograms;    /*!< If true, histograms are available. */
-    bool dvs_stats;     /*!< If true, DVS statistics are available. */
-    bool rgbs_grids_hdr;  /*!< If true, RGBS HDR grids are available. */	
+    bool rgbs_grid;          /*!< If true, RGBS grid is available. */
+    bool af_grid;            /*!< If true, AF grid is available. */
+    bool histograms;         /*!< If true, histograms are available. */
+    bool dvs_stats;          /*!< If true, DVS statistics are available. */
+    bool rgbs_grids_hdr;     /*!< If true, RGBS HDR grids are available. */
+    bool rgby_grids_hdr;     /*!< If true, RGBY stat for high precision histogram is available. */
+    bool yv_grids_hdr;       /*!< If true, YV HDR grids are available. */
 } ia_isp_bxt_statistics_query_results_t;
+
+/*!
+ * \brief Describes options to decompress Y (luma).
+ */
+typedef enum
+{
+    ia_isp_bxt_hdr_y_decompression_max_rgb,   /*!< Use RGB max to calculate Y (luma). */
+    ia_isp_bxt_hdr_y_decompression_avg_rgb    /*!< Use RGB average to calculate Y (luma). */
+} ia_isp_bxt_hdr_y_compression_method_t;
+
+/*!
+ * \brief Describes the parameters used in HDR compression algorithm.
+ * Sensor/ISP may merge the HDR image and then compress the data to preserve data from different parts of the dynamic range.
+ * Compression is most often done to save memory. For example, merged 20 bit (input) image data could be compressed to fit into (output) 15 bits.
+ * Parameters in this structure are used to decompress HDR statistics back to linear space.
+ */
+typedef struct
+{
+    ia_isp_bxt_hdr_y_compression_method_t y_compression_method; /*!< Used decompression method. */
+    unsigned char input_bit_depth;                              /*!< Bit depth per pixel for input. */
+    unsigned char output_bit_depth;                             /*!< Bit depth per pixel for output to which Y is compressed. */
+} ia_isp_bxt_hdr_compression_t;
+
+/*!
+ * \brief Structure describes the parameters used in HDR statistics.
+ */
+typedef struct
+{
+    unsigned char num_exposures;                               /*!< Mandatory. Number of exposures the sensor supports/outputs. */
+    float *hdr_ratios;                                         /*!< Mandatory. HDR ratio of [L/S S/VS etc.] for stitching. The effective length is determined by num_exposures-1. */
+    ia_isp_bxt_hdr_compression_t *ia_isp_bxt_hdr_compression;  /*!< Optional. NULL, if HDR statistics are already in linear space (no compression). */
+} ia_isp_bxt_hdr_params_t;
 
 #ifdef __cplusplus
 }

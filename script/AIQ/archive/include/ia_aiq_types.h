@@ -162,6 +162,26 @@ typedef enum {
 } ia_aiq_ae_priority_mode;
 
 /*!
+ * \brief AEC exposure distribution priority modes
+ *
+ * This enumeration values are used to control distribution of AEC exposure parameters. For example in some situation user may want to keep
+ * aperture at smallest value (in order to have large DOF) as long as possible in expense of motion blur (caused by long exposure time) and
+ * noise (caused by high ISO).
+ *
+ * Note. Manual priority modes as understood by SLRs are achieved by using manual exposure parameters when running AEC:
+ * Shutter priority: Set manual_exposure_time_us in ia_aiq_ae_input_params.
+ * ISO priority: Set manual_iso in ia_aiq_ae_input_params.
+ * Aperture priority: Set manual_aperture_fn in ia_aiq_ae_input_params.
+ */
+typedef enum
+{
+    ia_aiq_ae_exposure_distribution_auto,     /*!< AEC internally prioritizes between exposure time, aperture and ISO when calculating distribution. */
+    ia_aiq_ae_exposure_distribution_shutter,  /*!< AEC tries to keep the exposure time at minimum until ISO and aperture are at maximum. */
+    ia_aiq_ae_exposure_distribution_iso,      /*!< AEC tries to keep the ISO at minimum until exposure time and aperture are at maximum. */
+    ia_aiq_ae_exposure_distribution_aperture, /*!< AEC tries to keep the aperture at minimum until exposure time and ISO are at maximum. */
+} ia_aiq_ae_exposure_distribution_priority;
+
+/*!
  * \brief AEC feature setting.
  */
 typedef enum {
@@ -525,18 +545,20 @@ typedef struct
  */
 typedef enum
 {
-    ia_aiq_aperture_control_dc_iris_hold,
-    ia_aiq_aperture_control_dc_iris_open,
-    ia_aiq_aperture_control_dc_iris_close,
+    ia_aiq_aperture_control_dc_iris_hold,  /*!< Iris should hold current aperture. */
+    ia_aiq_aperture_control_dc_iris_open,  /*!< Iris should open. */
+    ia_aiq_aperture_control_dc_iris_close, /*!< Iris should close. */
 } ia_aiq_aperture_control_dc_iris_command;
 
 /*!
  * \brief Aperture control parameters.
+ * Aperture controls for both P (where iris has discrete amount of apertures) and DC (where iris has indefinite amount of possible apertures) iris.
  */
 typedef struct
 {
-    float aperture_fn;                                       /*!< f-number of aperture (e.g. 2.8), -1.0 for N/A. */
+    float aperture_fn;                                       /*!< f-number of aperture (e.g. 2.8), -1.0 for N/A. Used only with P iris. */
     ia_aiq_aperture_control_dc_iris_command dc_iris_command; /*!< Used only with DC iris. */
+    int next_aperture_position;                              /*!< Iris module HW register value. */
 } ia_aiq_aperture_control;
 
 /*!
@@ -601,20 +623,35 @@ typedef struct
  */
 typedef enum
 {
-    ia_aiq_gbce_level_use_tuning = -1,                    /*!< Use GBCE level defined in the tuning. */
-    ia_aiq_gbce_level_bypass = 0,                         /*!< No gamma adaptation (use the default gamma table). This level should be used when manual AE parameters are set. */
-    ia_aiq_gbce_level_gamma_stretch,                      /*!< Only gamma stretching adaptation. */
-    ia_aiq_gbce_level_gamma_stretch_and_power_adaptation, /*!< Gamma stretching & gamma power adaptation. */
+    ia_aiq_gbce_level_use_tuning = -1, /*!< Use GBCE level defined in the tuning. */
+    ia_aiq_gbce_level_bypass = 0,      /*!< Use the default gamma table without stretching. This level should be used when manual AE parameters are set. */
+    ia_aiq_gbce_level_gamma_stretch,   /*!< Apply histogram stretching. */
+    ia_aiq_gbce_level_gamma_stretch_and_power_adaptation, /*!< Histogram stretching & gamma power adaptation. */
 } ia_aiq_gbce_level;
+
+/*!
+* \brief Tone Map level.
+* Allows to override Tone Map level defined in the tuning.
+*/
+
+typedef enum
+{
+    ia_aiq_tone_map_level_use_tuning = -1,  /*!< Use Tone Map level defined in the tuning. */
+    ia_aiq_tone_map_level_bypass = 0,       /*!< Bypass TM LUT (i.e. legacy GBCE behavior) */
+    ia_aiq_tone_map_level_default,          /*!< Put the gains in TM LUT (gamma LUT will have sRGB gamma only) */
+    ia_aiq_tone_map_level_dynamic,          /*!< Force dynamic calculation of TM LUT */
+} ia_aiq_tone_map_level;
 
 /*!
  * \brief Results from GBCE.
  */
 typedef struct {
-    float* r_gamma_lut;          /*!< Gamma LUT for R channel. Range [0.0, 1.0]. */
-    float* b_gamma_lut;          /*!< Gamma LUT for B channel. Range [0.0, 1.0]. */
-    float* g_gamma_lut;          /*!< Gamma LUT for G channel. Range [0.0, 1.0]. */
-    unsigned int gamma_lut_size; /*!< Number of elements in each gamma LUT. */
+    float* r_gamma_lut;             /*!< Gamma LUT for R channel. Range [0.0, 1.0]. */
+    float* b_gamma_lut;             /*!< Gamma LUT for B channel. Range [0.0, 1.0]. */
+    float* g_gamma_lut;             /*!< Gamma LUT for G channel. Range [0.0, 1.0]. */
+    unsigned int gamma_lut_size;    /*!< Number of elements in each gamma LUT. */
+    float* tone_map_lut;            /*!< Tone Mapping Gain LUT. Range [0.0 FLT_MAX] */
+    unsigned int tone_map_lut_size; /*!< Number of elements in tone mapping LUT. */
 } ia_aiq_gbce_results;
 
 /*!

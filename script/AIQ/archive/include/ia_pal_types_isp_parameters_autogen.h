@@ -2,7 +2,7 @@
 
 /*
 * INTEL CONFIDENTIAL
-* Copyright (c) 2014 Intel Corporation
+* Copyright (c) 2016 Intel Corporation
 * All Rights Reserved.
 *
 * The source code contained or described herein and all documents related to
@@ -96,7 +96,7 @@ ia_pal_uuid_isp_bxt_shift14to16bit = 49150,
 ia_pal_uuid_isp_sc_ylpf = 50844,
 ia_pal_uuid_isp_sc_iefd_v2 = 33433,
 ia_pal_uuid_isp_bxt_gdc_reference = 40503,
-ia_pal_uuid_isp_bxt_xnr4_mh = 31951,
+ia_pal_uuid_isp_bxt_xnr4_mh = 47865,
 ia_pal_uuid_isp_bxt_pixprecadapter_prewb = 20178,
 ia_pal_uuid_isp_bxt_pixprecadapter_postvcr = 64780,
 ia_pal_uuid_isp_bxt_inputscaler_a0 = 41839,
@@ -104,13 +104,15 @@ ia_pal_uuid_isp_bxt_demosaic_a0 = 46791,
 ia_pal_uuid_isp_bxt_bitcomp_a0 = 41588,
 ia_pal_uuid_isp_bxt_bitdecomp_a0 = 7104,
 ia_pal_uuid_isp_bxt_tnr5v1 = 43225,
-ia_pal_uuid_isp_dma_cropper = 43277,
-ia_pal_uuid_isp_drc_1 = 44964,
-ia_pal_uuid_isp_dss_xnr = 63813,
+ia_pal_uuid_isp_dma_cropper_mp = 27230,
+ia_pal_uuid_isp_dma_cropper_dp = 47638,
+ia_pal_uuid_isp_dma_cropper_ppp = 49162,
+ia_pal_uuid_isp_drc_1 = 63426,
 ia_pal_uuid_isp_exy = 35008,
-ia_pal_uuid_isp_hdrstats_1 = 7435,
+ia_pal_uuid_isp_hdrstats_1 = 23432,
 ia_pal_uuid_isp_see = 20631,
-ia_pal_uuid_isp_tnr5_21 = 49783,
+ia_pal_uuid_isp_tnr5_21 = 41505,
+ia_pal_uuid_isp_xnr_dss = 42418,
 
 } ia_pal_uuid;
 
@@ -2977,6 +2979,8 @@ typedef struct
     int32_t hf_luma_power;
      /*!< rad_hf_luma_power HF Luma denoise power, Q15 -radial */
     int32_t rad_hf_luma_power;
+     /*!< blend_hf_power_c blend_mf_power_c HF denoise blending power chroma */
+    int32_t blend_hf_power_c;
 
 } ia_pal_isp_bxt_xnr4_mh_t; 
 
@@ -3562,7 +3566,7 @@ typedef struct
 
 } ia_pal_isp_bxt_tnr5v1_t; 
 
-/*! \struct dma_cropper
+/*! \struct dma_cropper_mp
     
 */
 typedef struct 
@@ -3582,7 +3586,51 @@ typedef struct
      /*!< cropped_height input crop height */
     int32_t cropped_height;
 
-} ia_pal_isp_dma_cropper_t; 
+} ia_pal_isp_dma_cropper_mp_t; 
+
+/*! \struct dma_cropper_dp
+    
+*/
+typedef struct 
+{
+     /*!< Bypass bypass the DMA_Cropper */
+    int32_t Bypass;
+     /*!< crop_left number of pixels to crop from left */
+    int32_t crop_left;
+     /*!< crop_top number of pixels to crop from top */
+    int32_t crop_top;
+     /*!< uncropped_output_width output width before any cropping is done */
+    int32_t uncropped_output_width;
+     /*!< uncropped_output_height output height before any cropping is done */
+    int32_t uncropped_output_height;
+     /*!< cropped_width input crop width */
+    int32_t cropped_width;
+     /*!< cropped_height input crop height */
+    int32_t cropped_height;
+
+} ia_pal_isp_dma_cropper_dp_t; 
+
+/*! \struct dma_cropper_ppp
+    
+*/
+typedef struct 
+{
+     /*!< Bypass bypass the DMA_Cropper */
+    int32_t Bypass;
+     /*!< crop_left number of pixels to crop from left */
+    int32_t crop_left;
+     /*!< crop_top number of pixels to crop from top */
+    int32_t crop_top;
+     /*!< uncropped_output_width output width before any cropping is done */
+    int32_t uncropped_output_width;
+     /*!< uncropped_output_height output height before any cropping is done */
+    int32_t uncropped_output_height;
+     /*!< cropped_width input crop width */
+    int32_t cropped_width;
+     /*!< cropped_height input crop height */
+    int32_t cropped_height;
+
+} ia_pal_isp_dma_cropper_ppp_t; 
 
 /*! \struct drc_1
     DRC filter
@@ -3617,10 +3665,190 @@ typedef struct
     int32_t lce_deadzone;
      /*!< lce_clip LCE clip, 0.0.15 */
     int32_t lce_clip;
+     /*!< lr_gain_map[133584] LRGain, 0.7.8 */
+    int32_t lr_gain_map[133584];
+     /*!< lr_wgt_map[133584] LRWgt */
+    int32_t lr_wgt_map[133584];
+     /*!< lr_map_width map width */
+    int32_t lr_map_width;
+     /*!< lr_map_height map height */
+    int32_t lr_map_height;
 
 } ia_pal_isp_drc_1_t; 
 
-/*! \struct dss_xnr
+/*! \struct exy
+    
+*/
+typedef struct 
+{
+     /*!< bypass Bypass filter */
+    int32_t bypass;
+     /*!< Coef[2] filter coefficients */
+    int32_t Coef[2];
+     /*!< NS_shift shifting noise stream to the relevant range */
+    int32_t NS_shift;
+
+} ia_pal_isp_exy_t; 
+
+/*! \struct hdrstats_1
+    HDR Statistics Extraction filter
+*/
+typedef struct 
+{
+     /*!< rgbsstat_en StatR/G/B/S enable: 0 - disable, 1 - enable */
+    int32_t rgbsstat_en;
+     /*!< histstat_en HistStatR/G/B/Y enable: 0 - disable, 1 - enable */
+    int32_t histstat_en;
+     /*!< drcstat_en DRCStatY/V enable: 0 - disable, 1 - enable */
+    int32_t drcstat_en;
+     /*!< bayer_startcolor Bayer Start Color: 0 - R, 1 - Gr, 2 - Gb, 3 - B */
+    int32_t bayer_startcolor;
+     /*!< dcn_mode DCN mode: 0 - bypass, 1 - DC2, 2 - DC4, 3 - DC8, Saturation grid size: 0 - 8x8, 1 - 16x16, 2 - 32x32, 3 - 64x64 */
+    int32_t dcn_mode;
+     /*!< sat_thrsh Saturation threshold */
+    int32_t sat_thrsh;
+     /*!< sat_rshift Saturation right shift value for converting to saturation ratio: DCN mode * 2 */
+    int32_t sat_rshift;
+     /*!< drcstat_xx2x_bypass Bypass XX2x sub-block */
+    int32_t drcstat_xx2x_bypass;
+     /*!< decomp_bypass Bypass decompression sub-block */
+    int32_t decomp_bypass;
+     /*!< decomp_y_mode decompression Y mode: 0 - average, 1 - max */
+    int32_t decomp_y_mode;
+     /*!< rgbs_grid_width StatR/G/B/S grid width */
+    int32_t rgbs_grid_width;
+     /*!< rgbs_grid_height StatR/G/B/S grid height */
+    int32_t rgbs_grid_height;
+     /*!< hist_grid_width HistStatR/G/B/Y grid width */
+    int32_t hist_grid_width;
+     /*!< hist_grid_height HistStatR/G/B/Y grid height */
+    int32_t hist_grid_height;
+     /*!< drc_grid_width DRCStatY/V grid width */
+    int32_t drc_grid_width;
+     /*!< drc_grid_height DRCStatY/V grid height */
+    int32_t drc_grid_height;
+
+} ia_pal_isp_hdrstats_1_t; 
+
+/*! \struct see
+    
+*/
+typedef struct 
+{
+     /*!< bypass bypass for the filter */
+    int32_t bypass;
+     /*!< Alpha_LUT[64] edge enhance gain */
+    int32_t Alpha_LUT[64];
+     /*!< Edge_Max max edge value for clamping */
+    int32_t Edge_Max;
+     /*!< Edge_Thres threshold for coring */
+    int32_t Edge_Thres;
+
+} ia_pal_isp_see_t; 
+
+/*! \struct tnr5_21
+    
+*/
+typedef struct 
+{
+     /*!< NM_Rad2_Shift Bit shift bumber to calculate index for nm_R_xcu */
+    int32_t NM_Rad2_Shift;
+     /*!< nm_radial_y_center Opical center y coordinate in chroma resolution */
+    int32_t nm_radial_y_center;
+     /*!< nm_radial_x_center Opical center x coordinate in chroma resolution */
+    int32_t nm_radial_x_center;
+     /*!< nm_R_xcu[128] LUT for radial noise model */
+    int32_t nm_R_xcu[128];
+     /*!< nm_YY_xcu[64] LUT for Y noise model – Y dependency */
+    int32_t nm_YY_xcu[64];
+     /*!< nm_YC_xcu[64] LUT for Y noise model – C dependency */
+    int32_t nm_YC_xcu[64];
+     /*!< nm_CY_xcu[64] LUT for C noise model – Y dependency */
+    int32_t nm_CY_xcu[64];
+     /*!< nm_CC_xcu[64] LUT for C noise model – C dependency */
+    int32_t nm_CC_xcu[64];
+     /*!< nm_Y_log_est_min Min value for log space Y noise model */
+    int32_t nm_Y_log_est_min;
+     /*!< nm_Y_log_est_max Max value for log space Y noise model */
+    int32_t nm_Y_log_est_max;
+     /*!< nm_C_log_est_min Min value for log space C noise model */
+    int32_t nm_C_log_est_min;
+     /*!< nm_C_log_est_max Max value for log space C noise model */
+    int32_t nm_C_log_est_max;
+     /*!< nm_lut_frac Fractional bit for noise model LUT */
+    int32_t nm_lut_frac;
+     /*!< nm_idx_frac Bit number for adjusting to POW LUT index */
+    int32_t nm_idx_frac;
+     /*!< nm_pow[64] LUT for power function */
+    int32_t nm_pow[64];
+     /*!< nm_pow_frac Fractional bit for POW LUT */
+    int32_t nm_pow_frac;
+     /*!< nm_shift_num Pre-calculation of nm_lut_frac - nm_idx_frac */
+    int32_t nm_shift_num;
+     /*!< nm_Y_alpha Scaling coefficient for Y noise model */
+    int32_t nm_Y_alpha;
+     /*!< nm_C_alpha Scaling coefficient for C noise model */
+    int32_t nm_C_alpha;
+     /*!< co_var_thres Variance threshold */
+    int32_t co_var_thres;
+     /*!< co_var_gain Variance gain */
+    int32_t co_var_gain;
+     /*!< tbd_sad_Y_gain Y SAD sensitivity gain */
+    int32_t tbd_sad_Y_gain;
+     /*!< tbd_sad_C_gain C SAD sensitivity gain */
+    int32_t tbd_sad_C_gain;
+     /*!< tbd_sim_arg_gain_m Similarity argument gain for dynamic */
+    int32_t tbd_sim_arg_gain_m;
+     /*!< tbd_con_thres Content level threshold */
+    int32_t tbd_con_thres;
+     /*!< tbd_con_gain Content level gain */
+    int32_t tbd_con_gain;
+     /*!< tbd_sim_lut[64] Similarity LUT */
+    int32_t tbd_sim_lut[64];
+     /*!< tbd_rec_sim_thres Similarity threshold for recursive filter */
+    int32_t tbd_rec_sim_thres;
+     /*!< tbd_rec_gain0 Gain of recursive filter for static region */
+    int32_t tbd_rec_gain0;
+     /*!< tbd_rec_gain1 Gain of recursive filter for dynamic region */
+    int32_t tbd_rec_gain1;
+     /*!< pb_weight_in_opp 1.0 - minimum input weight */
+    int32_t pb_weight_in_opp;
+     /*!< pb_weight_in_min Minimum input weight */
+    int32_t pb_weight_in_min;
+     /*!< pb_weight_pre PAL - weight w.r.t. frame count */
+    int32_t pb_weight_pre;
+     /*!< pb_weight_sp_thres Spatial filter weight threshold */
+    int32_t pb_weight_sp_thres;
+     /*!< pb_weight_sp_gain Spatial filter weight gain */
+    int32_t pb_weight_sp_gain;
+     /*!< pb_weight_sp_max0 Spatial filter weight max at high similarity region */
+    int32_t pb_weight_sp_max0;
+     /*!< pb_weight_sp_max1 Spatial filter weight max at low similarity region */
+    int32_t pb_weight_sp_max1;
+     /*!< NS_weight_LUT[64] LUT for Noise stream weight control by similarity */
+    int32_t NS_weight_LUT[64];
+     /*!< NS_ConLv_w_LUT[64] LUT for Noise stream weight control by content */
+    int32_t NS_ConLv_w_LUT[64];
+     /*!< NS_gain Overall noise stream gain */
+    int32_t NS_gain;
+     /*!< NS_out_max Max value for clipping noise stream */
+    int32_t NS_out_max;
+     /*!< NS_Norm_bias Bias for noise stream luma dependency model */
+    int32_t NS_Norm_bias;
+     /*!< NS_Norm_coef Slope for noise stream luma dependency model */
+    int32_t NS_Norm_coef;
+     /*!< bypass bypass */
+    int32_t bypass;
+     /*!< framenumber frame number */
+    int32_t framenumber;
+     /*!< g_mv_x global  MV_X */
+    int32_t g_mv_x;
+     /*!< g_mv_y global  MV_Y */
+    int32_t g_mv_y;
+
+} ia_pal_isp_tnr5_21_t; 
+
+/*! \struct xnr_dss
     Scalable Chroma and Luma Denoise, Medium and High Frequency
 */
 typedef struct 
@@ -3738,191 +3966,7 @@ typedef struct
      /*!< blend_hf_power_c HF blending power chroma */
     int32_t blend_hf_power_c;
 
-} ia_pal_isp_dss_xnr_t; 
-
-/*! \struct exy
-    
-*/
-typedef struct 
-{
-     /*!< bypass Bypass filter */
-    int32_t bypass;
-     /*!< Coef[2] filter coefficients */
-    int32_t Coef[2];
-     /*!< NS_shift shifting noise stream to the relevant range */
-    int32_t NS_shift;
-
-} ia_pal_isp_exy_t; 
-
-/*! \struct hdrstats_1
-    HDR Statistics Extraction filter
-*/
-typedef struct 
-{
-     /*!< rgbsstat_en StatR/StatG/StatB/StatS enable: 0 - disable, 1 - enable */
-    int32_t rgbsstat_en;
-     /*!< drcstat_en DRCStat enable: 0 - disable, 1 - enable */
-    int32_t drcstat_en;
-     /*!< histstat_en HistStat enable: 0 - disable, 1 - enable */
-    int32_t histstat_en;
-     /*!< bayer_startcolor Bayer Start Color: 0 - R, 1 - Gr, 2 - Gb, 3 - B */
-    int32_t bayer_startcolor;
-     /*!< dcn_mode DCN mode: 0 - bypass, 1 - DC2, 2 - DC4, 3 - DC8, Saturation grid size: 0 - 8x8, 1 - 16x16, 2 - 32x32, 3 - 64x64 */
-    int32_t dcn_mode;
-     /*!< sat_thrsh Saturation threshold */
-    int32_t sat_thrsh;
-     /*!< sat_rshift Saturation right shift value for converting to saturation ratio: DCN mode * 2 */
-    int32_t sat_rshift;
-     /*!< drcstat_xx2x_bypass Bypass XX2x sub-block */
-    int32_t drcstat_xx2x_bypass;
-     /*!< decomp_bypass Bypass decompression sub-block */
-    int32_t decomp_bypass;
-     /*!< decomp_y_mode decompression Y mode: 0 - average, 1 - max */
-    int32_t decomp_y_mode;
-
-} ia_pal_isp_hdrstats_1_t; 
-
-/*! \struct see
-    
-*/
-typedef struct 
-{
-     /*!< bypass bypass for the filter */
-    int32_t bypass;
-     /*!< Alpha_LUT[64] edge enhance gain */
-    int32_t Alpha_LUT[64];
-     /*!< Edge_Max max edge value for clamping */
-    int32_t Edge_Max;
-     /*!< Edge_Thres threshold for coring */
-    int32_t Edge_Thres;
-
-} ia_pal_isp_see_t; 
-
-/*! \struct tnr5_21
-    
-*/
-typedef struct 
-{
-     /*!< NM_Rad2_Shift Bit shift bumber to calculate index for nm_R_xcu */
-    int32_t NM_Rad2_Shift;
-     /*!< nm_radial_y_center Opical center y coordinate in chroma resolution */
-    int32_t nm_radial_y_center;
-     /*!< nm_radial_x_center Opical center x coordinate in chroma resolution */
-    int32_t nm_radial_x_center;
-     /*!< nm_R_xcu[128] LUT for radial noise model */
-    int32_t nm_R_xcu[128];
-     /*!< nm_YY_xcu[64] LUT for Y noise model – Y dependency */
-    int32_t nm_YY_xcu[64];
-     /*!< nm_YU_xcu[64] LUT for Y noise model – U dependency */
-    int32_t nm_YU_xcu[64];
-     /*!< nm_YV_xcu[64] LUT for Y noise model – V dependency */
-    int32_t nm_YV_xcu[64];
-     /*!< nm_UY_xcu[64] LUT for U noise model – Y dependency */
-    int32_t nm_UY_xcu[64];
-     /*!< nm_UU_xcu[64] LUT for U noise model – U dependency */
-    int32_t nm_UU_xcu[64];
-     /*!< nm_UV_xcu[64] LUT for U noise model – V dependency */
-    int32_t nm_UV_xcu[64];
-     /*!< nm_VY_xcu[64] LUT for V noise model – Y dependency */
-    int32_t nm_VY_xcu[64];
-     /*!< nm_VU_xcu[64] LUT for V noise model – U dependency */
-    int32_t nm_VU_xcu[64];
-     /*!< nm_VV_xcu[64] LUT for V noise model – V dependency */
-    int32_t nm_VV_xcu[64];
-     /*!< nm_Y_log_est_min Min value for log space Y noise model */
-    int32_t nm_Y_log_est_min;
-     /*!< nm_Y_log_est_max Max value for log space Y noise model */
-    int32_t nm_Y_log_est_max;
-     /*!< nm_U_log_est_min Min value for log space U noise model */
-    int32_t nm_U_log_est_min;
-     /*!< nm_U_log_est_max Max value for log space U noise model */
-    int32_t nm_U_log_est_max;
-     /*!< nm_V_log_est_min Min value for log space V noise model */
-    int32_t nm_V_log_est_min;
-     /*!< nm_V_log_est_max Max value for log space V noise model */
-    int32_t nm_V_log_est_max;
-     /*!< nm_lut_frac Fractional bit for noise model LUT */
-    int32_t nm_lut_frac;
-     /*!< nm_idx_frac Bit number for adjusting to POW LUT index */
-    int32_t nm_idx_frac;
-     /*!< nm_pow[64] LUT for power function */
-    int32_t nm_pow[64];
-     /*!< nm_pow_frac Fractional bit for POW LUT */
-    int32_t nm_pow_frac;
-     /*!< nm_shift_num Pre-calculation of nm_lut_frac - nm_idx_frac */
-    int32_t nm_shift_num;
-     /*!< nm_Y_alpha Scaling coefficient for Y noise model */
-    int32_t nm_Y_alpha;
-     /*!< nm_U_alpha Scaling coefficient for U noise model */
-    int32_t nm_U_alpha;
-     /*!< nm_V_alpha Scaling coefficient for V noise model */
-    int32_t nm_V_alpha;
-     /*!< co_var_thres Variance threshold */
-    int32_t co_var_thres;
-     /*!< co_var_gain Variance gain */
-    int32_t co_var_gain;
-     /*!< tbd_sad_Y_gain Y SAD sensitivity gain */
-    int32_t tbd_sad_Y_gain;
-     /*!< tbd_sad_U_gain U SAD sensitivity gain */
-    int32_t tbd_sad_U_gain;
-     /*!< tbd_sad_V_gain V SAD sensitivity gain */
-    int32_t tbd_sad_V_gain;
-     /*!< tbd_sim_arg_gain Similarity argument gain for static */
-    int32_t tbd_sim_arg_gain;
-     /*!< tbd_sim_arg_gain_m Similarity argument gain for dynamic */
-    int32_t tbd_sim_arg_gain_m;
-     /*!< tbd_con_thres Content level threshold */
-    int32_t tbd_con_thres;
-     /*!< tbd_con_gain Content level gain */
-    int32_t tbd_con_gain;
-     /*!< tbd_sim_lut[64] Similarity LUT */
-    int32_t tbd_sim_lut[64];
-     /*!< tbd_rec_sim_thres Similarity threshold for recursive filter */
-    int32_t tbd_rec_sim_thres;
-     /*!< tbd_rec_gain0 Gain of recursive filter for static region */
-    int32_t tbd_rec_gain0;
-     /*!< tbd_rec_gain1 Gain of recursive filter for dynamic region */
-    int32_t tbd_rec_gain1;
-     /*!< spnr_a0 Spatial NR filter coefficient - 1 */
-    int32_t spnr_a0;
-     /*!< spnr_a1 Spatial NR filter coefficient - 2 */
-    int32_t spnr_a1;
-     /*!< spnr_a2 Spatial NR filter coefficient - 3 */
-    int32_t spnr_a2;
-     /*!< pb_weight_in_opp 1.0 - minimum input weight */
-    int32_t pb_weight_in_opp;
-     /*!< pb_weight_in_min Minimum input weight */
-    int32_t pb_weight_in_min;
-     /*!< pb_weight_pre PAL - weight w.r.t. frame count */
-    int32_t pb_weight_pre;
-     /*!< pb_weight_sp_thres Spatial filter weight threshold */
-    int32_t pb_weight_sp_thres;
-     /*!< pb_weight_sp_gain Spatial filter weight gain */
-    int32_t pb_weight_sp_gain;
-     /*!< pb_weight_sp_max0 Spatial filter weight max at high similarity region */
-    int32_t pb_weight_sp_max0;
-     /*!< pb_weight_sp_max1 Spatial filter weight max at low similarity region */
-    int32_t pb_weight_sp_max1;
-     /*!< NS_weight_LUT[64] LUT for Noise stream weight control by similarity */
-    int32_t NS_weight_LUT[64];
-     /*!< NS_ConLv_w_LUT[64] LUT for Noise stream weight control by content */
-    int32_t NS_ConLv_w_LUT[64];
-     /*!< NS_gain Overall noise stream gain */
-    int32_t NS_gain;
-     /*!< NS_out_max Max value for clipping noise stream */
-    int32_t NS_out_max;
-     /*!< NS_Norm_LUT[64] Noise stream luma dependency model */
-    int32_t NS_Norm_LUT[64];
-     /*!< bypass bypass flag, output is 4 bit shifted input */
-    int32_t bypass;
-     /*!< framenumber frame number. Should be in PAL */
-    int32_t framenumber;
-     /*!< g_mv_x global  MV_X. Should be in PAL */
-    int32_t g_mv_x;
-     /*!< g_mv_y global  MV_Y. Should be in PAL */
-    int32_t g_mv_y;
-
-} ia_pal_isp_tnr5_21_t; 
+} ia_pal_isp_xnr_dss_t; 
 
   
 
