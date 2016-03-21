@@ -15,6 +15,7 @@ export IACSS_INSTALL_DIR=$ROOT_DIR/out/libiacss
 export LIBCAMHAL_INSTALL_DIR=$ROOT_DIR/out/libcamhal
 export ICAMERASRC_INSTALL_DIR=$ROOT_DIR/out/icamerasrc
 export RPMS_INSTALL_DIR=$ROOT_DIR/out/rpms
+export TEST_INSTALL_DIR=$ROOT_DIR/out/test
 
 export BUILD_LOG=$OUTPUT_DIR/build.log
 
@@ -37,6 +38,7 @@ function check_output_dir() {
     check_dir $IACSS_INSTALL_DIR
     check_dir $LIBCAMHAL_INSTALL_DIR
     check_dir $RPMS_INSTALL_DIR
+    check_dir $TEST_INSTALL_DIR
 }
 
 function check_cross_compile() {

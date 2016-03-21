@@ -95,12 +95,24 @@ function iacss_build() {
     check_result $res $FUNCNAME
 }
 
+function iacss_generate_rpm_version() {
+    #update the libiacss.spec with new version
+    specFile=$RPM_DIR/build/libiacss.spec
+    oldVersion=$(grep "Version: 1.0" $specFile | cut -d "." -f 3)
+    newVersion=`expr $oldVersion + 1`
+    sed -i "s/1.0.$oldVersion/1.0.$newVersion/" $specFile
+    newRpm=libiacss-1.0.$newVersion-0.x86_64.rpm
+    echo "$newRpm"
+}
+
 function iacss_rpm_install() {
     echo "###############" "  $FUNCNAME  " "#############"
 
     rm -rf ~/rpmbuild
     mkdir -p ~/rpmbuild/BUILD/
     /usr/bin/rsync -av --exclude=".*" $OUTPUT_DIR/libiacss/* ~/rpmbuild/BUILD/
+
+    iacss_generate_rpm_version
 
     /usr/bin/rpmbuild -ba --nodeps $RPM_DIR/build/libiacss.spec
     cp -fv ~/rpmbuild/RPMS/x86_64/libiacss*.rpm $RPMS_INSTALL_DIR
@@ -166,6 +178,8 @@ function libcamhal_build_test() {
     fi
 
     make $MAKE_OPTION
+    cd -
+    cp -frv test $TEST_INSTALL_DIR/libcamhal-test
 
     check_result $? $FUNCNAME
 }
@@ -215,6 +229,8 @@ function icamerasrc_build_test() {
     fi
     make $MAKE_OPTION
 
+    cd -
+    cp -frv test $TEST_INSTALL_DIR/icamera-test
     check_result $? $FUNCNAME
 }
 
