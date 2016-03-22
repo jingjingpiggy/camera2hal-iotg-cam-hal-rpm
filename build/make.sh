@@ -27,7 +27,6 @@ function aiqb_rpm_install() {
     echo "###############" "  $FUNCNAME  " "#############"
 
     local specFile=$RPM_DIR/build/aiqb.spec
-    aiq_generate_rpm_version
     
     rm -rf ~/rpmbuild
     mkdir -p ~/rpmbuild/BUILD/
@@ -414,30 +413,36 @@ function mmm_helper() {
 }
 
 aiqb_build_steps () {
-    cd ${AIQB_DIR}
+    pushd ${AIQB_DIR}
+
     aiqb_files_copy
     aiqb_rpm_install
+
+    popd
 }
 
 aiq_build_steps () {
-    cd ${AIQ_DIR}
+    pushd ${AIQ_DIR}
     aiq_files_copy
-    aiq_rpm_install
+    #aiq_rpm_install
+    popd
 }
 
 iacss_build_steps() {
-    cd ${LIBIACSS_DIR}
+    pushd ${LIBIACSS_DIR}
     iacss_configure
     iacss_build
     iacss_rpm_install
+    popd
 }
 
 libcamhal_build_steps() {
-    cd ${LIBCAMHAL_DIR}
+    pushd ${LIBCAMHAL_DIR}
     libcamhal_configure
     libcamhal_build
     libcamhal_rpm_install
     libcamhal_build_test
+    popd
 }
 
 icamerasrc_build_steps() {
@@ -446,6 +451,7 @@ icamerasrc_build_steps() {
     icamerasrc_build
     icamerasrc_rpm_install
     icamerasrc_build_test
+    popd
 }
 
 all_build_steps() {
