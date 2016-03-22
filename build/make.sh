@@ -424,7 +424,7 @@ aiqb_build_steps () {
 aiq_build_steps () {
     pushd ${AIQ_DIR}
     aiq_files_copy
-    #aiq_rpm_install
+    aiq_rpm_install
     popd
 }
 
