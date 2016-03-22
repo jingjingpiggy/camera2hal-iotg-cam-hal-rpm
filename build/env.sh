@@ -8,8 +8,10 @@ export KERNEL_HEADER_DIR=$ROOT_DIR/kernel
 export LIBIACSS_DIR=$ROOT_DIR/libiacss
 export RPM_DIR=$ROOT_DIR/rpm
 export AIQ_DIR=$ROOT_DIR/libmfldadvci
+export AIQB_DIR=$RPM_DIR/script/AIQB/
 export OUTPUT_DIR=$ROOT_DIR/out
 
+export AIQB_INSTALL_DIR=$ROOT_DIR/out/aiqb
 export AIQ_INSTALL_DIR=$ROOT_DIR/out/libiaaiq
 export IACSS_INSTALL_DIR=$ROOT_DIR/out/libiacss
 export LIBCAMHAL_INSTALL_DIR=$ROOT_DIR/out/libcamhal
@@ -34,6 +36,7 @@ function check_dir() {
 
 function check_output_dir() {
     check_dir $OUTPUT_DIR
+    check_dir $AIQB_INSTALL_DIR
     check_dir $AIQ_INSTALL_DIR
     check_dir $IACSS_INSTALL_DIR
     check_dir $LIBCAMHAL_INSTALL_DIR

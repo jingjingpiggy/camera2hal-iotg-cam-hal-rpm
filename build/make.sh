@@ -16,6 +16,30 @@ function check_result() {
     fi
 }
 
+function aiqb_files_copy() {
+    echo "###############" "  $FUNCNAME  " "#############"
+    cp -frv $AIQB_DIR/*.aiqb $AIQB_INSTALL_DIR/
+
+    check_result $? $FUNCNAME
+}
+
+function aiqb_rpm_install() {
+    echo "###############" "  $FUNCNAME  " "#############"
+
+    local specFile=$RPM_DIR/build/aiqb.spec
+    aiq_generate_rpm_version
+    
+    rm -rf ~/rpmbuild
+    mkdir -p ~/rpmbuild/BUILD/
+
+    /usr/bin/rsync -av --exclude=".*" $AIQB_INSTALL_DIR/*.aiqb ~/rpmbuild/BUILD/
+
+    /usr/bin/rpmbuild -ba --nodeps $specFile
+    cp ~/rpmbuild/RPMS/x86_64/aiqb*.rpm $RPMS_INSTALL_DIR
+
+    check_result $? $FUNCNAME
+}
+
 function aiq_files_copy() {
     echo "###############" "  $FUNCNAME  " "#############"
 
@@ -389,6 +413,12 @@ function mmm_helper() {
     echo "  mmm : build all projects, you can run this at anywhere under repo"
 }
 
+aiqb_build_steps () {
+    cd ${AIQB_DIR}
+    aiqb_files_copy
+    aiqb_rpm_install
+}
+
 aiq_build_steps () {
     cd ${AIQ_DIR}
     aiq_files_copy
@@ -420,6 +450,7 @@ icamerasrc_build_steps() {
 
 all_build_steps() {
     cd ${ROOT_DIR}
+    aiqb_build_steps
     aiq_build_steps
     iacss_build_steps
     libcamhal_build_steps
