@@ -7,7 +7,7 @@ export LIBCAMHAL_DIR=$ROOT_DIR/libcamhal
 export KERNEL_HEADER_DIR=$ROOT_DIR/kernel
 export LIBIACSS_DIR=$ROOT_DIR/libiacss
 export RPM_DIR=$ROOT_DIR/rpm
-export AIQ_DIR=$RPM_DIR/script/AIQ
+export AIQ_DIR=$ROOT_DIR/libmfldadvci
 export OUTPUT_DIR=$ROOT_DIR/out
 
 export AIQ_INSTALL_DIR=$ROOT_DIR/out/libiaaiq
