@@ -96,6 +96,7 @@ function aiq_generate_rpm_version() {
         fi
     popd
 
+    newVersion=`echo "$newVersion" | sed 's/ /_/g'`   
     newRelease=`printf %03d $newRelease`
 
     echo "New Version Information:"
