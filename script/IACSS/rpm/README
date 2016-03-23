@@ -1,0 +1,40 @@
+Under ubuntu, make rpm package for libiacss.
+
+*****************************************************
+Prerequisite for build RPM package:
+
+Install rpmbuild under ubuntu if needed,
+sudo apt-get install rpm
+
+Install auto-make utils needed for building the rpm from source,
+sudo apt-get install autoconf libtool
+
+*****************************************************
+Build RPM for IPU4 firmware binaries:
+
+Run the shell script under this directory to build and package rpm.
+
+./build_rpm.sh
+
+*****************************************************
+Install the built RPM:
+
+sudo rpm -ivh libiacss-1.0.0-0.x86_64.rpm
+
+or install RPM locally:
+
+rpm -ivh --prefix=/YOUR/OWN/PATH libiacss-1.0.0-0.x86_64.rpm
+
+version history:
+
+libiacss-1.0.1-0.x86_64.rpm
+it's generated in 2016.02.18.
+the last patch information in the libiacss:
+Author: Niklas Simons <niklas.a.simons@intel.com>
+ia_cipr: add two new memory flags   
+Add IA_CIPR_MEMORY_MAP_TO_USER and IA_CIPR_MEMORY_NO_CLEAR.
+Windows are using these to specify certain memory flows.
+Change-Id: I8f0bef03ddcad174c446d23b305b110c8815d898
+Tracked-On: #R499202
+
+

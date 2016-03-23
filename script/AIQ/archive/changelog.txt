@@ -1,0 +1,218 @@
+CCA changelog
+.
+ia_imaging-ia_aiq
+99bb898fc34cd2df96fb34012d0e7f4e835f12ff
+ (HEAD, tag: v2.0_012.000, origin/master)99bb898	Markku Mettala	Thu Feb 25 18:06:22 2016 +0200	[INT] version number updated
+d9a372f	Uygar Tuna	Thu Feb 25 15:51:43 2016 +0200	AWB: Add initial support for multi-frame statistics
+d103528	Dmitriy Paliy	Thu Feb 25 15:51:22 2016 +0200	[INT] refpipe: add wdr_grid_to_bmp
+26e3dbc	Miikka Tuppurainen	Thu Feb 25 15:46:08 2016 +0200	[API] Aperture control API
+4bd2463	Dmitriy Paliy	Thu Feb 25 11:18:59 2016 +0200	[INT] AEC: add HDRType2MainAELoop test case and WDR stat
+12faabf	Dmitriy Paliy	Thu Feb 25 11:18:57 2016 +0200	AEC: add limitation of HDR exposures by ratios
+ (tag: v2.0_011.000)c6b4620	Markku Mettala	Wed Feb 24 13:51:34 2016 +0200	[INT] version number updated
+04b8419	Miikka Tuppurainen	Wed Feb 24 13:18:03 2016 +0200	Revert "[API] API changes for IoTA for AIQ"
+d5a472f	Sampo Utriainen	Tue Feb 23 14:03:47 2016 +0200	[INT] ACM parsing fixed in filedebugplugin
+ (tag: v2.0_010.001)10afd42	Markku Mettala	Tue Feb 16 12:57:04 2016 +0200	[INT] version number updated
+4b3bf97	Evgeny Krestyannikov	Fri Feb 5 08:11:53 2016 +0000	[AF] Relax the CAF start conditions
+ (tag: v2.0_010.000)8029d63	Markku Mettala	Tue Feb 2 13:33:39 2016 +0200	[INT] version number updated
+2aeb447	Markku Mettala	Mon Feb 1 12:10:12 2016 +0200	Merge branch 'IoTA'ia_imaging-ia_aiq
+v2.0_012.000
+.
+.
+ia_imaging-ia_isp
+7608cf9efb4807a1cac6bfae8f256d633d625fcb
+ (HEAD, tag: v2.0_012.000_002, origin/master)7608cf9	Markku Mettala	Thu Feb 25 21:48:06 2016 +0200	[INT] Version.
+162bda1	Markku Mettala	Thu Feb 25 21:22:59 2016 +0200	[INT] Fix file_debug
+ (tag: v2.0_012.000_001)2ad7f46	Markku Mettala	Thu Feb 25 20:44:25 2016 +0200	[INT] Version.
+7384e6b	Uygar Tuna	Thu Feb 25 17:40:04 2016 +0000	Add split for HDR statistics
+ (tag: v2.0_012.000)7db8237	Markku Mettala	Thu Feb 25 18:06:16 2016 +0200	[INT] version number updated
+4fe9a50	Kranthi Kuntala	Thu Feb 25 17:20:20 2016 +0200	[API] Statistics conversion API for HDR
+ (tag: v2.0_011.000)ae05028	Markku Mettala	Wed Feb 24 13:51:29 2016 +0200	[INT] version number updated
+09d0bcf	Markku Mettala	Wed Feb 24 10:57:23 2016 +0200	[INT] Fix solution.
+128a997	Mika Andersson	Mon Feb 22 15:37:39 2016 +0000	[API] CIF ISP 3.1 AIC change in the measurement configuration
+dad322f	Xie,Hongbiao	Mon Feb 22 07:59:09 2016 +0000	[CIF31_LP]: Update BLS config refer to cif_3_1
+2a55ee7	Markku Mettala	Fri Feb 19 16:12:37 2016 +0200	[INT] pdb filename
+d129583	Markku Mettala	Fri Feb 19 12:41:57 2016 +0000	[INT] pdb changes
+8a89c0b	Xie,Hongbiao	Fri Feb 19 11:58:06 2016 +0800	[CIF31_LP]: remove sdg_config
+81a47f2	Xie,Hongbiao	Fri Feb 19 11:57:57 2016 +0800	[CIF31_LP]: Update BPC refer to cif_3_1
+1518587	Xie,Hongbiao	Fri Feb 19 11:57:26 2016 +0800	[CIF_LP31] Code clean up
+da2cad3	Markku Mettala	Thu Feb 18 13:32:25 2016 +0200	[INT] Driver build related chnnges.
+aabf863	Xie,Hongbiao	Wed Feb 17 13:04:01 2016 +0000	[API]: testplugin naming change for CIF LPISP v3.1
+ (tag: v2.0_010.001)5656c0d	Miikka Tuppurainen	Tue Feb 16 11:34:44 2016 +0000	[API] Support custom control variables
+cd63cfb	Markku Mettala	Tue Feb 16 12:56:55 2016 +0200	[INT] version number updated
+c71f111	Sampo Utriainen	Thu Feb 11 09:25:09 2016 +0200	[API] Added mode operation parameter for ia_isp_bxt
+69c139e	Sampo Utriainen	Fri Feb 5 12:16:49 2016 +0200	Updated better default params for ia_isp_bxt.
+d9a0fa4	Markku Mettala	Thu Feb 4 11:30:21 2016 +0200	[INT] winbuild & ia_pal_dynamic
+0bb2190	Markku Mettala	Thu Feb 4 11:11:43 2016 +0200	[INT] ia_pal_dynamic
+ (tag: v2.0_010.000)04603d4	Markku Mettala	Tue Feb 2 13:33:32 2016 +0200	[INT] version number updated
+90b8f67	Xie,Hongbiao	Tue Feb 2 08:59:00 2016 +0000	[CIF30_LP]: revise naming for GSD LPISP
+db139a2	Xie,Hongbiao	Tue Feb 2 08:27:55 2016 +0000	[CIF30_LP]:delete unused makefiles.
+02913ee	Markku Mettala	Mon Feb 1 16:55:09 2016 +0200	[INT] no MultiThreaded*DLL
+d352b04	Vitali Samurov	Fri Jan 29 13:45:36 2016 +0000	PAF 3A statistics structure added in to the BXT structure.
+31ab954	Harish EssakySankaran	Fri Jan 29 09:45:00 2016 +0200	Fix the CIF ISP header names in define sectionia_imaging-ia_isp
+v2.0_012.000_002
+.
+.
+ia_imaging-ia_cmc_parser
+e858e49021b8985bfb32c4146d3c329e9eee9f8a
+ (HEAD, tag: v2.0_012.000, origin/master)e858e49	Uygar Tuna	Wed Feb 24 19:07:21 2016 +0200	Add min and max HDR CMC to parseria_imaging-ia_cmc_parser
+v2.0_012.000
+.
+.
+ia_imaging-ia_dvs
+f72cf3329942a0b9f7aa8bb98c20da196872ea43
+ (HEAD, tag: v2.0_012.000, origin/master)f72cf33	Markku Mettala	Thu Feb 25 18:06:32 2016 +0200	[INT] version number updated
+ (tag: v2.0_011.000)7aa6105	Markku Mettala	Wed Feb 24 13:51:42 2016 +0200	[INT] version number updated
+ad07951	Markku Mettala	Fri Feb 19 13:39:35 2016 +0200	[INT] Windows project files and lib naming ia_dvs_static / ia_dvs_dynamic
+ (tag: v2.0_010.001)9d82244	Markku Mettala	Tue Feb 16 12:57:23 2016 +0200	[INT] version number updated
+9734236	uygar tuna	Tue Feb 16 07:25:27 2016 +0000	[INT] Fix Scene Analysis for Z-type motion
+0329969	Vladislav Uzunov	Mon Feb 15 14:28:29 2016 +0200	[INT] Fix the 3D rotational model estimation
+04bd0aa	Vladislav Uzunov	Mon Feb 15 14:20:23 2016 +0200	[INT] MATLAB simulator for Cam shake from 3D scene
+7610c1e	Vladislav Uzunov	Mon Feb 8 14:13:05 2016 +0000	Tuning/Fix for static scene detection
+7779f09	Uygar Tuna	Wed Feb 3 09:22:20 2016 +0000	[INT] Additions to matlab funtions for gyro-based DVS
+ (tag: v2.0_010.000)be978f2	Markku Mettala	Tue Feb 2 13:33:53 2016 +0200	[INT] version number updated
+e6033b8	Markku Mettala	Mon Feb 1 16:21:32 2016 +0200	[INT] ProgramDataBaseFileName
+215a6f9	Markku Mettala	Mon Feb 1 12:27:46 2016 +0200	[INT] INPUTS_IN_FILE
+2f195c3	Sampo Utriainen	Mon Feb 1 09:55:11 2016 +0200	Upscaling/downscaling support from dvs_configia_imaging-ia_dvs
+v2.0_012.000
+.
+.
+ia_imaging-ia_log
+969e121ce0bb1bb0e59b391a26fbd02b218a6859
+ (HEAD, tag: v1.1.6, origin/master)969e121	Harish EssakySankaran	Fri Feb 19 15:40:59 2016 +0200	Fix klocwork issue in ia_log
+68e55f6	Markku Mettala	Fri Feb 19 12:39:45 2016 +0000	[INT] pdb files
+04f0e12	Markku Mettala	Tue Feb 16 16:25:58 2016 +0000	[INT] Fix rootnamespace.ia_imaging-ia_log
+v1.1.6
+.
+.
+ia_imaging-ia_mkn
+75e57001e8094368b687097489e8046e1a019d05
+ia_imaging-ia_mkn
+v4.4.14
+.
+.
+ia_imaging-ia_nvm
+de8ab61720d3bbad6219f0af511831e9d2837d1a
+ia_imaging-ia_nvm
+v4.0.22
+.
+.
+ia_imaging-ia_tools
+25710a989444f76eb1351c69cbb6749d3a6ddea3
+ (HEAD, tag: v4.3.13, origin/master)25710a9	Evgeny Krestyannikov	Thu Feb 11 10:18:09 2016 +0200	[AUX] Klockwork fix
+c248d1b	Evgeny Krestyannikov	Wed Feb 10 18:06:23 2016 +0200	[AUX] Auxiliary and geometry2d updates and fixesia_imaging-ia_tools
+v4.3.13
+.
+.
+ia_imaging-ia_maiq
+811a77b56589c0c8972b1718b92abff5c22fecf3
+ (HEAD, origin/master)811a77b	Xie,Hongbiao	Fri Jan 29 14:38:30 2016 +0000	Compiling with smallest code optionia_imaging-ia_maiq
+v.000-58-g811a77b
+.
+.
+ia_imaging-ia_pal
+d624481d9dbc7c9cc5e4b8dcb7435151f7b667d9
+ (HEAD, tag: v2.0_012.000, origin/master)d624481	Markku Mettala	Thu Feb 25 18:06:38 2016 +0200	[INT] version number updated
+dd68748	Jun Nishimura	Thu Feb 25 16:48:14 2016 +0200	[API] Added missing ISP API for SEE.
+bfa59ca	Masayoshi Asama	Wed Feb 24 09:55:38 2016 -0800	[INT]resubmit Skelton for HDRStats and DRC
+ (tag: v2.0_011.000)508b7c4	Markku Mettala	Wed Feb 24 13:51:47 2016 +0200	[INT] version number updated
+a15c92b	Kranthi Kuntala	Wed Feb 24 11:17:09 2016 +0200	Merge branch 'IoTA'
+ (origin/IoTA)910d3a4	Kranthi Kuntala	Wed Feb 24 10:56:49 2016 +0200	Merge branch 'master' into IoTA
+f0b03b0	Hadas Dahan	Wed Feb 24 10:12:38 2016 +0200	[IPU4][IEFD] bug fix ED isp api
+4ec7be7	Hadas Dahan	Tue Feb 23 22:38:36 2016 +0200	[IPU4][IEFD] bug fix  IEFD tool -  ED2 Normalization does not work properly
+b153d0d	Masayoshi Asama	Tue Feb 23 17:41:08 2016 +0000	[INT] fixed missing parameters in algo_hdrstats, algo_drc
+4fa0e34	Masayoshi Asama	Mon Feb 22 12:44:43 2016 +0000	fixed skelton for DRC and HDRStats, with updated algo API
+584c8ee	Jun Nishimura	Mon Feb 22 14:23:33 2016 +0200	[API] PAL feature integrated for TNR, SEE, EXY. Signed-off-by: Jun Nishimura <jun.nishimura@intel.com>
+24f63d1	Markku Mettala	Thu Feb 18 18:25:53 2016 +0200	[INT] cmake target naming
+d65e539	Kranthi Kuntala	Thu Feb 18 14:40:39 2016 +0200	[INT] Auto code gen V1.2.25
+88ca3d4	Vitali Samurov	Thu Feb 18 13:43:03 2016 +0200	input_image_params removed from PixelFormatter PAL.
+dde7f61	Vitali Samurov	Thu Feb 18 08:34:49 2016 +0000	3A_CCM: Y-histogram coefficients are corrected.
+692d267	Jun Nishimura	Wed Feb 17 12:22:53 2016 -0800	[API] re-doing the work of excel update and auto code gen update since IoTA was updated after I submitted the patch.
+7474c42	Markku Mettala	Wed Feb 17 18:14:04 2016 +0200	[INT] solutions
+7504bcd	Amir Goren	Wed Feb 17 14:23:31 2016 +0000	[INT] vcud and xnr lpf_coef ranges bugfix
+0b16355	Sampo Utriainen	Wed Feb 17 14:07:35 2016 +0200	[INT] Fixing the build break caused by merging
+22d9cb4	Maya Goldshtein	Wed Feb 17 13:49:42 2016 +0200	[API][DMA_Cropper] Add functionality to the DMA_Cropper PAL
+b5f7e3b	Sampo Utriainen	Wed Feb 17 11:02:16 2016 +0200	Merge branch 'master' of ssh://git-ger-5.devtools.intel.com:29418/ia_imaging-ia_pal into IoTA
+756f265	Markku Mettala	Tue Feb 16 17:38:13 2016 +0200	[INT] Remove dynamic libs from project. Rename rootnamespace.
+a23261b	Markku Mettala	Tue Feb 16 13:55:42 2016 +0200	[API] Auto code gen for IPU4i filters
+ (tag: v2.0_010.001)e453045	Markku Mettala	Tue Feb 16 12:57:29 2016 +0200	[INT] version number updated
+a9e2694	Markku Mettala	Mon Feb 15 11:05:03 2016 +0000	[INT] Autogen tool excles are listed in text file.
+38b3c19	Markku Mettala	Mon Feb 15 11:33:36 2016 +0200	[INT] Autogen tool excles are listed in text file.
+82d9e73	Kranthi Kuntala	Sat Feb 13 09:39:55 2016 +0000	[API] Auto code gen V1.2.23
+0f72b32	Hadas Dahan	Thu Feb 11 13:32:29 2016 +0200	[IPU4][Demosiac] demosaic slider fix max value
+23c4b3e	Kranthi Kuntala	Thu Feb 11 12:32:27 2016 +0200	[INT] Move excel definations from IPA repo to PAL
+da051ab	Kranthi Kuntala	Thu Feb 11 10:08:42 2016 +0000	Revert "[API] created SEE PAL templates"
+d333a0c	Kranthi Kuntala	Thu Feb 11 10:07:47 2016 +0000	Revert "[API] implemented SEE PAL"
+c81fe2a	Jun Nishimura	Wed Feb 10 16:26:47 2016 -0800	[API] implemented SEE PAL
+526e014	Jun Nishimura	Wed Feb 10 15:22:33 2016 -0800	[API] created SEE PAL templates
+7607ab1	Amir Goren	Tue Feb 9 16:49:42 2016 +0200	[API] VCUD removed 'upscale_only' from ALGO API
+44a3d5a	Maya Goldshtein	Tue Feb 9 14:23:40 2016 +0200	[API] Added DMA_Cropper PAL
+d464401	Amir Goren	Mon Feb 8 10:45:03 2016 +0200	Revert "[INT] HSD#1804217911 temp bugfix changed default linear_rgb2luma->mode=2"
+99bb3ad	Markku Mettala	Fri Feb 5 12:48:05 2016 +0200	[INT] Sync projectfiles to match driver modofied version
+b88fcfb	Joni-Matti Maatta	Fri Feb 5 09:44:35 2016 +0000	[INT] Fix PalPlugin VS project
+6d541b6	Peeta Kiikka	Fri Feb 5 09:38:56 2016 +0000	DVS_Statistics: fix to use resolution_history output dimensions, not input
+5ea66ff	Amir Goren	Thu Feb 4 15:19:04 2016 +0000	[API] XNR4 spatial sigma fixes + bypass logic fixes
+20232d7	Hadas Dahan	Thu Feb 4 11:13:28 2016 +0200	Signed-off-by: Hadas Dahan <hadas.dahan@intel.com>
+4ffa259	Markku Mettala	Wed Feb 3 19:37:57 2016 +0200	[INT] static dynamic project setup
+b09da49	Peeta Kiikka	Wed Feb 3 14:18:44 2016 +0200	DPC: fix frame_width to use resolution_history->output_width instead of input
+edcdc27	Hadas Dahan	Wed Feb 3 11:10:50 2016 +0200	Signed-off-by: Hadas Dahan <hadas.dahan@intel.com>
+ (tag: v2.0_010.000)86e9464	Markku Mettala	Tue Feb 2 13:33:59 2016 +0200	[INT] version number updated
+e8e09d4	Joni-Matti Maatta	Fri Jan 29 13:41:33 2016 +0200	[INT] Add preprocessor flags in broxton_ia_pal.vcxproj
+832562a	liron	Fri Jan 29 08:31:14 2016 +0200	[API] InputScalerV2: changed parameters to match HW. PAL functionality enabled same as InputScaler.ia_imaging-ia_pal
+v2.0_012.000
+.
+.
+ia_imaging-ia_p2p
+0491baa692aa235c9bd3a4b0fe81e17a7fbb686a
+ (HEAD, tag: v2.0_012.000, origin/master)0491baa	Joni-Matti Maatta	Wed Feb 24 11:48:00 2016 +0000	Update configunitedy range in input validation
+ (tag: v2.0_011.000)a3159ec	Joni-Matti Maatta	Wed Feb 24 07:58:12 2016 +0000	Enable XNR4_STILL in spregdc
+58c2482	Markku Mettala	Tue Feb 23 17:21:42 2016 +0200	[INT] P2P_WINDOWS_KERNELSPACE
+6508c29	Joni-Matti Maatta	Mon Feb 22 10:27:12 2016 +0000	Add built-in support for compiling for Windows kernel space
+b6cfab1	Joni-Matti Maatta	Mon Feb 22 12:08:23 2016 +0200	VCR2 converter for IPU4p
+9b70b81	Joni-Matti Maatta	Mon Feb 22 10:21:20 2016 +0200	Fix DVS kernel id mappings in vpregdc
+b903354	Joni-Matti Maatta	Fri Feb 19 07:21:27 2016 +0000	Add input validation for disparity and applycorrection
+082be09	Peeta Kiikka	Thu Feb 18 17:50:38 2016 +0200	Revert "DPCM functionality added."
+24cfd63	Joni-Matti Maatta	Thu Feb 18 13:43:49 2016 +0000	Fix incorrect kernel order in pg_dump_generator for vpregdc
+ab26f2c	Joni-Matti Maatta	Thu Feb 18 13:14:14 2016 +0000	Allow P2P compilation against the official P2P userspace package
+82dc35c	Joni-Matti Maatta	Thu Feb 18 15:05:23 2016 +0200	[INT] Update VS solution & winbuild.prop
+0949c0a	Joni-Matti Maatta	Wed Feb 17 11:55:29 2016 +0000	Fix pg_dump_generator for vpregdc and vpostgdc
+ca9be3e	Joni-Matti Maatta	Wed Feb 17 11:37:48 2016 +0000	Remove workarounds for DVS define
+1c7ab45	Joni-Matti Maatta	Wed Feb 17 13:28:07 2016 +0200	Revert OFS correctness test to match old defs
+ (tag: v2.0_010.001)72c7871	Joni-Matti Maatta	Mon Feb 15 14:23:04 2016 +0200	Add IPU4i as a new platform
+907a862	Joni-Matti Maatta	Sat Feb 13 09:40:48 2016 +0000	Align with new PAL uuids
+049fc40	Peeta Kiikka	Fri Feb 12 08:33:49 2016 +0200	DPCM functionality added.
+d719d6d	Joni-Matti Maatta	Thu Feb 11 13:07:04 2016 +0200	[INT] Add log print to show handled PAL records
+2777a03	Joni-Matti Maatta	Tue Feb 9 10:59:07 2016 +0200	[INT] Update developer documentation
+f1324c5	Joni-Matti Maatta	Fri Feb 5 17:32:53 2016 +0200	Enable DVS statistics in vpregdc
+f1187e5	Joni-Matti Maatta	Fri Feb 5 15:14:05 2016 +0000	[INT] Fix vpregdc in PG dump generator
+15b6098	Miikka Tuppurainen	Fri Feb 5 15:52:47 2016 +0200	Make P2P as a static library on Linux
+fd07baa	Vitali Samurov	Thu Feb 4 15:44:55 2016 +0000	[API] PAF 3A statistics functionality added.
+b8f107d	Joni-Matti Maatta	Thu Feb 4 16:25:53 2016 +0200	Fix validation ranges for several kernels
+5a4c68a	Joni-Matti Maatta	Thu Feb 4 15:08:51 2016 +0200	Add debug prints to show which kernels are enabled
+cd45bfb	Joni-Matti Maatta	Thu Feb 4 13:53:27 2016 +0200	Add PAL record size validation
+353e9da	Joni-Matti Maatta	Thu Feb 4 12:19:23 2016 +0200	[INT] Update VS solution
+31d4f96	Markku Mettala	Thu Feb 4 11:06:11 2016 +0200	[INT] ia_pal_dynamic
+5b56bb6	Joni-Matti Maatta	Wed Feb 3 15:31:58 2016 +0000	Enable TNR5 in vpregdc
+0b2689a	Joni-Matti Maatta	Wed Feb 3 11:16:02 2016 +0000	Support for custom output directory in PG dump generator
+ (tag: v2.0_010.000)11ab440	Kranthi Kuntala	Mon Feb 1 15:34:52 2016 +0000	[INT] update license headers
+064a0c6	Joni-Matti Maatta	Mon Feb 1 16:01:42 2016 +0200	Update PG dump generator to include XNR4 video kernel
+48eba90	Joni-Matti Maatta	Fri Jan 29 12:55:11 2016 +0200	[INT] Fix doxygen documentation
+c9dcf3d	Joni-Matti Maatta	Fri Jan 29 11:57:15 2016 +0200	IDS converter for IPU4p
+98b8872	Joni-Matti Maatta	Fri Jan 29 10:27:07 2016 +0200	Drop BXT A0 supportia_imaging-ia_p2p
+v2.0_012.000
+.
+.
+ia_imaging-include
+245dc70884f83faed0b7b363e62aea1723cfc994
+ (HEAD, tag: v2.0_012.000, origin/master)245dc70	Markku Mettala	Wed Feb 24 15:04:32 2016 +0200	[INT] Export.
+ (tag: v2.0_011.000)ac7ccc4	Markku Mettala	Tue Feb 23 17:55:54 2016 +0200	[INT] P2P_WINDOWS_KERNELSPACE
+d3c3856	Joni-Matti Maatta	Tue Feb 23 13:19:15 2016 +0000	Fix redefinition of bool when stdbool.h is present in Windows
+39e238a	Markku Mettala	Tue Feb 23 11:25:35 2016 +0200	[INT] P2P_WINDOWS_KERNELSPACE
+ (tag: v2.0_010.001)3258d73	Markku Mettala	Wed Feb 3 20:35:54 2016 +0200	[INT] sync headeria_imaging-include
+v2.0_012.000
+.
+.
+ia_imaging-testframework
+d45b4a4a3818f879b304aa106ac1175afd271f02
+ (HEAD, tag: v2.0_012.000, tag: v2.0_011.000, tag: v2.0_010.001, origin/master)d45b4a4	Joni-Matti Maatta	Wed Feb 3 12:27:55 2016 +0200	File path functionsia_imaging-testframework
+v2.0_012.000
+.
