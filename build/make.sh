@@ -321,7 +321,10 @@ function icamerasrc_build_test() {
     make $MAKE_OPTION
     check_fail $? $FUNCNAME
 
-    cd -
+    cd utils
+    make $MAKE_OPTION
+
+    goto $ICAMERASRC_DIR
     cp -frv test $TEST_INSTALL_DIR/icamera-test
     check_result $? $FUNCNAME
 }
