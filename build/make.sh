@@ -16,6 +16,15 @@ function check_result() {
     fi
 }
 
+function check_fail() {
+    local res=$1
+    local func=$2
+
+    if [ $res -ne 0 ] ; then
+        echo "###############" "  $func  FAIL  " "#############"
+    fi
+}
+
 function aiqb_files_copy() {
     echo "###############" "  $FUNCNAME  " "#############"
     cp -frv $AIQB_DIR/*.aiqb $AIQB_INSTALL_DIR/
@@ -143,7 +152,7 @@ function iacss_build() {
     fi
 
     make $MAKE_OPTION
-    res=$?
+    check_fail $? $FUNCNAME
 
     
     check_dir ${IACSS_INSTALL_DIR}/include/ia_camera
@@ -164,6 +173,7 @@ function iacss_build() {
     cp -fvr ia_camera/cipf_css/*.h ${IACSS_INSTALL_DIR}/include/ia_cipf_css
     cp -fvr ia_cipr/*.h ${IACSS_INSTALL_DIR}/include/ia_cipr
     cp -fvr ia_tools/*.h ${IACSS_INSTALL_DIR}/include/ia_tools
+    check_fail $? $FUNCNAME
 
 
     cp -fvr ia_cipf/.libs/*.so* ${IACSS_INSTALL_DIR}/lib64
@@ -171,7 +181,7 @@ function iacss_build() {
     cp -fvr ia_camera/.libs/*.so* ${IACSS_INSTALL_DIR}/lib64
     cp -fvr ia_camera/.libs/*.a ${IACSS_INSTALL_DIR}/lib64
 
-    check_result $res $FUNCNAME
+    check_result $? $FUNCNAME
 }
 
 function iacss_generate_rpm_version() {
@@ -219,8 +229,7 @@ function libcamhal_build() {
     fi
 
     make $MAKE_OPTION
-
-    res=$?
+    check_fail $? $FUNCNAME
 
     check_dir $LIBCAMHAL_INSTALL_DIR/include
     cp -frv include/* $LIBCAMHAL_INSTALL_DIR/include
@@ -232,7 +241,7 @@ function libcamhal_build() {
     check_dir $LIBCAMHAL_INSTALL_DIR/etc/camera
     cp -frv config/*.xml $LIBCAMHAL_INSTALL_DIR/etc/camera
 
-    check_result $res $FUNCNAME
+    check_result $? $FUNCNAME
 }
 
 function libcamhal_rpm_install() {
@@ -241,6 +250,8 @@ function libcamhal_rpm_install() {
     goto $LIBCAMHAL_DIR
     rm -f rpm/libcamhal*.rpm
     make rpm
+    check_fail $? $FUNCNAME
+
     cp -fv rpm/libcamhal*.rpm $RPMS_INSTALL_DIR
 
     check_result $? $FUNCNAME
@@ -257,6 +268,7 @@ function libcamhal_build_test() {
     fi
 
     make $MAKE_OPTION
+    check_fail $? $FUNCNAME
     cd -
     cp -frv test $TEST_INSTALL_DIR/libcamhal-test
 
@@ -283,7 +295,6 @@ function icamerasrc_build() {
     fi
 
     make $MAKE_OPTION
-
     check_result $? $FUNCNAME
 }
 
@@ -293,6 +304,7 @@ function icamerasrc_rpm_install() {
     goto $ICAMERASRC_DIR
     rm -f rpm/icamerasrc*.rpm
     make rpm
+    check_fail $? $FUNCNAME
     cp -fv rpm/icamerasrc*.rpm $RPMS_INSTALL_DIR
 
     check_result $? $FUNCNAME
@@ -307,6 +319,7 @@ function icamerasrc_build_test() {
         make clean
     fi
     make $MAKE_OPTION
+    check_fail $? $FUNCNAME
 
     cd -
     cp -frv test $TEST_INSTALL_DIR/icamera-test
