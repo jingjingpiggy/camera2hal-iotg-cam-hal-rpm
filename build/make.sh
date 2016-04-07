@@ -369,6 +369,7 @@ function mm() {
     MAKE_DEPENDENCE=0
     MAKE_OPTION=
 
+    check_output_dir
     get_build_inodes
 
     find_build_inode $PWD
@@ -402,6 +403,8 @@ function mm() {
 }
 
 function mmm() {
+    check_output_dir
+
     goto ${BUILD_DIRS[0]}
 
     REBUILD=1
