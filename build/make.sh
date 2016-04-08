@@ -393,11 +393,11 @@ function mm() {
     if [ $MAKE_DEPENDENCE -eq 1 ] ; then
         REBUILD=1
         for((i=1;i<$build_index;i++));do
-            ${build_steps[$i]} | tee $BUILD_LOG
+            ${build_steps[$i]} 2>&1 | tee $BUILD_LOG
         done
     fi
 
-    ${build_steps[$build_index]} | tee -a $BUILD_LOG
+    ${build_steps[$build_index]} 2>&1 | tee -a $BUILD_LOG
 
     handle_log
 }
@@ -410,7 +410,7 @@ function mmm() {
     REBUILD=1
     MAKE_OPTION="-j"
     rm -f $BUILD_LOG
-    ${build_steps[0]} | tee -a $BUILD_LOG
+    ${build_steps[0]} 2>&1 | tee -a $BUILD_LOG
 
     handle_log
 }
