@@ -13,6 +13,7 @@ function check_result() {
         echo "###############" "  $func  OK  " "#############"
     else
         echo "###############" "  $func  FAIL  " "#############"
+        exit 1
     fi
 }
 
@@ -22,6 +23,7 @@ function check_fail() {
 
     if [ $res -ne 0 ] ; then
         echo "###############" "  $func  FAIL  " "#############"
+        exit 1
     fi
 }
 
@@ -36,7 +38,7 @@ function aiqb_rpm_install() {
     echo "###############" "  $FUNCNAME  " "#############"
 
     local specFile=$RPM_DIR/build/aiqb.spec
-    
+
     rm -rf ~/rpmbuild
     mkdir -p ~/rpmbuild/BUILD/
 
@@ -417,8 +419,13 @@ function mmm() {
 
 function handle_log() {
     grep "FAIL" $BUILD_LOG
+    ret=$?
     cp -fr $BUILD_LOG `dirname $BUILD_LOG`/build-`date +%m%H%M`.log
     mv $BUILD_LOG `dirname $BUILD_LOG`/build-latest.log
+
+    if [ $ret -eq 0 ]; then
+        return 1
+    fi
 }
 
 function mm_helper() {
