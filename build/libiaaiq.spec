@@ -1,6 +1,6 @@
 Summary: Lib IA AIQ 
 Name: libiaaiq 
-Version: v2.0_013.002
+Version: v2.0_014.001
 Release: 001
 License: Intel
 Group: Development/Tools
