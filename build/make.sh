@@ -141,7 +141,7 @@ function iacss_configure() {
     if [ $REBUILD -eq 1 -o ! -f configure ] ; then
         rm -fr config/  config.h.in autom4te.cache/ aclocal.m4 m4 *-libtool
         autoreconf --install
-        CFLAGS="-I$AIQ_INSTALL_DIR/include -I$AIQ_INSTALL_DIR/include/libiaaiq" LDFLAGS="-L$AIQ_INSTALL_DIR/lib64" ./configure --with-kernel-sources=$KERNEL_HEADER_DIR --with-B0=yes --with-aiq=yes --prefix=$IACSS_INSTALL_DIR
+        CFLAGS="-I$AIQ_INSTALL_DIR/include -I$AIQ_INSTALL_DIR/include/libiaaiq" LDFLAGS="-L$AIQ_INSTALL_DIR/lib64" ./configure ${CONFIGURE_FLAGS} --with-kernel-sources=$KERNEL_HEADER_DIR --with-B0=yes --with-aiq=yes --prefix=$IACSS_INSTALL_DIR
     fi
     check_result $? $FUNCNAME
 }
@@ -217,7 +217,7 @@ function libcamhal_configure() {
     if [ $REBUILD -eq 1 -o ! -f configure ] ; then
         rm -fr config.h.in autom4te.cache/ aclocal.m4 *-libtool config.guess compile config.sub configure depcomp install-sh ltmain.sh m4
         autoreconf --install
-        CPPFLAGS="-I$AIQ_INSTALL_DIR/include -I$AIQ_INSTALL_DIR/include/libiaaiq -I$IACSS_INSTALL_DIR/include/" LDFLAGS="-L$AIQ_INSTALL_DIR/lib64 -L$IACSS_INSTALL_DIR/lib64" CFLAGS="-O2" CXXFLAGS="-O2" ./configure
+        CPPFLAGS="-I$AIQ_INSTALL_DIR/include -I$AIQ_INSTALL_DIR/include/libiaaiq -I$IACSS_INSTALL_DIR/include/" LDFLAGS="-L$AIQ_INSTALL_DIR/lib64 -L$IACSS_INSTALL_DIR/lib64" CFLAGS="-O2" CXXFLAGS="-O2" ./configure ${CONFIGURE_FLAGS}
     fi
 
     check_result $? $FUNCNAME
@@ -283,7 +283,7 @@ function icamerasrc_configure() {
     if [ $REBUILD -eq 1 -o ! -f configure ] ; then
         rm -fr config.h.in autom4te.cache/ aclocal.m4 *-libtool config.guess compile config.sub configure depcomp install-sh ltmain.sh m4
         autoreconf --install
-        CPPFLAGS="-I$LIBCAMHAL_INSTALL_DIR/include/ -I$LIBCAMHAL_INSTALL_DIR/include/api -I$LIBCAMHAL_INSTALL_DIR/include/utils " LDFLAGS="-L$LIBCAMHAL_INSTALL_DIR/lib/" CFLAGS="-O2" CXXFLAGS="-O2" ./configure --prefix=$ICAMERASRC_INSTALL_DIR
+        CPPFLAGS="-I$LIBCAMHAL_INSTALL_DIR/include/ -I$LIBCAMHAL_INSTALL_DIR/include/api -I$LIBCAMHAL_INSTALL_DIR/include/utils " LDFLAGS="-L$LIBCAMHAL_INSTALL_DIR/lib/" CFLAGS="-O2" CXXFLAGS="-O2" ./configure ${CONFIGURE_FLAGS} --prefix=$ICAMERASRC_INSTALL_DIR
     fi
 
     check_result $? $FUNCNAME
