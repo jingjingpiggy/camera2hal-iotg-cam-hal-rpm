@@ -59,10 +59,6 @@ function aiq_files_copy() {
     cp -rfv $AIQ_DIR/ia_imaging/include/* $AIQ_INSTALL_DIR/include/
 
     check_dir $AIQ_INSTALL_DIR/lib64
-    check_dir $AIQ_INSTALL_DIR/debug
-
-    #copy debug libraries
-    cp -rfv $AIQ_DIR/ia_imaging/linux/lib/debug/64/*  $AIQ_INSTALL_DIR/debug
 
     #copy release libraries
     cp -rfv $AIQ_DIR/ia_imaging/linux/lib/release/64/*  $AIQ_INSTALL_DIR/lib64/
@@ -73,8 +69,6 @@ function aiq_files_copy() {
     rm -v $AIQ_INSTALL_DIR/include/ia_isp_cif_*
     rm -v $AIQ_INSTALL_DIR/include/cif_*
     rm -v $AIQ_INSTALL_DIR/include/pvl_*
-    rm -v $AIQ_INSTALL_DIR/debug/libia_isp_2_*
-    rm -v $AIQ_INSTALL_DIR/debug/libia_isp_cif_*
     rm -v $AIQ_INSTALL_DIR/lib64/libia_isp_2_*
     rm -v $AIQ_INSTALL_DIR/lib64/libia_isp_cif_*
 
