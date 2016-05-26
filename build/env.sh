@@ -45,7 +45,7 @@ function check_output_dir() {
 }
 
 function check_cross_compile() {
-    export PRE_BUILD_DIR=$RPM_DIR/pre-build
+    export PRE_BUILD_DIR=$RPM_DIR/pre-build/host
 }
 
 check_output_dir
