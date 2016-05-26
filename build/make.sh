@@ -90,7 +90,7 @@ function aiq_generate_rpm_version() {
         #
         #FIXME: handle this case: more than 1 patch
         #
-        newVersion=$(git log -1 | grep libmf | cut -d "_" -f 2)
+        newVersion=$(git log -1 | grep libmf | grep _ | cut -d "_" -f 2)
         if [ "$newVersion" == "" ];then
             echo "There is no version update in this libiaaiq Release!!"
             newVersion=$oldVersion
