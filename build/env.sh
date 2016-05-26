@@ -45,13 +45,7 @@ function check_output_dir() {
 }
 
 function check_cross_compile() {
-    if [ -z "$CXX" ] ; then
-        export IS_CROSS_COMPILE=0
-        export PRE_BUILD_DIR=$RPM_DIR/pre-build/host
-    else
-        export IS_CROSS_COMPILE=1
-        export PRE_BUILD_DIR=$RPM_DIR/pre-build/cross
-    fi
+    export PRE_BUILD_DIR=$RPM_DIR/pre-build
 }
 
 check_output_dir
