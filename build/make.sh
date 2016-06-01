@@ -55,22 +55,13 @@ function aiq_files_copy() {
 
     cd $AIQ_DIR/
 
-    check_dir $AIQ_INSTALL_DIR/include
-    cp -rfv $AIQ_DIR/ia_imaging/linux/include/* $AIQ_INSTALL_DIR/include/
-
-    check_dir $AIQ_INSTALL_DIR/lib64
-
-    #copy release libraries
-    cp -rfv $AIQ_DIR/ia_imaging/linux/lib/release/64/*  $AIQ_INSTALL_DIR/lib64/
-
+    autoreconf -i
+    ./configure --prefix $AIQ_INSTALL_DIR
+    make install 
     #remove useless header files and libraries
-    rm -v $AIQ_INSTALL_DIR/include/ia_isp_1_*
-    rm -v $AIQ_INSTALL_DIR/include/ia_isp_2_*
-    rm -v $AIQ_INSTALL_DIR/include/ia_isp_cif_*
-    rm -v $AIQ_INSTALL_DIR/include/cif_*
-    rm -v $AIQ_INSTALL_DIR/include/pvl_*
-    rm -v $AIQ_INSTALL_DIR/lib64/libia_isp_2_*
-    rm -v $AIQ_INSTALL_DIR/lib64/libia_isp_cif_*
+    rm -v $AIQ_INSTALL_DIR/include/ia_imaging/ia_isp_1_*
+    rm -v $AIQ_INSTALL_DIR/include/ia_imaging/ia_isp_2_*
+    rm -v $AIQ_INSTALL_DIR/include/ia_imaging/pvl_* 
 
     check_result $? $FUNCNAME
 }
@@ -132,10 +123,11 @@ function aiq_rpm_install() {
 function iacss_configure() {
     echo "###############" "  $FUNCNAME  " "#############"
 
+    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$AIQ_INSTALL_DIR/lib/pkgconfig
     if [ $REBUILD -eq 1 -o ! -f configure ] ; then
         rm -fr config/  config.h.in autom4te.cache/ aclocal.m4 m4 *-libtool
         autoreconf --install
-        CFLAGS="-I$AIQ_INSTALL_DIR/include -I$AIQ_INSTALL_DIR/include/libiaaiq" LDFLAGS="-L$AIQ_INSTALL_DIR/lib64" ./configure ${CONFIGURE_FLAGS} --with-kernel-sources=$KERNEL_HEADER_DIR --with-B0=yes --with-aiq=yes --prefix=$IACSS_INSTALL_DIR
+        ./configure ${CONFIGURE_FLAGS} --with-kernel-sources=$KERNEL_HEADER_DIR --with-B0=yes --with-aiq=yes --prefix=$IACSS_INSTALL_DIR
     fi
     check_result $? $FUNCNAME
 }
@@ -150,34 +142,9 @@ function iacss_build() {
     make $MAKE_OPTION
     check_fail $? $FUNCNAME
 
-    
-    check_dir ${IACSS_INSTALL_DIR}/include/ia_camera
-    check_dir ${IACSS_INSTALL_DIR}/include/ia_cipf
-    check_dir ${IACSS_INSTALL_DIR}/include/ia_cipf_common
-    check_dir ${IACSS_INSTALL_DIR}/include/ia_cipf_css
-    check_dir ${IACSS_INSTALL_DIR}/include/ia_cipr
-    check_dir ${IACSS_INSTALL_DIR}/include/ia_tools
-    check_dir ${IACSS_INSTALL_DIR}/lib64
-
-    
-    cp -fvr ia_camera/ipu_library/ipu4/vied_parameters/support/bxtB0/*.h ${IACSS_INSTALL_DIR}/include/ia_camera
-    cp -fvr ia_camera/ipu_library/ipu4/vied_parameters/support/*.h ${IACSS_INSTALL_DIR}/include/ia_camera
-    cp -fvr ia_camera/ipu_library/*.h ${IACSS_INSTALL_DIR}/include/ia_camera
-    cp -fvr ia_camera/*.h ${IACSS_INSTALL_DIR}/include/ia_camera
-    cp -fvr ia_cipf/*.h ${IACSS_INSTALL_DIR}/include/ia_cipf
-    cp -fvr ia_camera/cipf_common/*.h ${IACSS_INSTALL_DIR}/include/ia_cipf_common
-    cp -fvr ia_camera/cipf_css/*.h ${IACSS_INSTALL_DIR}/include/ia_cipf_css
-    cp -fvr ia_cipr/*.h ${IACSS_INSTALL_DIR}/include/ia_cipr
-    cp -fvr ia_tools/*.h ${IACSS_INSTALL_DIR}/include/ia_tools
+    make install
     check_fail $? $FUNCNAME
 
-
-    cp -fvr ia_cipf/.libs/*.so* ${IACSS_INSTALL_DIR}/lib64
-    cp -fvr ia_cipf/.libs/*.a ${IACSS_INSTALL_DIR}/lib64
-    cp -fvr ia_camera/.libs/*.so* ${IACSS_INSTALL_DIR}/lib64
-    cp -fvr ia_camera/.libs/*.a ${IACSS_INSTALL_DIR}/lib64
-
-    check_result $? $FUNCNAME
 }
 
 function iacss_generate_rpm_version() {
@@ -207,11 +174,12 @@ function iacss_rpm_install() {
 
 function libcamhal_configure() {
     echo "###############" "  $FUNCNAME  " "#############"
-
+    # Add the dependencies to the path of package config
+    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$AIQ_INSTALL_DIR/lib/pkgconfig:$IACSS_INSTALL_DIR/lib/pkgconfig
     if [ $REBUILD -eq 1 -o ! -f configure ] ; then
         rm -fr config.h.in autom4te.cache/ aclocal.m4 *-libtool config.guess compile config.sub configure depcomp install-sh ltmain.sh m4
         autoreconf --install
-        CPPFLAGS="-I$AIQ_INSTALL_DIR/include -I$AIQ_INSTALL_DIR/include/libiaaiq -I$IACSS_INSTALL_DIR/include/" LDFLAGS="-L$AIQ_INSTALL_DIR/lib64 -L$IACSS_INSTALL_DIR/lib64" CFLAGS="-O2" CXXFLAGS="-O2" ./configure ${CONFIGURE_FLAGS}
+        CFLAGS="-O2" CXXFLAGS="-O2" ./configure ${CONFIGURE_FLAGS}
     fi
 
     check_result $? $FUNCNAME
