@@ -1,6 +1,6 @@
 Summary: Lib IA CSS 
 Name: libiacss 
-Version: 1.0.73
+Version: 1.0.74
 Release: 0
 License: Intel
 Group: Development/Tools
