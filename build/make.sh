@@ -56,7 +56,7 @@ function aiq_files_copy() {
     cd $AIQ_DIR/
 
     check_dir $AIQ_INSTALL_DIR/include
-    cp -rfv $AIQ_DIR/ia_imaging/linux/include/* $AIQ_INSTALL_DIR/include/
+    cp -rfv $AIQ_DIR/ia_imaging/include/* $AIQ_INSTALL_DIR/include/
 
     check_dir $AIQ_INSTALL_DIR/lib64
 
