@@ -8,7 +8,7 @@ export KERNEL_HEADER_DIR=$ROOT_DIR/kernel
 export LIBIACSS_DIR=$ROOT_DIR/libiacss
 export RPM_DIR=$ROOT_DIR/rpm
 export AIQ_DIR=$ROOT_DIR/libmfldadvci
-export AIQB_DIR=$RPM_DIR/script/AIQB/
+export AIQB_DIR=$ROOT_DIR/cameralibs/cpf/aiq
 export OUTPUT_DIR=$ROOT_DIR/out
 
 export AIQB_INSTALL_DIR=$ROOT_DIR/out/aiqb

@@ -29,7 +29,9 @@ function check_fail() {
 
 function aiqb_files_copy() {
     echo "###############" "  $FUNCNAME  " "#############"
-    cp -frv $AIQB_DIR/*.aiqb $AIQB_INSTALL_DIR/
+    cp -frv $AIQB_DIR/ov13860.aiqb $AIQB_INSTALL_DIR/
+    cp -frv $AIQB_DIR/imx185.aiqb $AIQB_INSTALL_DIR/
+    cp -frv $AIQB_DIR/imx185-hdr.aiqb $AIQB_INSTALL_DIR/
 
     check_result $? $FUNCNAME
 }
