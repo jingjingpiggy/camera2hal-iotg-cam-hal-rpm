@@ -56,24 +56,19 @@ function aiq_files_copy() {
     echo "###############" "  $FUNCNAME  " "#############"
 
     cd $AIQ_DIR/
+    autoreconf -i
+    check_result $? "Autoreconf"
 
-    check_dir $AIQ_INSTALL_DIR/include
-    cp -rfv $AIQ_DIR/ia_imaging/include/* $AIQ_INSTALL_DIR/include/
+    ./configure ${CONFIGURE_FLAGS} --prefix $AIQ_INSTALL_DIR
+    check_result $? "AIQ configure"
 
-    check_dir $AIQ_INSTALL_DIR/lib64
-
-    #copy release libraries
-    cp -rfv $AIQ_DIR/ia_imaging/linux/lib/release/64/*  $AIQ_INSTALL_DIR/lib64/
+    make install
+    find ${AIQ_INSTALL_DIR}/ -name "*.la" -exec rm -f "{}" \;
 
     #remove useless header files and libraries
-    rm -v $AIQ_INSTALL_DIR/include/ia_isp_1_*
-    rm -v $AIQ_INSTALL_DIR/include/ia_isp_2_*
-    rm -v $AIQ_INSTALL_DIR/include/ia_isp_cif_*
-    rm -v $AIQ_INSTALL_DIR/include/cif_*
-    rm -v $AIQ_INSTALL_DIR/include/pvl_*
-    rm -v $AIQ_INSTALL_DIR/lib64/libia_isp_2_*
-    rm -v $AIQ_INSTALL_DIR/lib64/libia_isp_cif_*
-
+    rm -v $AIQ_INSTALL_DIR/include/ia_imaging/ia_isp_1_*
+    rm -v $AIQ_INSTALL_DIR/include/ia_imaging/ia_isp_2_*
+    rm -v $AIQ_INSTALL_DIR/include/ia_imaging/pvl_*
     check_result $? $FUNCNAME
 }
 
@@ -134,10 +129,14 @@ function aiq_rpm_install() {
 function iacss_configure() {
     echo "###############" "  $FUNCNAME  " "#############"
 
+    if [ -n "$SDKTARGETSYSROOT" ]; then
+        export PKG_CONFIG_SYSROOT_DIR=
+    fi
+    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$AIQ_INSTALL_DIR/lib/pkgconfig
     if [ $REBUILD -eq 1 -o ! -f configure ] ; then
         rm -fr config/  config.h.in autom4te.cache/ aclocal.m4 m4 *-libtool
         autoreconf --install
-        CFLAGS="-I$AIQ_INSTALL_DIR/include -I$AIQ_INSTALL_DIR/include/libiaaiq" LDFLAGS="-L$AIQ_INSTALL_DIR/lib64" ./configure ${CONFIGURE_FLAGS} --with-kernel-sources=$KERNEL_HEADER_DIR --with-B0=yes --with-aiq=yes --prefix=$IACSS_INSTALL_DIR
+        ./configure ${CONFIGURE_FLAGS} --with-kernel-sources=$KERNEL_HEADER_DIR --with-B0=yes --with-aiq=yes --prefix=$IACSS_INSTALL_DIR
     fi
     check_result $? $FUNCNAME
 }
@@ -152,34 +151,9 @@ function iacss_build() {
     make $MAKE_OPTION
     check_fail $? $FUNCNAME
 
-    
-    check_dir ${IACSS_INSTALL_DIR}/include/ia_camera
-    check_dir ${IACSS_INSTALL_DIR}/include/ia_cipf
-    check_dir ${IACSS_INSTALL_DIR}/include/ia_cipf_common
-    check_dir ${IACSS_INSTALL_DIR}/include/ia_cipf_css
-    check_dir ${IACSS_INSTALL_DIR}/include/ia_cipr
-    check_dir ${IACSS_INSTALL_DIR}/include/ia_tools
-    check_dir ${IACSS_INSTALL_DIR}/lib64
-
-    
-    cp -fvr ia_camera/ipu_library/ipu4/vied_parameters/support/bxtB0/*.h ${IACSS_INSTALL_DIR}/include/ia_camera
-    cp -fvr ia_camera/ipu_library/ipu4/vied_parameters/support/*.h ${IACSS_INSTALL_DIR}/include/ia_camera
-    cp -fvr ia_camera/ipu_library/*.h ${IACSS_INSTALL_DIR}/include/ia_camera
-    cp -fvr ia_camera/*.h ${IACSS_INSTALL_DIR}/include/ia_camera
-    cp -fvr ia_cipf/*.h ${IACSS_INSTALL_DIR}/include/ia_cipf
-    cp -fvr ia_camera/cipf_common/*.h ${IACSS_INSTALL_DIR}/include/ia_cipf_common
-    cp -fvr ia_camera/cipf_css/*.h ${IACSS_INSTALL_DIR}/include/ia_cipf_css
-    cp -fvr ia_cipr/*.h ${IACSS_INSTALL_DIR}/include/ia_cipr
-    cp -fvr ia_tools/*.h ${IACSS_INSTALL_DIR}/include/ia_tools
-    check_fail $? $FUNCNAME
-
-
-    cp -fvr ia_cipf/.libs/*.so* ${IACSS_INSTALL_DIR}/lib64
-    cp -fvr ia_cipf/.libs/*.a ${IACSS_INSTALL_DIR}/lib64
-    cp -fvr ia_camera/.libs/*.so* ${IACSS_INSTALL_DIR}/lib64
-    cp -fvr ia_camera/.libs/*.a ${IACSS_INSTALL_DIR}/lib64
-
+    make install
     check_result $? $FUNCNAME
+    find ${IACSS_INSTALL_DIR}/ -name "*.la" -exec rm -f "{}" \;
 }
 
 function iacss_generate_rpm_version() {
@@ -210,10 +184,15 @@ function iacss_rpm_install() {
 function libcamhal_configure() {
     echo "###############" "  $FUNCNAME  " "#############"
 
+    if [ -n "$SDKTARGETSYSROOT" ]; then
+        export PKG_CONFIG_SYSROOT_DIR=
+    fi
+    # Add the dependencies to the path of package configure
+    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$AIQ_INSTALL_DIR/lib/pkgconfig:$IACSS_INSTALL_DIR/lib/pkgconfig
     if [ $REBUILD -eq 1 -o ! -f configure ] ; then
         rm -fr config.h.in autom4te.cache/ aclocal.m4 *-libtool config.guess compile config.sub configure depcomp install-sh ltmain.sh m4
         autoreconf --install
-        CPPFLAGS="-I$AIQ_INSTALL_DIR/include -I$AIQ_INSTALL_DIR/include/libiaaiq -I$IACSS_INSTALL_DIR/include/" LDFLAGS="-L$AIQ_INSTALL_DIR/lib64 -L$IACSS_INSTALL_DIR/lib64" CFLAGS="-O2" CXXFLAGS="-O2" ./configure ${CONFIGURE_FLAGS}
+        CFLAGS="-O2" CXXFLAGS="-O2" ./configure ${CONFIGURE_FLAGS} --prefix=$LIBCAMHAL_INSTALL_DIR
     fi
 
     check_result $? $FUNCNAME
@@ -228,6 +207,10 @@ function libcamhal_build() {
 
     make $MAKE_OPTION
     check_fail $? $FUNCNAME
+
+    make install
+    check_fail $? $FUNCNAME
+    find ${LIBCAMHAL_INSTALL_DIR}/ -name "*.la" -exec rm -f "{}" \;
 
     check_dir $LIBCAMHAL_INSTALL_DIR/include
     cp -frv include/* $LIBCAMHAL_INSTALL_DIR/include
@@ -261,6 +244,11 @@ function libcamhal_build_test() {
     goto $LIBCAMHAL_DIR
     cd test
 
+    if [ -n "$SDKTARGETSYSROOT" ]; then
+        export PKG_CONFIG_SYSROOT_DIR=
+    fi
+    # Add the dependencies to the path of package configure
+    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$AIQ_INSTALL_DIR/lib/pkgconfig:$IACSS_INSTALL_DIR/lib/pkgconfig
     if [ $REBUILD -eq 1 ] ; then
         make clean
     fi
@@ -275,6 +263,12 @@ function libcamhal_build_test() {
 
 function icamerasrc_configure() {
     echo "###############" "  $FUNCNAME  " "#############"
+
+    if [ -n "$SDKTARGETSYSROOT" ]; then
+        export GST_LIBS="-L$SDKTARGETSYSROOT/usr/lib -lgstvideo-1.0 -lgstbase-1.0 -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0"
+        export GST_CFLAGS="-I$SDKTARGETSYSROOT/usr/include/gstreamer-1.0 -I$SDKTARGETSYSROOT/usr/lib/gstreamer-1.0/include \
+            -I$SDKTARGETSYSROOT/usr/include/glib-2.0 -I$SDKTARGETSYSROOT/usr/lib/glib-2.0/include"
+    fi
 
     if [ $REBUILD -eq 1 -o ! -f configure ] ; then
         rm -fr config.h.in autom4te.cache/ aclocal.m4 *-libtool config.guess compile config.sub configure depcomp install-sh ltmain.sh m4
@@ -294,6 +288,10 @@ function icamerasrc_build() {
 
     make $MAKE_OPTION
     check_result $? $FUNCNAME
+
+    make install
+    check_result $? $FUNCNAME
+    find ${ICAMERASRC_INSTALL_DIR}/ -name "*.la" -exec rm -f "{}" \;
 }
 
 function icamerasrc_rpm_install() {
@@ -312,6 +310,12 @@ function icamerasrc_build_test() {
     echo "###############" "  $FUNCNAME  " "#############"
 
     goto $ICAMERASRC_DIR
+
+    if [ -n "$SDKTARGETSYSROOT" ]; then
+        export GST_LIBS="-L$SDKTARGETSYSROOT/usr/lib -lgstvideo-1.0 -lgstbase-1.0 -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0"
+        export GST_CFLAGS="-I$SDKTARGETSYSROOT/usr/include/gstreamer-1.0 -I$SDKTARGETSYSROOT/usr/lib/gstreamer-1.0/include \
+            -I$SDKTARGETSYSROOT/usr/include/glib-2.0 -I$SDKTARGETSYSROOT/usr/lib/glib-2.0/include"
+    fi
     cd test
     if [ $REBUILD -eq 1 ] ; then
         make clean
@@ -479,6 +483,7 @@ icamerasrc_build_steps() {
 
 all_build_steps() {
     cd ${ROOT_DIR}
+    unset PKG_CONFIG_SYSROOT_DIR
     aiqb_build_steps
     aiq_build_steps
     iacss_build_steps
