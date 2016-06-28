@@ -1,0 +1,6 @@
+#/bin/bash
+rpm -qa aiqb | sudo xargs rpm -e --nodeps
+rpm -qa libiaaiq | sudo xargs rpm -e --nodeps
+rpm -qa libiacss | sudo xargs rpm -e --nodeps
+rpm -qa libcamhal | sudo xargs rpm -e --nodeps
+rpm -qa icamerasrc | sudo xargs rpm -e --nodeps
