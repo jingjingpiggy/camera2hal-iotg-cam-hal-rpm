@@ -9,6 +9,7 @@ export LIBIACSS_DIR=$ROOT_DIR/libiacss
 export RPM_DIR=$ROOT_DIR/rpm
 export AIQ_DIR=$ROOT_DIR/libmfldadvci
 export AIQB_DIR=$ROOT_DIR/cameralibs/cpf/aiq
+export AIQB_RPM_DIR=$ROOT_DIR/cameralibs/rpm/
 export OUTPUT_DIR=$ROOT_DIR/out
 
 export AIQB_INSTALL_DIR=$ROOT_DIR/out/aiqb

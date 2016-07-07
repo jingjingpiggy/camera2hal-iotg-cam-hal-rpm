@@ -39,15 +39,12 @@ function aiqb_files_copy() {
 function aiqb_rpm_install() {
     echo "###############" "  $FUNCNAME  " "#############"
 
-    local specFile=$RPM_DIR/build/aiqb.spec
+    goto $AIQB_RPM_DIR
+    rm -f aiqb*.rpm
+    ./build_rpm.sh
+    check_fail $? $FUNCNAME
 
-    rm -rf ~/rpmbuild
-    mkdir -p ~/rpmbuild/BUILD/
-
-    /usr/bin/rsync -av --exclude=".*" $AIQB_INSTALL_DIR/*.aiqb ~/rpmbuild/BUILD/
-
-    /usr/bin/rpmbuild -ba --nodeps $specFile
-    cp ~/rpmbuild/RPMS/x86_64/aiqb*.rpm $RPMS_INSTALL_DIR
+    cp -fv aiqb*.rpm $RPMS_INSTALL_DIR
 
     check_result $? $FUNCNAME
 }
@@ -72,56 +69,15 @@ function aiq_files_copy() {
     check_result $? $FUNCNAME
 }
 
-AIQ_RPM=libiaaiq-v2.0_010.000-000.x86_64.rpm
-
-function aiq_generate_rpm_version() {
-    #update the libiaaiq.spec with new version
-    local specFile=$RPM_DIR/build/libiaaiq.spec
-
-    #libmfldadvci: IA AIQ library release v2.0_012.000
-    oldVersion=$(grep Version $specFile | cut -d "_" -f 2 | tr -d " ")
-    oldRelease=$(grep Release $specFile | cut -d ":" -f 2 | tr -d " ")
-
-    pushd $AIQ_DIR
-        newRelease=$oldRelease
-        #
-        #FIXME: handle this case: more than 1 patch
-        #
-        newVersion=$(git log -1 | grep libmf | grep _ | cut -d "_" -f 2)
-        if [ "$newVersion" == "" ];then
-            echo "There is no version update in this libiaaiq Release!!"
-            newVersion=$oldVersion
-            newRelease=`expr $oldRelease + 1`
-        elif [ "$newVersion" == "$oldVersion" ];then
-            echo "Version is the same as old one $oldVersion"
-            newRelease=`expr $oldRelease + 1`
-        fi
-    popd
-
-    newVersion=`echo "$newVersion" | sed 's/ /_/g'`   
-    newRelease=`printf %03d $newRelease`
-
-    echo "New Version Information:"
-    echo "Version: v2.0_$oldVersion-->v2.0_$newVersion"
-    echo "Release: $oldRelease-->$newRelease"
-
-    #FIXME: be care to update to v3.0?
-    sed -i "s/Version: v2.0_$oldVersion/Version: v2.0_$newVersion/" $specFile
-    sed -i "s/Release: $oldRelease/Release: $newRelease/" $specFile
-}
-
 function aiq_rpm_install() {
     echo "###############" "  $FUNCNAME  " "#############"
 
-    local specFile=$RPM_DIR/build/libiaaiq.spec
-    aiq_generate_rpm_version
-    
-    rm -rf ~/rpmbuild
-    mkdir -p ~/rpmbuild/BUILD/
-    /usr/bin/rsync -av --exclude=".*" $AIQ_INSTALL_DIR/* ~/rpmbuild/BUILD/
+    goto $AIQ_DIR
+    rm -f rpm/libiaaiq*.rpm
+    make rpm
+    check_fail $? $FUNCNAME
 
-    /usr/bin/rpmbuild -ba --nodeps $specFile
-    cp ~/rpmbuild/RPMS/x86_64/libiaaiq*.rpm $RPMS_INSTALL_DIR
+    cp -fv rpm/libiaaiq*.rpm $RPMS_INSTALL_DIR
 
     check_result $? $FUNCNAME
 }
@@ -156,27 +112,15 @@ function iacss_build() {
     find ${IACSS_INSTALL_DIR}/ -name "*.la" -exec rm -f "{}" \;
 }
 
-function iacss_generate_rpm_version() {
-    #update the libiacss.spec with new version
-    local specFile=$RPM_DIR/build/libiacss.spec
-    oldVersion=$(grep "Version: 1.0" $specFile | cut -d "." -f 3)
-    newVersion=`expr $oldVersion + 1`
-    sed -i "s/1.0.$oldVersion/1.0.$newVersion/" $specFile
-    newRpm=libiacss-1.0.$newVersion-0.x86_64.rpm
-    echo "$newRpm"
-}
-
 function iacss_rpm_install() {
     echo "###############" "  $FUNCNAME  " "#############"
 
-    rm -rf ~/rpmbuild
-    mkdir -p ~/rpmbuild/BUILD/
-    /usr/bin/rsync -av --exclude=".*" $OUTPUT_DIR/libiacss/* ~/rpmbuild/BUILD/
+    goto $LIBIACSS_DIR
+    rm -f rpm/libiacss*.rpm
+    make rpm
+    check_fail $? $FUNCNAME
 
-    iacss_generate_rpm_version
-
-    /usr/bin/rpmbuild -ba --nodeps $RPM_DIR/build/libiacss.spec
-    cp -fv ~/rpmbuild/RPMS/x86_64/libiacss*.rpm $RPMS_INSTALL_DIR
+    cp -fv rpm/libiacss*.rpm $RPMS_INSTALL_DIR
 
     check_result $? $FUNCNAME
 }
