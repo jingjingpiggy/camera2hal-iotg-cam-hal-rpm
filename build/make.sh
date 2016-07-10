@@ -27,29 +27,7 @@ function check_fail() {
     fi
 }
 
-function aiqb_files_copy() {
-    echo "###############" "  $FUNCNAME  " "#############"
-    cp -frv $AIQB_DIR/ov13860.aiqb $AIQB_INSTALL_DIR/
-    cp -frv $AIQB_DIR/imx185.aiqb $AIQB_INSTALL_DIR/
-    cp -frv $AIQB_DIR/imx185-hdr.aiqb $AIQB_INSTALL_DIR/
-
-    check_result $? $FUNCNAME
-}
-
-function aiqb_rpm_install() {
-    echo "###############" "  $FUNCNAME  " "#############"
-
-    goto $AIQB_RPM_DIR
-    rm -f aiqb*.rpm
-    ./build_rpm.sh
-    check_fail $? $FUNCNAME
-
-    cp -fv aiqb*.rpm $RPMS_INSTALL_DIR
-
-    check_result $? $FUNCNAME
-}
-
-function aiq_files_copy() {
+function aiq_build() {
     echo "###############" "  $FUNCNAME  " "#############"
 
     cd $AIQ_DIR/
@@ -82,13 +60,63 @@ function aiq_rpm_install() {
     check_result $? $FUNCNAME
 }
 
+function aiqb_configure() {
+    echo "###############" "  $FUNCNAME  " "#############"
+    echo "zlix ++++++++++" $PWD
+
+    if [ -n "$SDKTARGETSYSROOT" ]; then
+        export PKG_CONFIG_SYSROOT_DIR=
+    fi
+    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$AIQ_INSTALL_DIR/lib/pkgconfig
+    if [ $REBUILD -eq 1 -o ! -f configure ] ; then
+        rm -fr config/  config.h.in autom4te.cache/ aclocal.m4 m4 *-libtool
+        autoreconf --install
+        ./configure ${CONFIGURE_FLAGS} --prefix=$AIQB_INSTALL_DIR
+    fi
+    check_result $? $FUNCNAME
+}
+
+function aiqb_build() {
+    echo "###############" "  $FUNCNAME  " "#############"
+
+    if [ $REBUILD -eq 1 ] ; then
+        make clean
+    fi
+
+    make $MAKE_OPTION
+    check_fail $? $FUNCNAME
+
+    make install
+    check_result $? $FUNCNAME
+    find ${IACSS_INSTALL_DIR}/ -name "*.la" -exec rm -f "{}" \;
+
+    check_dir $AIQB_INSTALL_DIR/etc/camera
+    cp -frv $AIQB_DIR/cpf/aiq/ov13860.aiqb $AIQB_INSTALL_DIR/etc/camera/
+    cp -frv $AIQB_DIR/cpf/aiq/imx185.aiqb $AIQB_INSTALL_DIR/etc/camera/
+    cp -frv $AIQB_DIR/cpf/aiq/imx185-hdr.aiqb $AIQB_INSTALL_DIR/etc/camera/
+    check_result $? $FUNCNAME
+}
+
+function aiqb_rpm_install() {
+    echo "###############" "  $FUNCNAME  " "#############"
+
+    goto $AIQB_RPM_DIR
+    rm -f aiqb*.rpm
+    ./build_rpm.sh
+    check_fail $? $FUNCNAME
+
+    cp -fv aiqb*.rpm $RPMS_INSTALL_DIR
+
+    check_result $? $FUNCNAME
+}
+
 function iacss_configure() {
     echo "###############" "  $FUNCNAME  " "#############"
 
     if [ -n "$SDKTARGETSYSROOT" ]; then
         export PKG_CONFIG_SYSROOT_DIR=
     fi
-    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$AIQ_INSTALL_DIR/lib/pkgconfig
+    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$AIQ_INSTALL_DIR/lib/pkgconfig:$AIQB_INSTALL_DIR/lib/pkgconfig
     if [ $REBUILD -eq 1 -o ! -f configure ] ; then
         rm -fr config/  config.h.in autom4te.cache/ aclocal.m4 m4 *-libtool
         autoreconf --install
@@ -132,7 +160,7 @@ function libcamhal_configure() {
         export PKG_CONFIG_SYSROOT_DIR=
     fi
     # Add the dependencies to the path of package configure
-    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$AIQ_INSTALL_DIR/lib/pkgconfig:$IACSS_INSTALL_DIR/lib/pkgconfig
+    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$AIQ_INSTALL_DIR/lib/pkgconfig:$AIQB_INSTALL_DIR/lib/pkgconfig:$IACSS_INSTALL_DIR/lib/pkgconfig
     if [ $REBUILD -eq 1 -o ! -f configure ] ; then
         rm -fr config.h.in autom4te.cache/ aclocal.m4 *-libtool config.guess compile config.sub configure depcomp install-sh ltmain.sh m4
         autoreconf --install
@@ -383,19 +411,18 @@ function mmm_helper() {
     echo "  mmm : build all projects, you can run this at anywhere under repo"
 }
 
-aiqb_build_steps () {
-    pushd ${AIQB_DIR}
-
-    aiqb_files_copy
-    aiqb_rpm_install
-
+aiq_build_steps () {
+    pushd ${AIQ_DIR}
+    aiq_build
+    aiq_rpm_install
     popd
 }
 
-aiq_build_steps () {
-    pushd ${AIQ_DIR}
-    aiq_files_copy
-    aiq_rpm_install
+aiqb_build_steps () {
+    pushd ${AIQB_DIR}
+    aiqb_configure
+    aiqb_build
+    aiqb_rpm_install
     popd
 }
 
@@ -428,12 +455,12 @@ icamerasrc_build_steps() {
 all_build_steps() {
     cd ${ROOT_DIR}
     unset PKG_CONFIG_SYSROOT_DIR
-    aiqb_build_steps
     aiq_build_steps
+    aiqb_build_steps
     iacss_build_steps
     libcamhal_build_steps
     icamerasrc_build_steps
 }
 
-build_steps=(all_build_steps aiq_build_steps iacss_build_steps libcamhal_build_steps icamerasrc_build_steps)
-BUILD_DIRS=($ROOT_DIR $AIQ_DIR $LIBIACSS_DIR $LIBCAMHAL_DIR $ICAMERASRC_DIR)
+build_steps=(all_build_steps aiq_build_steps aiqb_build_steps iacss_build_steps libcamhal_build_steps icamerasrc_build_steps)
+BUILD_DIRS=($ROOT_DIR $AIQ_DIR $AIQB_DIR $LIBIACSS_DIR $LIBCAMHAL_DIR $ICAMERASRC_DIR)
