@@ -62,7 +62,6 @@ function aiq_rpm_install() {
 
 function aiqb_configure() {
     echo "###############" "  $FUNCNAME  " "#############"
-    echo "zlix ++++++++++" $PWD
 
     if [ -n "$SDKTARGETSYSROOT" ]; then
         export PKG_CONFIG_SYSROOT_DIR=
