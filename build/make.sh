@@ -34,7 +34,7 @@ function aiq_build() {
     autoreconf -i
     check_result $? "Autoreconf"
 
-    ./configure ${CONFIGURE_FLAGS} --prefix $AIQ_INSTALL_DIR
+    ./configure ${CONFIGURE_FLAGS} --with-project=dss --prefix $AIQ_INSTALL_DIR
     check_result $? "AIQ configure"
 
     make install
